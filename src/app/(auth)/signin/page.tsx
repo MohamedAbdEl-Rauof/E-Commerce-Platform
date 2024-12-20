@@ -41,7 +41,7 @@ const Signin = () => {
             const session = await response.json();
 
             if (session?.user?.role === "admin") {
-                router.push("/admin/");
+                router.push("/admin");
             } else {
                 router.push("/user");
             }
@@ -56,7 +56,7 @@ const Signin = () => {
     };
 
     return (
-        <div className="flex justify-between h-screen">
+        <div className="flex flex-col h-screen md:flex-row">
             {/* Left */}
             <div className="bg-slate-200 flex-1 flex justify-center items-center">
                 <Image
