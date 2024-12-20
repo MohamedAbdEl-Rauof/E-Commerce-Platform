@@ -2,7 +2,7 @@ import clientPromise from '@/lib/mongodb';
 import {NextApiRequest, NextApiResponse} from 'next';
 import bcrypt from "bcrypt";
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const client = await clientPromise;
     await client.connect();
     const db = client.db(process.env.MONGODB_DB);
@@ -53,4 +53,3 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 }
 
-export default handler;
