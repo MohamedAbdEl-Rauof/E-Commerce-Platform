@@ -1,8 +1,8 @@
 📁 src/
 ├── 🏠 app/
 │ ├── 🔐 (auth)/ # Authentication group routes
-│ │ ├── 🔑 login/
-│ │ └── 📝 register/
+│ │ ├── 🔑 SignIn/
+│ │ └── 📝 SignUp/
 │ │
 │ ├── 👤 (user)/ # User routes group
 │ │ ├── 🏠 page.tsx # Home page
@@ -19,13 +19,6 @@
 │ │ ├── 👥 customers/
 │ │ └── ⚙️ settings/
 │ │
-│ ├── 🚀 api/ # API routes
-│ │ ├── 🔐 auth/
-│ │ ├── 📦 products/
-│ │ ├── 📋 orders/
-│ │ ├── 🛒 cart/
-│ │ └── 🔔 webhook/
-│ │
 │ └── 🏗️ layout.tsx # Root layout
 │
 ├── 🧩 components/ # Reusable components
@@ -37,6 +30,13 @@
 │ ├── 📝 forms/ # Form components
 │ ├── 👑 admin/ # Admin-specific components
 │ └── 👤 user/ # User-specific components
+│
+├── 🚀 api/ # API routes
+│ ├── 🔐 auth/
+│ ├── 📦 products/
+│ ├── 📋 orders/
+│ ├── 🛒 cart/
+│ └── 🔔 webhook/
 │
 ├── 🛠️ lib/ # Utility functions and configurations
 │ ├── 🔐 auth.ts # NextAuth configuration
@@ -64,10 +64,36 @@
 │ ├── 📋 order.ts
 │ └── 👤 user.ts
 │
-│
 ├── 🛠️ services/ # Business logic services
 │ ├── 📦 product.service.ts
 │ ├── 📋 order.service.ts
 │ └── 👤 user.service.ts
 │
 └── 🚦 middleware.ts # Next.js middleware for auth & routing
+
+
+> are you have any suggestion for enhance the performance and seo or asscecaplity
+> the Responsive
+>
+>
+>
+> admin password
+> email : admin@gmail.com
+> password : admin123456
+>
+> user password
+> email : 142536789
+> password : 142536789
+>
+> email : 123456789
+> password : 123456789
+>
+> email : HIHICaptain@gmail.com
+> password : HIHICaptain@gmail.com
+
+
+
+
+
+
+
