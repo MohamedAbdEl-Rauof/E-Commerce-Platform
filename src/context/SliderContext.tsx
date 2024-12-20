@@ -29,7 +29,7 @@ export const SliderProvider: React.FC<{ children: React.ReactNode }> = ({childre
     useEffect(() => {
         const fetchImages = async () => {
             try {
-                const response = await fetch("/api/SliderSection");
+                const response = await fetch("/api/slidersection");
                 const data = await response.json();
                 setImages(data[0]?.images || []);
             } catch (error) {
