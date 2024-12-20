@@ -2,7 +2,7 @@ export default function Home() {
     return (
         <div className="">
             <div>
-                the
+                the test
             </div>
         </div>
     );
