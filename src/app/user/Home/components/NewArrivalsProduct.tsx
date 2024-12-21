@@ -8,6 +8,7 @@ import Image from "next/image";
 import Head from "next/head";
 import NewArrivalsProductLoading from "@/components/userUiLoading/Home/NewArrivalsProductLoading";
 import {useCart} from "@/context/AddToCartContext";
+import {useSession} from 'next-auth/react';
 
 interface Product {
     _id: string;
@@ -20,9 +21,11 @@ interface Product {
 
 const NewArrivalsProduct = () => {
     const {products, loading, error} = useProduct();
-    const {addToCart, toggleFavorite, updateRating} = useCart();
+    const {addToCart, toggleFavorite, updateRating, cart} = useCart();
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-    const [favorite, setFavorite] = useState(new Array(10).fill(false));
+    const {data: session} = useSession();
+    const userId = session?.user?.id;
+    const [theme, setTheme] = useState("light");
 
     useEffect(() => {
         if (products.length > 0) {
@@ -34,6 +37,14 @@ const NewArrivalsProduct = () => {
             setFilteredProducts(recentProducts);
         }
     }, [products]);
+
+    useEffect(() => {
+        document.documentElement.setAttribute("data-theme", theme);
+    }, [theme]);
+
+    const getCartItem = (productId: string) => {
+        return cart.find(item => item.productId === productId);
+    };
 
     if (error) {
         return <div>{error}</div>;
@@ -57,86 +68,92 @@ const NewArrivalsProduct = () => {
                                 <FaArrowRight
                                     className="ml-1 transform transition-transform duration-300 hover:translate-x-1"/>
                             </u>
+                            <button
+                                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                                className="ml-4 px-4 py-2 rounded bg-button-bg-color text-button-text-color"
+                            >
+                                Toggle Theme
+                            </button>
                         </header>
                         <main className="mt-7 mb-36 flex justify-center">
                             <div className="relative w-full overflow-x-auto scroll-container">
                                 <div className="flex gap-6 justify-start items-stretch">
-                                    {filteredProducts.map((item) => (
-                                        <article key={item._id} className="relative flex-shrink-0 w-64">
-                                            <div className="group relative">
-                                                <Image
-                                                    width={300}
-                                                    height={300}
-                                                    src={item.image}
-                                                    alt={item.name}
-                                                    className="object-cover rounded-md shadow-lg transition-transform duration-300 transform group-hover:scale-105"
-                                                    loading="lazy"
-                                                />
-                                                <button
-                                                    aria-label="Toggle Favorite"
-                                                    className="absolute top-4 right-4 text-2xl text-gray-500 cursor-pointer opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                                                    onClick={() => {
-                                                        toggleFavorite(item._id);
-                                                        const index = products.findIndex(
-                                                            (product) => product._id === item._id
-                                                        );
-                                                        setFavorite((prev) => {
-                                                            const newFav = [...prev];
-                                                            newFav[index] = !newFav[index];
-                                                            return newFav;
-                                                        });
-                                                    }}
-                                                >
-                                                    {favorite[products.findIndex((product) => product._id === item._id)] ? (
-                                                        <FaHeart className="text-red-500"/>
-                                                    ) : (
-                                                        <FaRegHeart/>
-                                                    )}
-                                                </button>
-                                                <button
-                                                    onClick={() => addToCart(item._id)}
-                                                    className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black text-white px-4 py-2 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100 font-semibold"
-                                                >
-                                                    Add to Cart
-                                                </button>
-                                                <div className="absolute top-2 left-2">
-                                                    <p className="text-black bg-white px-2 py-1 rounded-md text-sm font-semibold">
-                                                        New
-                                                    </p>
-                                                    <p className="text-white bg-green-500 px-2 mt-1 rounded-md text-sm font-semibold">
-                                                        -50%
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div className="mt-3 mb-3">
-                                                <Box sx={{"& > legend": {mt: 2}}}>
-                                                    <Rating
-                                                        name="no-value"
-                                                        value={null}
-                                                        sx={{
-                                                            "& .MuiRating-iconFilled": {
-                                                                color: "black",
-                                                            },
-                                                        }}
-                                                        onChange={(event, newValue) => {
-                                                            if (newValue !== null) {
-                                                                updateRating(item._id, newValue);
-                                                            }
-                                                        }}
+                                    {filteredProducts.map((item) => {
+                                        const cartItem = getCartItem(item._id);
+                                        return (
+                                            <article key={item._id} className="relative flex-shrink-0 w-64">
+                                                <div className="group relative">
+                                                    <Image
+                                                        width={300}
+                                                        height={300}
+                                                        src={item.image}
+                                                        alt={item.name}
+                                                        className="object-cover rounded-md shadow-lg transition-transform duration-300 transform group-hover:scale-105"
+                                                        loading="lazy"
                                                     />
-                                                </Box>
-                                                <p className="mt-2 font-semibold text-left">{item.name}</p>
-                                                <div className="flex gap-3 mt-2 text-left">
-                                                    <p className="font-bold">${item.price}</p>
-                                                    {item.PriceBeforeDiscount && (
-                                                        <del className="text-gray-500">
-                                                            ${item.PriceBeforeDiscount}
-                                                        </del>
-                                                    )}
+                                                    <button
+                                                        aria-label="Toggle Favorite"
+                                                        className="absolute top-4 right-4 text-2xl text-gray-500 cursor-pointer opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                                        onClick={() => {
+                                                            toggleFavorite(userId, item._id);
+                                                        }}
+                                                    >
+                                                        {cartItem?.isFavourite ? (
+                                                            <FaHeart className="text-red-500"/>
+                                                        ) : (
+                                                            <FaRegHeart/>
+                                                        )}
+                                                    </button>
+                                                    <button
+                                                        onClick={() => addToCart(userId, item._id)}
+                                                        className={`absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100 font-semibold ${
+                                                            theme === "dark" ? "bg-black text-white" : "bg-white text-black"
+                                                        }`}>
+                                                        Add to Cart
+                                                    </button>
+                                                    <div className="absolute top-2 left-2">
+                                                        <p className="text-black bg-white px-2 py-1 rounded-md text-sm font-semibold">
+                                                            New
+                                                        </p>
+                                                        <p className="text-white bg-green-500 px-2 mt-1 rounded-md text-sm font-semibold">
+                                                            -50%
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </article>
-                                    ))}
+                                                <div className="mt-3 mb-3">
+                                                    <Box sx={{"& > legend": {mt: 2}}}>
+                                                        <Rating
+                                                            name="simple-controlled"
+                                                            value={cartItem?.rating ?? null}
+                                                            sx={{
+                                                                "& .MuiRating-iconFilled": {
+                                                                    color: "var(--rating-color)",
+                                                                    border: "1px solid var(--rating-border-color)",
+                                                                },
+                                                                "& .MuiRating-iconEmpty": {
+                                                                    color: "var(--rating-unselected-color)",
+                                                                },
+                                                            }}
+                                                            onChange={(event, newValue) => {
+                                                                if (newValue !== null) {
+                                                                    updateRating(userId, item._id, newValue);
+                                                                }
+                                                            }}
+                                                        />
+                                                    </Box>
+                                                    <p className="mt-2 font-semibold text-left">{item.name}</p>
+                                                    <div className="flex gap-3 mt-2 text-left">
+                                                        <p className="font-bold">${item.price}</p>
+                                                        {item.PriceBeforeDiscount && (
+                                                            <del className="text-gray-500">
+                                                                ${item.PriceBeforeDiscount}
+                                                            </del>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </article>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         </main>

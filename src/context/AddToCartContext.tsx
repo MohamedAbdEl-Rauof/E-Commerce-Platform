@@ -1,5 +1,6 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {toast} from "react-toastify";
+import {useSession} from 'next-auth/react';
 
 interface CartItem {
     productId: string;
@@ -10,9 +11,9 @@ interface CartItem {
 
 interface CartContextType {
     cart: CartItem[];
-    addToCart: (productId: string) => Promise<void>;
-    toggleFavorite: (productId: string) => Promise<void>;
-    updateRating: (productId: string, rating: number) => Promise<void>;
+    addToCart: (userId: string, productId: string) => Promise<void>;
+    updateRating: (userId: string, productId: string, rating: number) => Promise<void>;
+    toggleFavorite: (userId: string, productId: string) => Promise<void>;
     cartCount: number;
 }
 
@@ -28,16 +29,33 @@ export const useCart = () => {
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}) => {
     const [cart, setCart] = useState<CartItem[]>([]);
-    const [cartCount, setCartCount] = useState(0);
+    const [cartLoaded, setCartLoaded] = useState(false);
+    const {data: session} = useSession();
+    const userId = session?.user?.id;
 
-    const addToCart = async (productId: string) => {
+    const getCart = async (userId: string) => {
+        try {
+            const response = await fetch(`/api/addtocart?userId=${userId}`);
+            if (response.ok) {
+                const data = await response.json();
+                setCart(data.info);
+                setCartLoaded(true);
+            } else {
+                console.error("Failed to fetch cart data");
+            }
+        } catch (error) {
+            console.error("Error fetching cart data:", error);
+        }
+    };
+
+    const addToCart = async (userId: string, productId: string) => {
         try {
             const response = await fetch("/api/addtocart", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({productId, quantity: 1}),
+                body: JSON.stringify({userId, productId, quantity: 1}),
             });
 
             if (!response.ok) {
@@ -60,58 +78,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
                     return [...prevCart, {productId, quantity: 1, isFavourite: false, rating: 0}];
                 }
             });
-
-            setCartCount((prevCount) => prevCount + 1);
         } catch (error) {
             toast.error("An error occurred while adding to cart");
             console.error("Error adding to cart:", error);
         }
     };
 
-    const toggleFavorite = async (productId: string) => {
+    const updateRating = async (userId: string, productId: string, rating: number) => {
         try {
             const response = await fetch("/api/addtocart", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({productId, isFavourite: true}),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to toggle favorite");
-            }
-
-            const data = await response.json();
-            toast.success(data.message);
-
-            setCart((prevCart) => {
-                const existingItemIndex = prevCart.findIndex(
-                    (cartItem) => cartItem.productId === productId
-                );
-
-                if (existingItemIndex !== -1) {
-                    const updatedCart = [...prevCart];
-                    updatedCart[existingItemIndex].isFavourite = !updatedCart[existingItemIndex].isFavourite;
-                    return updatedCart;
-                } else {
-                    return [...prevCart, {productId, quantity: 1, isFavourite: true, rating: 0}];
-                }
-            });
-        } catch (error) {
-            toast.error("An error occurred while toggling favorite");
-            console.error("Error toggling favorite:", error);
-        }
-    };
-
-    const updateRating = async (productId: string, rating: number) => {
-        try {
-            const response = await fetch("/api/addtocart", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({productId, rating}),
+                body: JSON.stringify({userId, productId, rating}),
             });
 
             if (!response.ok) {
@@ -140,8 +120,48 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
         }
     };
 
+    const toggleFavorite = async (userId: string, productId: string) => {
+        try {
+            const existingItemIndex = cart.findIndex(
+                (cartItem) => cartItem.productId === productId
+            );
+
+            if (existingItemIndex !== -1) {
+                const updatedCart = [...cart];
+                const newFavouriteStatus = !updatedCart[existingItemIndex].isFavourite;
+
+                const response = await fetch("/api/addtocart", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({userId, productId, isFavourite: newFavouriteStatus}),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to toggle favorite");
+                }
+
+                const data = await response.json();
+                toast.success(data.message);
+
+                updatedCart[existingItemIndex].isFavourite = newFavouriteStatus;
+                setCart(updatedCart);
+            }
+        } catch (error) {
+            toast.error("An error occurred while toggling favorite");
+            console.error("Error toggling favorite:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (userId && !cartLoaded) {
+            getCart(userId);
+        }
+    }, [userId, cartLoaded]);
+
     return (
-        <CartContext.Provider value={{cart, addToCart, toggleFavorite, updateRating, cartCount}}>
+        <CartContext.Provider value={{cart, addToCart, toggleFavorite, updateRating, cartCount: cart.length}}>
             {children}
         </CartContext.Provider>
     );

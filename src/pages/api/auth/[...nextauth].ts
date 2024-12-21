@@ -1,25 +1,31 @@
-import NextAuth, {AuthOptions, Session, User} from "next-auth";
+import NextAuth, {AuthOptions, DefaultSession, User} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import clientPromise from "../../../lib/mongodb";
 import bcrypt from "bcrypt";
-import {JWT} from "next-auth/jwt";
 
+declare module "next-auth" {
+    interface Session {
+        user: {
+            id: string;
+            email: string;
+            role: string;
+        } & DefaultSession["user"];
+    }
 
-interface CustomUser extends User {
-    role: string;
-    id: string;
+    interface User {
+        role: string;
+    }
 }
 
-interface CustomJWT extends JWT {
-    role: string;
-    id: string;
-}
-
-interface CustomSession extends Session {
-    user: {
+declare module "next-auth/jwt" {
+    interface JWT {
         role: string;
         id: string;
-    } & Session["user"];
+    }
+}
+
+interface CustomUser extends User {
+    id: string;
 }
 
 export const authOptions: AuthOptions = {
@@ -61,20 +67,17 @@ export const authOptions: AuthOptions = {
     callbacks: {
         async jwt({token, user}) {
             if (user) {
-                const customUser = user as CustomUser;
-                token.role = customUser.role;
-                token.id = customUser.id;
+                token.role = (user as CustomUser).role;
+                token.id = (user as CustomUser).id;
             }
-            return token as CustomJWT;
+            return token;
         },
         async session({session, token}) {
-            console.log("Session callback:", token);
-            const customSession = session as CustomSession;
-            if (customSession?.user) {
-                customSession.user.role = (token as CustomJWT).role;
-                customSession.user.id = (token as CustomJWT).id;
+            if (session.user) {
+                session.user.role = token.role;
+                session.user.id = token.id;
             }
-            return customSession;
+            return session;
         },
     },
     pages: {

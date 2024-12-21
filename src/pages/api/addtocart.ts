@@ -41,9 +41,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     info: [
                         {
                             productId: new ObjectId(productId),
-                            quantity,
-                            isFavourite,
-                            rating,
+                            quantity: quantity !== undefined ? Math.max(0, quantity) : 0,
+                            isFavourite: isFavourite ?? false,
+                            rating: rating ?? 0,
                         },
                     ],
                 };
@@ -56,13 +56,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 );
 
                 if (existingProductIndex !== -1) {
+                    const updates: Partial<CartItem> = {};
+                    if (quantity !== undefined) {
+                        updates.quantity = Math.max(0, cart.info[existingProductIndex].quantity + quantity);
+                    }
+                    if (isFavourite !== undefined) {
+                        updates.isFavourite = isFavourite;
+                    }
+                    if (rating !== undefined) {
+                        updates.rating = rating;
+                    }
+
                     await cartCollection.updateOne(
                         {_id: cart._id},
                         {
-                            $inc: {[`info.${existingProductIndex}.quantity`]: quantity},
                             $set: {
-                                [`info.${existingProductIndex}.isFavourite`]: isFavourite,
-                                [`info.${existingProductIndex}.rating`]: rating,
+                                [`info.${existingProductIndex}`]: {
+                                    ...cart.info[existingProductIndex],
+                                    ...updates,
+                                },
                             },
                         }
                     );
@@ -73,9 +85,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             $push: {
                                 info: {
                                     productId: new ObjectId(productId),
-                                    quantity,
-                                    isFavourite,
-                                    rating,
+                                    quantity: quantity !== undefined ? Math.max(0, quantity) : 0,
+                                    isFavourite: isFavourite ?? false,
+                                    rating: rating ?? 0,
                                 } as CartItem,
                             },
                         }
@@ -87,6 +99,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } catch (error) {
             console.error("Error adding to cart:", error);
             res.status(500).json({message: "An error occurred while adding to cart"});
+        }
+    } else if (req.method === 'GET') {
+        const {userId} = req.query;
+
+        if (!userId || !ObjectId.isValid(userId as string)) {
+            return res.status(401).json({message: "Unauthorized or invalid user ID"});
+        }
+
+        try {
+            const cart = await db.collection('cart').findOne({userId: new ObjectId(userId as string)});
+
+            if (!cart) {
+                return res.status(404).json({message: "Cart not found"});
+            }
+
+            res.status(200).json(cart);
+        } catch (error) {
+            console.error("Error fetching cart:", error);
+            res.status(500).json({message: "An error occurred while fetching the cart"});
         }
     } else {
         res.status(405).json({message: "Method not allowed"});
