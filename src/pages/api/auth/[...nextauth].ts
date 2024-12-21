@@ -68,6 +68,7 @@ export const authOptions: AuthOptions = {
             return token as CustomJWT;
         },
         async session({session, token}) {
+            console.log("Session callback:", token);
             const customSession = session as CustomSession;
             if (customSession?.user) {
                 customSession.user.role = (token as CustomJWT).role;

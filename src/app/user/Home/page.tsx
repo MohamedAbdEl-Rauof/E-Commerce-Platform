@@ -5,6 +5,8 @@ import SliderImage from "./components/SliderImage";
 import TextSection from "./components/TextSection";
 import Categories from "./components/Categories";
 import {CategoriesProvider} from "@/context/CategoriesContext";
+import NewArrivalsProduct from "./components/NewArrivalsProduct";
+import {ProductProvider} from "@/context/ProductContext";
 
 const HomeContent = () => {
 
@@ -19,6 +21,9 @@ const HomeContent = () => {
             <div>
                 <Categories/>
             </div>
+            <div>
+                <NewArrivalsProduct/>
+            </div>
         </>
     );
 };
@@ -27,7 +32,9 @@ const Home = () => {
     return (
         <SliderProvider>
             <CategoriesProvider>
-                <HomeContent/>
+                <ProductProvider>
+                    <HomeContent/>
+                </ProductProvider>
             </CategoriesProvider>
         </SliderProvider>
     );
