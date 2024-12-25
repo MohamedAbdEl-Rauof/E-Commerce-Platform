@@ -1,6 +1,8 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {useSession} from 'next-auth/react';
+import Swal from "sweetalert2";
+import {useRouter} from "next/navigation";
 
 interface CartItem {
     productId: string;
@@ -32,6 +34,24 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
     const [cartLoaded, setCartLoaded] = useState(false);
     const {data: session} = useSession();
     const userId = session?.user?.id;
+    const router = useRouter();
+
+    const checkUserSignin = () => {
+        if (!userId) {
+            Swal.fire({
+                title: "Please Log In",
+                text: "You need to be logged in to perform this action.",
+                icon: "warning",
+                confirmButtonText: "Go to Login",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.push("/signin");
+                }
+            });
+            return false;
+        }
+        return true;
+    };
 
     const getCart = async (userId: string) => {
         try {
@@ -49,6 +69,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
     };
 
     const addToCart = async (userId: string, productId: string) => {
+        if (!checkUserSignin()) return;
+
         try {
             const response = await fetch("/api/addtocart", {
                 method: "POST",
@@ -85,6 +107,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
     };
 
     const updateRating = async (userId: string, productId: string, rating: number) => {
+        if (!checkUserSignin()) return;
+
         try {
             const response = await fetch("/api/addtocart", {
                 method: "POST",
@@ -121,6 +145,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
     };
 
     const toggleFavorite = async (userId: string, productId: string) => {
+        if (!checkUserSignin()) return;
+
         try {
             const existingItemIndex = cart.findIndex(
                 (cartItem) => cartItem.productId === productId

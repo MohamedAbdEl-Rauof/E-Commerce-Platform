@@ -7,22 +7,31 @@ import Categories from "./components/Categories";
 import {CategoriesProvider} from "@/context/CategoriesContext";
 import NewArrivalsProduct from "./components/NewArrivalsProduct";
 import {ProductProvider} from "@/context/ProductContext";
+import ValuesSection from "@/app/user/home/components/ValuesSection";
+import BannerSection from "@/app/user/home/components/BannerSection";
+import Newsletter from "@/components/common/Newsletter";
+import {CartProvider} from "@/context/AddToCartContext";
 
 const HomeContent = () => {
 
     return (
         <>
-            <div className="w-[90%] mx-auto">
+            <div className="w-[90%] mx-auto space-y-16">
                 <SliderImage/>
-            </div>
-            <div className=" mt-10 ml-10">
+
                 <TextSection/>
-            </div>
-            <div>
+
                 <Categories/>
+
+                <NewArrivalsProduct/>
+
+                <ValuesSection/>
             </div>
             <div>
-                <NewArrivalsProduct/>
+                <BannerSection/>
+            </div>
+            <div>
+                <Newsletter/>
             </div>
         </>
     );
@@ -33,7 +42,9 @@ const Home = () => {
         <SliderProvider>
             <CategoriesProvider>
                 <ProductProvider>
-                    <HomeContent/>
+                    <CartProvider>
+                        <HomeContent/>
+                    </CartProvider>
                 </ProductProvider>
             </CategoriesProvider>
         </SliderProvider>

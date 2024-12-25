@@ -9,6 +9,7 @@ import Head from "next/head";
 import NewArrivalsProductLoading from "@/components/userUiLoading/Home/NewArrivalsProductLoading";
 import {useCart} from "@/context/AddToCartContext";
 import {useSession} from 'next-auth/react';
+import {useTheme} from "next-themes"
 
 interface Product {
     _id: string;
@@ -25,7 +26,7 @@ const NewArrivalsProduct = () => {
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const {data: session} = useSession();
     const userId = session?.user?.id;
-    const [theme, setTheme] = useState("light");
+    const {theme} = useTheme()
 
     useEffect(() => {
         if (products.length > 0) {
@@ -37,10 +38,6 @@ const NewArrivalsProduct = () => {
             setFilteredProducts(recentProducts);
         }
     }, [products]);
-
-    useEffect(() => {
-        document.documentElement.setAttribute("data-theme", theme);
-    }, [theme]);
 
     const getCartItem = (productId: string) => {
         return cart.find(item => item.productId === productId);
@@ -60,7 +57,7 @@ const NewArrivalsProduct = () => {
                         <title>New Arrivals</title>
                         <meta name="description" content="Check out the latest arrivals in our store."/>
                     </Head>
-                    <div className="mt-14 w-[90%] mx-auto">
+                    <div className="mt-14">
                         <header className="flex justify-between items-center">
                             <h1 className="text-4xl font-bold">New Arrivals</h1>
                             <u className="flex items-center text-black font-bold cursor-pointer hover:underline">
@@ -68,12 +65,7 @@ const NewArrivalsProduct = () => {
                                 <FaArrowRight
                                     className="ml-1 transform transition-transform duration-300 hover:translate-x-1"/>
                             </u>
-                            <button
-                                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                                className="ml-4 px-4 py-2 rounded bg-button-bg-color text-button-text-color"
-                            >
-                                Toggle Theme
-                            </button>
+
                         </header>
                         <main className="mt-7 mb-36 flex justify-center">
                             <div className="relative w-full overflow-x-auto scroll-container">
@@ -95,7 +87,9 @@ const NewArrivalsProduct = () => {
                                                         aria-label="Toggle Favorite"
                                                         className="absolute top-4 right-4 text-2xl text-gray-500 cursor-pointer opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                                                         onClick={() => {
-                                                            toggleFavorite(userId, item._id);
+                                                            if (userId) {
+                                                                toggleFavorite(userId, item._id);
+                                                            }
                                                         }}
                                                     >
                                                         {cartItem?.isFavourite ? (
@@ -105,7 +99,11 @@ const NewArrivalsProduct = () => {
                                                         )}
                                                     </button>
                                                     <button
-                                                        onClick={() => addToCart(userId, item._id)}
+                                                        onClick={() => {
+                                                            if (userId) {
+                                                                addToCart(userId, item._id)
+                                                            }
+                                                        }}
                                                         className={`absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100 font-semibold ${
                                                             theme === "dark" ? "bg-black text-white" : "bg-white text-black"
                                                         }`}>
@@ -135,7 +133,7 @@ const NewArrivalsProduct = () => {
                                                                 },
                                                             }}
                                                             onChange={(event, newValue) => {
-                                                                if (newValue !== null) {
+                                                                if (newValue !== null && userId) {
                                                                     updateRating(userId, item._id, newValue);
                                                                 }
                                                             }}

@@ -1,6 +1,6 @@
 "use client";
 import Navbar from "@/components/common/Navbar";
-import Home from "@/app/user/Home/page";
+import Home from "@/app/user/home/page";
 import {CartProvider} from "@/context/AddToCartContext";
 
 const Page = () => {
@@ -13,7 +13,6 @@ const Page = () => {
                 <h1>Hi Hi Captain (User)</h1>
                 <Home/>
             </CartProvider>
-
 
         </div>
     );

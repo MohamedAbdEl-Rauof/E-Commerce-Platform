@@ -2,11 +2,6 @@ import {motion} from "framer-motion";
 import React from "react";
 
 const CategoriesLoading = () => {
-    const fadeInUp = {
-        initial: {opacity: 0, y: 20},
-        animate: {opacity: 1, y: 0},
-        exit: {opacity: 0, y: 20},
-    };
 
     return (
         <>
