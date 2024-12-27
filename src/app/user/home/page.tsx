@@ -9,7 +9,7 @@ import NewArrivalsProduct from "./components/NewArrivalsProduct";
 import {ProductProvider} from "@/context/ProductContext";
 import ValuesSection from "@/app/user/home/components/ValuesSection";
 import BannerSection from "@/app/user/home/components/BannerSection";
-import Newsletter from "@/components/common/Newsletter";
+import Newsletter from "@/components/common/user/Newsletter";
 import {CartProvider} from "@/context/AddToCartContext";
 
 const HomeContent = () => {

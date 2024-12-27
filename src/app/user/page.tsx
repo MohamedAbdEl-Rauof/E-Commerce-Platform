@@ -1,5 +1,5 @@
 "use client";
-import Navbar from "@/components/common/Navbar";
+import Navbar from "@/components/common/user/Navbar";
 import Home from "@/app/user/home/page";
 import {CartProvider} from "@/context/AddToCartContext";
 

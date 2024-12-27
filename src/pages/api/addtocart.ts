@@ -119,7 +119,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             console.error("Error fetching cart:", error);
             res.status(500).json({message: "An error occurred while fetching the cart"});
         }
+    } else if (req.method === "DELETE") {
+        const {userId, productId} = req.body;
+
+        if (!userId || !ObjectId.isValid(userId)) {
+            return res
+                .status(401)
+                .json({message: "Unauthorized or invalid user ID"});
+        }
+
+        if (!productId || !ObjectId.isValid(productId)) {
+            return res.status(400).json({message: "Invalid product ID"});
+        }
+
+        try {
+            const cartCollection = db.collection<Cart>("cart");
+
+            // Remove the product from the user's cart
+            await cartCollection.updateOne(
+                {userId: new ObjectId(userId)},
+                {$pull: {info: {productId: new ObjectId(productId)}}},
+            );
+
+            res
+                .status(200)
+                .json({message: "Category removed from cart successfully"});
+        } catch (error) {
+            console.error("Error deleting from cart:", error);
+            res
+                .status(500)
+                .json({message: "An error occurred while deleting from cart"});
+        }
     } else {
-        res.status(405).json({message: "Method not allowed"});
+        res.setHeader("Allow", ["POST", "GET", "PUT", "DELETE"]);
+        res.status(405).json({message: `Method ${req.method} Not Allowed`});
     }
-}
+};

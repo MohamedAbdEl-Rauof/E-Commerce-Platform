@@ -9,14 +9,21 @@ interface CartItem {
     quantity: number;
     isFavourite: boolean;
     rating: number;
+
 }
 
 interface CartContextType {
     cart: CartItem[];
     addToCart: (userId: string, productId: string) => Promise<void>;
+    decrementFromCart: (userId: string, productId: string) => Promise<void>;
+    deleteItem: (productId: string) => Promise<void>;
     updateRating: (userId: string, productId: string, rating: number) => Promise<void>;
     toggleFavorite: (userId: string, productId: string) => Promise<void>;
     cartCount: number;
+    checkUserSignin: () => boolean;
+    isOpen: boolean;
+    openCart: () => void;
+    closeCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -35,6 +42,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
     const {data: session} = useSession();
     const userId = session?.user?.id;
     const router = useRouter();
+
+    const [isOpen, setIsOpen] = useState(false);
+
+    const openCart = () => setIsOpen(true);
+    const closeCart = () => setIsOpen(false);
+
 
     const checkUserSignin = () => {
         if (!userId) {
@@ -105,6 +118,44 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
             console.error("Error adding to cart:", error);
         }
     };
+
+    const decrementFromCart = async (userId: string, productId: string) => {
+        if (!checkUserSignin()) return;
+
+        try {
+            const response = await fetch("/api/addtocart", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({userId, productId, quantity: 1}),
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to add item to cart");
+            }
+
+            const data = await response.json();
+            toast.success(data.message);
+
+            setCart((prevCart) => {
+                const existingItemIndex = prevCart.findIndex(
+                    (cartItem) => cartItem.productId === productId
+                );
+
+                if (existingItemIndex !== -1) {
+                    const updatedCart = [...prevCart];
+                    updatedCart[existingItemIndex].quantity -= 1;
+                    return updatedCart;
+                } else {
+                    return [...prevCart, {productId, quantity: 1, isFavourite: false, rating: 0}];
+                }
+            });
+        } catch (error) {
+            toast.error("An error occurred while adding to cart");
+            console.error("Error adding to cart:", error);
+        }
+    }
 
     const updateRating = async (userId: string, productId: string, rating: number) => {
         if (!checkUserSignin()) return;
@@ -180,6 +231,33 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
         }
     };
 
+    const deleteItem = async (productId: string) => {
+        try {
+            setCart((prevItems) =>
+                prevItems.filter((item) => item.productId !== productId)
+            );
+
+            if (userId) {
+                await fetch('/api/addtocart', {
+                    method: 'DELETE',
+                    body: JSON.stringify({userId, productId}),
+                    headers: {'Content-Type': 'application/json'},
+                });
+
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Deleted Done',
+                    showConfirmButton: false,
+                    timer: 1000,
+                });
+            }
+        } catch (error) {
+            console.error('Error deleting item:', error);
+        }
+    };
+
+
     useEffect(() => {
         if (userId && !cartLoaded) {
             getCart(userId);
@@ -187,7 +265,20 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
     }, [userId, cartLoaded]);
 
     return (
-        <CartContext.Provider value={{cart, addToCart, toggleFavorite, updateRating, cartCount: cart.length}}>
+        <CartContext.Provider
+            value={{
+                cart,
+                addToCart,
+                decrementFromCart,
+                deleteItem,
+                toggleFavorite,
+                updateRating,
+                isOpen,
+                openCart,
+                closeCart,
+                checkUserSignin,
+                cartCount: cart.length
+            }}>
             {children}
         </CartContext.Provider>
     );

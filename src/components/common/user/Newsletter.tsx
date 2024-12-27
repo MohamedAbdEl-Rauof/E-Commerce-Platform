@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import NewsletterLoading from "../userUiLoading/commonUiLoading/NewsletterLoading";
+import NewsletterLoading from "../../userUiLoading/commonUiLoading/NewsletterLoading";
 import {useCategories} from "@/context/CategoriesContext";
 import {useSlider} from "@/context/SliderContext";
 import Image from "next/image";

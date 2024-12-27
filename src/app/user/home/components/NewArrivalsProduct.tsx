@@ -22,7 +22,7 @@ interface Product {
 
 const NewArrivalsProduct = () => {
     const {products, loading, error} = useProduct();
-    const {addToCart, toggleFavorite, updateRating, cart} = useCart();
+    const {addToCart, toggleFavorite, updateRating, cart, checkUserSignin} = useCart();
     const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
     const {data: session} = useSession();
     const userId = session?.user?.id;
@@ -89,6 +89,8 @@ const NewArrivalsProduct = () => {
                                                         onClick={() => {
                                                             if (userId) {
                                                                 toggleFavorite(userId, item._id);
+                                                            } else {
+                                                                checkUserSignin();
                                                             }
                                                         }}
                                                     >
@@ -102,6 +104,8 @@ const NewArrivalsProduct = () => {
                                                         onClick={() => {
                                                             if (userId) {
                                                                 addToCart(userId, item._id)
+                                                            } else {
+                                                                checkUserSignin();
                                                             }
                                                         }}
                                                         className={`absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded opacity-0 transition-opacity duration-300 group-hover:opacity-100 font-semibold ${
@@ -135,6 +139,8 @@ const NewArrivalsProduct = () => {
                                                             onChange={(event, newValue) => {
                                                                 if (newValue !== null && userId) {
                                                                     updateRating(userId, item._id, newValue);
+                                                                } else {
+                                                                    checkUserSignin();
                                                                 }
                                                             }}
                                                         />
