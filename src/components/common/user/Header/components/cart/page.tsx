@@ -1,16 +1,14 @@
 "use client";
 import React from "react";
 import {Box, List, ListItem} from "@mui/material";
-import {useRouter} from "next/navigation";
 import {useCart} from "@/context/AddToCartContext";
 import {useSession} from "next-auth/react";
 import CartHeader from './components/CartHeader';
 import CartItem from './components/CartItem';
 import CartSummary from './components/CartSummary';
-import CartActions from './components/CartActions';
+import {useProduct} from "@/context/ProductContext";
 
 const Page = () => {
-    const router = useRouter();
     const {data: session} = useSession();
     const userId = session?.user?.id;
     const {
@@ -20,12 +18,14 @@ const Page = () => {
         decrementFromCart,
         deleteItem,
         toggleFavorite,
-        // calculateSubtotal,
         checkUserSignin,
     } = useCart();
 
+    const {products} = useProduct();
+
     const handleCheckout = () => {
-        router.push("/pages/ViewCart");
+        // router.push("/pages/ViewCart");
+        console.log("productsssssssssssssssssssssss", products);
     };
 
     return (
@@ -59,10 +59,7 @@ const Page = () => {
                         ))}
                 </ListItem>
             </List>
-            <div className="mt-auto p-3 sm:p-4">
-                <CartSummary /*calculateSubtotal={calculateSubtotal}*/ />
-                <CartActions handleCheckout={handleCheckout}/>
-            </div>
+            <CartSummary handleCheckout={handleCheckout}/>
         </Box>
     );
 };
