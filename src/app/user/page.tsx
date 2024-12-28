@@ -1,8 +1,9 @@
 "use client";
-import Navbar from "@/components/common/user/Navbar";
 import Home from "@/app/user/home/page";
 import {CartProvider} from "@/context/AddToCartContext";
 import {ProductProvider} from "@/context/ProductContext";
+import Header from "@/components/common/user/Header/Page";
+import * as React from "react";
 
 const Page = () => {
 
@@ -11,8 +12,7 @@ const Page = () => {
             {/* Made CartProvider to listen the state in all project */}
             <CartProvider>
                 <ProductProvider>
-                    <Navbar/>
-                    <h1>Hi Hi Captain (User)</h1>
+                    <Header/>
                     <Home/>
                 </ProductProvider>
             </CartProvider>

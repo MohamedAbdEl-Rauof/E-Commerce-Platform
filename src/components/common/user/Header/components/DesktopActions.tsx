@@ -1,3 +1,4 @@
+// src/components/common/user/Header/components/DesktopActions.tsx
 "use client";
 
 import React, {useState} from 'react';
@@ -5,14 +6,24 @@ import {useRouter} from 'next/navigation';
 import {CiSearch} from 'react-icons/ci';
 import {FaRegCircleUser} from 'react-icons/fa6';
 import {IoCartOutline} from 'react-icons/io5';
-import {Badge, Button, Drawer, Menu, MenuItem, TextField,} from '@mui/material';
+import {Badge, Button, Drawer, Menu, MenuItem, TextField} from '@mui/material';
 import {signOut} from 'next-auth/react';
 import Swal from 'sweetalert2';
 import CartDrawer from './cart/page';
+import DarkMoodSwitch from "@/components/common/user/DarkMoodSwitch";
+import {Session} from 'next-auth';
+
+interface CartItem {
+    productId: string;
+    quantity: number;
+    _id: string;
+    isFavourite: boolean;
+    id: string;
+}
 
 interface DesktopActionsProps {
-    session: any;
-    cart: any[];
+    session: Session | null;
+    cart: CartItem[];
     isOpen: boolean;
     openCart: () => void;
     closeCart: () => void;
@@ -30,7 +41,7 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({session, cart, isOpen, o
         if (session) {
             setAnchorEl(event.currentTarget);
         } else {
-            router.push('/Signin');
+            router.push('/signin');
         }
     };
 
@@ -85,6 +96,9 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({session, cart, isOpen, o
                     className="cursor-pointer text-2xl hover:text-gray-800 transition-colors duration-200"
                     onClick={toggleInputVisibility}
                 />
+            </div>
+            <div>
+                <DarkMoodSwitch/>
             </div>
 
             <div>

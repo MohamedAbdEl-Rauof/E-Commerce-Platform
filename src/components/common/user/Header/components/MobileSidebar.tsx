@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import {
     Box,
@@ -16,17 +14,17 @@ import {
 import {IoMdClose} from 'react-icons/io';
 import SearchIcon from '@mui/icons-material/Search';
 import {Session} from 'next-auth';
-import {NextRouter} from 'next/router';
+import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context';
 import {signOut} from 'next-auth/react';
-import Swal from 'sweetalert2';
+import {NavItem} from './Navigation';
 
 interface MobileSidebarProps {
     isSidebarOpen: boolean;
     toggleSidebar: (open: boolean) => () => void;
-    NAV_ITEMS: readonly string[];
-    handleItemClick: (item: string) => void;
+    NAV_ITEMS: readonly NavItem[];
+    handleItemClick: (item: NavItem) => void;
     session: Session | null;
-    router: NextRouter;
+    router: AppRouterInstance;
 }
 
 const MobileSidebar: React.FC<MobileSidebarProps> = ({

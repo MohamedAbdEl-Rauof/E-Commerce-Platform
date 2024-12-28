@@ -1,3 +1,4 @@
+// Page.tsx
 "use client";
 import React from "react";
 import {Box, List, ListItem} from "@mui/material";
@@ -6,11 +7,12 @@ import {useSession} from "next-auth/react";
 import CartHeader from './components/CartHeader';
 import CartItem from './components/CartItem';
 import CartSummary from './components/CartSummary';
-import {useProduct} from "@/context/ProductContext";
+import {useRouter} from "next/navigation";
+import {useProduct} from "@/context/ProductContext"; // Import useProduct
 
 const Page = () => {
     const {data: session} = useSession();
-    const userId = session?.user?.id;
+    const userId = session?.user?.id || "";
     const {
         cart,
         closeCart,
@@ -20,12 +22,12 @@ const Page = () => {
         toggleFavorite,
         checkUserSignin,
     } = useCart();
+    const {products} = useProduct(); // Get products from useProduct
 
-    const {products} = useProduct();
+    const router = useRouter();
 
     const handleCheckout = () => {
-        // router.push("/pages/ViewCart");
-        console.log("productsssssssssssssssssssssss", products);
+        router.push("/pages/ViewCart");
     };
 
     return (
@@ -55,6 +57,7 @@ const Page = () => {
                                 decrementFromCart={decrementFromCart}
                                 addToCart={addToCart}
                                 checkUserSignin={checkUserSignin}
+                                products={products}
                             />
                         ))}
                 </ListItem>

@@ -19,7 +19,7 @@ export default function DarkMoodSwitch() {
             <DarkModeSwitch
                 checked={isDarkMode}
                 onChange={toggleTheme}
-                size={100}
+                size={50}
             />
         </div>
     )

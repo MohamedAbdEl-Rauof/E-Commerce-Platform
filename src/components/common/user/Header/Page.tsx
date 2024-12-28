@@ -1,4 +1,4 @@
-"use client";
+// src/components/common/user/Header/Page.tsx
 import React, {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
@@ -8,6 +8,14 @@ import Navigation from './components/Navigation';
 import MobileMenu from './components/MobileMenu';
 import MobileSidebar from './components/MobileSidebar';
 import DesktopActions from './components/DesktopActions';
+
+interface CartItem {
+    productId: string;
+    quantity: number;
+    _id: string;
+    isFavourite: boolean;
+    id: string;
+}
 
 const NAV_ITEMS = ['Home', 'Shop', 'Categories', 'Contact Us'] as const;
 type NavItem = (typeof NAV_ITEMS)[number];

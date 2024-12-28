@@ -2,18 +2,25 @@
 import React from "react";
 import {IoMdClose} from "react-icons/io";
 import {FaHeart, FaRegHeart} from "react-icons/fa";
-import {useProduct} from "@/context/ProductContext";
 import Image from "next/image";
 
+interface Item {
+    productId: string;
+    quantity: number;
+    _id: string;
+    isFavourite: boolean;
+    id: string;
+}
+
 interface CartItemProps {
-    item: any;
+    item: Item;
     userId: string;
-    deleteItem: (id: string) => void;
-    toggleFavorite: (id: string) => void;
+    deleteItem: (id: string, prod: Item) => void;
+    toggleFavorite: (userId: string, productId: string) => void;
     decrementFromCart: (userId: string, itemId: string) => void;
     addToCart: (userId: string, itemId: string) => void;
     checkUserSignin: () => void;
-    products: any[];
+    products: Item[];
 }
 
 const CartItem: React.FC<CartItemProps> = ({
@@ -24,8 +31,8 @@ const CartItem: React.FC<CartItemProps> = ({
                                                decrementFromCart,
                                                addToCart,
                                                checkUserSignin,
+                                               products,
                                            }) => {
-    const {products} = useProduct();
     const product = products.find((p) => p._id === item.productId);
 
     return (
@@ -52,7 +59,7 @@ const CartItem: React.FC<CartItemProps> = ({
                             ${product.price || "0.00"}
                         </p>
                         <IoMdClose
-                            onClick={() => deleteItem(item.id)}
+                            onClick={() => deleteItem(item.id, product)}
                             className="text-lg text-gray-600 cursor-pointer block"
                         />
                     </div>
@@ -91,13 +98,13 @@ const CartItem: React.FC<CartItemProps> = ({
                         {item.isFavourite ? (
                             <FaHeart
                                 className="text-red-500 cursor-pointer text-sm sm:text-base block"
-                                onClick={() => toggleFavorite(item.id)}
+                                onClick={() => toggleFavorite(userId, item.id)}
                             />
                         ) : (
                             item.quantity > 0 && (
                                 <FaRegHeart
                                     className="text-gray-500 cursor-pointer text-sm sm:text-base block"
-                                    onClick={() => toggleFavorite(item.id)}
+                                    onClick={() => toggleFavorite(userId, item.id)}
                                 />
                             )
                         )}
