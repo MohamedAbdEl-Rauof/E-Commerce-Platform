@@ -2,6 +2,8 @@ import React from 'react';
 
 type NavItem = 'Home' | 'Shop' | 'Categories' | 'Contact Us';
 
+export type {NavItem};
+
 interface NavigationProps {
     NAV_ITEMS: readonly NavItem[];
     activeItem: NavItem;

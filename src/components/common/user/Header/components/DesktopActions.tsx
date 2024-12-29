@@ -12,14 +12,7 @@ import Swal from 'sweetalert2';
 import CartDrawer from './cart/page';
 import DarkMoodSwitch from "@/components/common/user/DarkMoodSwitch";
 import {Session} from 'next-auth';
-
-interface CartItem {
-    productId: string;
-    quantity: number;
-    _id: string;
-    isFavourite: boolean;
-    id: string;
-}
+import {CartItem} from '@/context/AddToCartContext';
 
 interface DesktopActionsProps {
     session: Session | null;

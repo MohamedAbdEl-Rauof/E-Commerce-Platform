@@ -10,8 +10,11 @@ interface CartItem {
     quantity: number;
     isFavourite: boolean;
     rating: number;
-
+    _id?: string;
+    id?: string;
 }
+
+export type {CartItem};
 
 interface CartContextType {
     cart: CartItem[];

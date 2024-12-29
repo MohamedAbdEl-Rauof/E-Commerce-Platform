@@ -10,6 +10,9 @@ interface Item {
     _id: string;
     isFavourite: boolean;
     id: string;
+    name: string;
+    price: number;
+    image: string;
 }
 
 interface CartItemProps {
@@ -33,7 +36,14 @@ const CartItem: React.FC<CartItemProps> = ({
                                                checkUserSignin,
                                                products,
                                            }) => {
+
     const product = products.find((p) => p._id === item.productId);
+
+    if (!product) {
+        return null;
+    }
+
+    console.log("Item quantity:", item.quantity); // Debugging line
 
     return (
         <div

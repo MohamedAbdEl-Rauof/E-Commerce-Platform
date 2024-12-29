@@ -14,9 +14,10 @@ import {
 import {IoMdClose} from 'react-icons/io';
 import SearchIcon from '@mui/icons-material/Search';
 import {Session} from 'next-auth';
-import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context';
+import {useRouter} from 'next/navigation';
 import {signOut} from 'next-auth/react';
-import {NavItem} from './Navigation';
+import {NavItem} from "./Navigation";
+import Swal from "sweetalert2";
 
 interface MobileSidebarProps {
     isSidebarOpen: boolean;
@@ -24,7 +25,7 @@ interface MobileSidebarProps {
     NAV_ITEMS: readonly NavItem[];
     handleItemClick: (item: NavItem) => void;
     session: Session | null;
-    router: AppRouterInstance;
+    router: ReturnType<typeof useRouter>;
 }
 
 const MobileSidebar: React.FC<MobileSidebarProps> = ({

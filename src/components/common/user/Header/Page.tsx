@@ -9,14 +9,6 @@ import MobileMenu from './components/MobileMenu';
 import MobileSidebar from './components/MobileSidebar';
 import DesktopActions from './components/DesktopActions';
 
-interface CartItem {
-    productId: string;
-    quantity: number;
-    _id: string;
-    isFavourite: boolean;
-    id: string;
-}
-
 const NAV_ITEMS = ['Home', 'Shop', 'Categories', 'Contact Us'] as const;
 type NavItem = (typeof NAV_ITEMS)[number];
 
