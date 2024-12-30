@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import {Box, List, ListItem} from "@mui/material";
-import {useCart} from "@/context/AddToCartContext";
 import {useSession} from "next-auth/react";
 import CartHeader from './components/CartHeader';
 import CartItem from './components/CartItem';
 import CartSummary from './components/CartSummary';
 import {useRouter} from "next/navigation";
 import {useProduct} from "@/context/ProductContext";
+import {useCart} from "@/context/AddToCartContext";
 
 const Page = () => {
     const {data: session} = useSession();
@@ -29,25 +29,6 @@ const Page = () => {
         router.push("/pages/ViewCart");
     };
 
-    const getQuantity = (productId: string) => {
-        const cartItem = cart.find(item => item.productId === productId);
-        return cartItem ? cartItem.quantity : 0;
-    };
-
-    const getIsFavourite = (productId: string) => {
-        const cartItem = cart.find(item => item.productId === productId);
-        return cartItem ? cartItem.isFavourite : false;
-    };
-
-    const mappedProducts = products.map(product => ({
-        ...product,
-        productId: product._id,
-        quantity: getQuantity(product._id),
-        isFavourite: getIsFavourite(product._id),
-        id: product._id,
-        price: parseFloat(product.price)
-    }));
-
     return (
         <Box
             sx={{
@@ -66,23 +47,18 @@ const Page = () => {
                     {cart
                         .filter((item) => item.quantity > 0 || item.isFavourite)
                         .map((item) => {
-                            const product = mappedProducts.find((p) => p._id === item.productId);
-                            if (!product) return null;
+                            const product = products.find((p) => p._id === item.productId);
                             return (
                                 <CartItem
                                     key={item.productId}
-                                    item={{
-                                        ...item,
-                                        ...product,
-                                        id: item.id || "",
-                                    }}
+                                    item={item}
                                     userId={userId}
                                     deleteItem={deleteItem}
                                     toggleFavorite={toggleFavorite}
                                     decrementFromCart={decrementFromCart}
                                     addToCart={addToCart}
                                     checkUserSignin={checkUserSignin}
-                                    products={mappedProducts}
+                                    products={products}
                                 />
                             );
                         })}

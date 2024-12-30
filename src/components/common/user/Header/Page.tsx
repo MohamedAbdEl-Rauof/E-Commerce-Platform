@@ -1,4 +1,3 @@
-// src/components/common/user/Header/Page.tsx
 import React, {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
