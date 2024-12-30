@@ -10,7 +10,6 @@ interface CartItem {
     quantity: number;
     isFavourite: boolean;
     rating: number;
-    _id?: string;
     id?: string;
 }
 
@@ -104,25 +103,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
             const data = await response.json();
             toast.success(data.message);
 
-            setCart((prevCart) => {
-                const existingItemIndex = prevCart.findIndex(
-                    (cartItem) => cartItem.productId === productId
-                );
-
-                if (existingItemIndex !== -1) {
-                    const updatedCart = [...prevCart];
-                    updatedCart[existingItemIndex].quantity += 1;
-                    return updatedCart;
-                } else {
-                    return [...prevCart, {productId, quantity: 1, isFavourite: false, rating: 0}];
-                }
-            });
+            // Update the cart state based on the server response
+            if (data.updatedCart) {
+                setCart(data.updatedCart);
+            } else {
+                // If the server doesn't return the updated cart, fetch it
+                await getCart(userId);
+            }
         } catch (error) {
             toast.error("An error occurred while adding to cart");
             console.error("Error adding to cart:", error);
         }
     };
-
     const decrementFromCart = async (userId: string, productId: string) => {
         if (!checkUserSignin()) return;
 

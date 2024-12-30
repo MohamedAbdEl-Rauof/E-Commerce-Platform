@@ -4,7 +4,7 @@ interface Product {
     _id: string;
     image: string;
     name: string;
-    price: string;
+    price: number;
     PriceBeforeDiscount: string;
     createdAt: Date;
 }

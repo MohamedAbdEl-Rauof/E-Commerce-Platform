@@ -1,16 +1,16 @@
 "use client";
 import React from "react";
-import {Box, List, ListItem} from "@mui/material";
-import {useSession} from "next-auth/react";
+import { Box, List, ListItem } from "@mui/material";
+import { useSession } from "next-auth/react";
 import CartHeader from './components/CartHeader';
 import CartItem from './components/CartItem';
 import CartSummary from './components/CartSummary';
-import {useRouter} from "next/navigation";
-import {useProduct} from "@/context/ProductContext";
-import {useCart} from "@/context/AddToCartContext";
+import { useRouter } from "next/navigation";
+import { useProduct } from "@/context/ProductContext";
+import { useCart } from "@/context/AddToCartContext";
 
 const Page = () => {
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const userId = session?.user?.id || "";
     const {
         cart,
@@ -21,7 +21,7 @@ const Page = () => {
         toggleFavorite,
         checkUserSignin,
     } = useCart();
-    const {products} = useProduct();
+    const { products } = useProduct();
 
     const router = useRouter();
 
@@ -43,28 +43,34 @@ const Page = () => {
         >
             <List className="flex-grow">
                 <ListItem disablePadding className="block">
-                    <CartHeader closeCart={closeCart}/>
+                    <CartHeader closeCart={closeCart} />
                     {cart
                         .filter((item) => item.quantity > 0 || item.isFavourite)
                         .map((item) => {
                             const product = products.find((p) => p._id === item.productId);
+                            if (!product) return null;
                             return (
                                 <CartItem
                                     key={item.productId}
-                                    item={item}
+                                    item={{
+                                        ...item,
+                                        productId: product._id,
+                                        name: product.name,
+                                        price: product.price,
+                                        image: product.image,
+                                    }}
                                     userId={userId}
                                     deleteItem={deleteItem}
                                     toggleFavorite={toggleFavorite}
                                     decrementFromCart={decrementFromCart}
                                     addToCart={addToCart}
                                     checkUserSignin={checkUserSignin}
-                                    products={products}
                                 />
                             );
                         })}
                 </ListItem>
             </List>
-            <CartSummary handleCheckout={handleCheckout}/>
+            <CartSummary handleCheckout={handleCheckout} />
         </Box>
     );
 };
