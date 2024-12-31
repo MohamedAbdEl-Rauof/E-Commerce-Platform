@@ -3,22 +3,13 @@ import {FaArrowRight, FaHeart, FaRegHeart} from "react-icons/fa";
 import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Link from "next/link";
-import {useProduct} from "@/context/ProductContext";
+import { useProduct, Product } from "@/context/ProductContext";
 import Image from "next/image";
 import Head from "next/head";
 import NewArrivalsProductLoading from "@/components/userUiLoading/Home/NewArrivalsProductLoading";
 import {useCart} from "@/context/AddToCartContext";
 import {useSession} from 'next-auth/react';
 import {useTheme} from "next-themes"
-
-interface Product {
-    _id: string;
-    image: string;
-    name: string;
-    price: string;
-    PriceBeforeDiscount: string;
-    createdAt: Date;
-}
 
 const NewArrivalsProduct = () => {
     const {products, loading, error} = useProduct();
@@ -61,7 +52,7 @@ const NewArrivalsProduct = () => {
                         <header className="flex justify-between items-center">
                             <h1 className="text-4xl font-bold">New Arrivals</h1>
                             <u className="flex items-center text-black font-bold cursor-pointer hover:underline">
-                                <Link href="user/Categories"> More Products</Link>
+                                <Link href="ظuser/Categories"> More Products</Link>
                                 <FaArrowRight
                                     className="ml-1 transform transition-transform duration-300 hover:translate-x-1"/>
                             </u>

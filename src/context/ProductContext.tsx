@@ -1,6 +1,6 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 
-interface Product {
+export interface Product {
     _id: string;
     image: string;
     name: string;

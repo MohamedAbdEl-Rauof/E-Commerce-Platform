@@ -115,6 +115,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
             console.error("Error adding to cart:", error);
         }
     };
+
     const decrementFromCart = async (userId: string, productId: string) => {
         if (!checkUserSignin()) return;
 
@@ -124,7 +125,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({userId, productId, quantity: 1}),
+                body: JSON.stringify({userId, productId, quantity: -1}),
             });
 
             if (!response.ok) {
@@ -134,24 +135,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
             const data = await response.json();
             toast.success(data.message);
 
-            setCart((prevCart) => {
-                const existingItemIndex = prevCart.findIndex(
-                    (cartItem) => cartItem.productId === productId
-                );
-
-                if (existingItemIndex !== -1) {
-                    const updatedCart = [...prevCart];
-                    updatedCart[existingItemIndex].quantity -= 1;
-                    return updatedCart;
-                } else {
-                    return [...prevCart, {productId, quantity: 1, isFavourite: false, rating: 0}];
-                }
-            });
+            if (data.updatedCart) {
+                setCart(data.updatedCart);
+            } else {
+                await getCart(userId);
+            }
         } catch (error) {
-            toast.error("An error occurred while adding to cart");
-            console.error("Error adding to cart:", error);
+            toast.error("An error occurred while updating the cart");
+            console.error("Error updating cart:", error);
         }
-    }
+    };
 
     const updateRating = async (userId: string, productId: string, rating: number) => {
         if (!checkUserSignin()) return;
