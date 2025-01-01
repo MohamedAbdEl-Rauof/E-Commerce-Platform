@@ -1,8 +1,8 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
-import {toast} from "react-toastify";
-import {useSession} from 'next-auth/react';
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
+import { toast } from "react-toastify";
+import { useSession } from 'next-auth/react';
 import Swal from "sweetalert2";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 interface CartItem {
@@ -45,6 +45,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
     const {data: session} = useSession();
     const userId = session?.user?.id;
     const router = useRouter();
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const [isOpen, setIsOpen] = useState(false);
 
@@ -83,6 +84,23 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
             console.error("Error fetching cart data:", error);
         }
     };
+
+    useEffect(() => {
+        if (userId) {
+            getCart(userId);
+            if (!intervalRef.current) {
+                intervalRef.current = setInterval(() => {
+                    getCart(userId);
+                }, 5000);
+            }
+            return () => {
+                if (intervalRef.current) {
+                    clearInterval(intervalRef.current);
+                    intervalRef.current = null;
+                }
+            };
+        }
+    }, [userId]);
 
     const addToCart = async (userId: string, productId: string) => {
         if (!checkUserSignin()) return;

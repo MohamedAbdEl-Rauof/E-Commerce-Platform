@@ -61,10 +61,10 @@ const Page = () => {
                     xs: "100%",
                     sm: "350px",
                 },
-                maxWidth: "350px",
+                maxWidth: "100%",
             }}
             role="presentation"
-            className="flex flex-col h-full"
+            className="flex flex-col h-full p-4 sm:p-0"
         >
             <List className="flex-grow">
                 <ListItem disablePadding className="block">

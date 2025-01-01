@@ -19,7 +19,7 @@ const ValuesSection = () => {
                 <div className="flex flex-wrap gap-8 justify-center">
                     <motion.div
                         className={`flex flex-col items-center justify-center w-44 h-44 rounded-full p-4 text-center ${
-                            theme === "dark" ? "bg-gray-800 text-white" : "bg-[#F3F5F7] text-black"
+                            theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-300 text-black"
                         }`}
                         whileHover={{scale: 1.1}}
                     >
@@ -30,7 +30,7 @@ const ValuesSection = () => {
 
                     <motion.div
                         className={`flex flex-col items-center justify-center w-44 h-44 rounded-full p-4 text-center ${
-                            theme === "dark" ? "bg-gray-800 text-white" : "bg-[#F3F5F7] text-black"
+                            theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-300 text-black"
                         }`}
                         whileHover={{scale: 1.1}}
                     >
@@ -41,7 +41,7 @@ const ValuesSection = () => {
 
                     <motion.div
                         className={`flex flex-col items-center justify-center w-44 h-44 rounded-full p-4 text-center ${
-                            theme === "dark" ? "bg-gray-800 text-white" : "bg-[#F3F5F7] text-black"
+                            theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-300 text-black"
                         }`}
                         whileHover={{scale: 1.1}}
                     >
@@ -52,7 +52,7 @@ const ValuesSection = () => {
 
                     <motion.div
                         className={`flex flex-col items-center justify-center w-44 h-44 rounded-full p-4 text-center ${
-                            theme === "dark" ? "bg-gray-800 text-white" : "bg-[#F3F5F7] text-black"
+                            theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-300 text-black"
                         }`}
                         whileHover={{scale: 1.1}}
                     >
