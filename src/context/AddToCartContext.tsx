@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useEffect, useState, useRef } from "react";
-import { toast } from "react-toastify";
-import { useSession } from 'next-auth/react';
+"use client";
+import React, {createContext, useContext, useEffect, useRef, useState} from "react";
+import {toast} from "react-toastify";
+import {useSession} from 'next-auth/react';
 import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 
 
 interface CartItem {
@@ -85,22 +86,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
         }
     };
 
+    // Fetches the user's cart data whenever the tab becomes active, ensuring the cart is updated when the user returns to the page.
     useEffect(() => {
         if (userId) {
-            getCart(userId);
-            if (!intervalRef.current) {
-                intervalRef.current = setInterval(() => {
-                    getCart(userId);
-                }, 5000);
-            }
-            return () => {
-                if (intervalRef.current) {
-                    clearInterval(intervalRef.current);
-                    intervalRef.current = null;
-                }
-            };
+            const fetchOnFocus = () => getCart(userId);
+
+            window.addEventListener("focus", fetchOnFocus);
+
+            return () => window.removeEventListener("focus", fetchOnFocus);
         }
     }, [userId]);
+
 
     const addToCart = async (userId: string, productId: string) => {
         if (!checkUserSignin()) return;

@@ -1,3 +1,4 @@
+"use client";
 import React, {useState} from 'react';
 import {useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
@@ -13,9 +14,9 @@ type NavItem = (typeof NAV_ITEMS)[number];
 
 const ROUTES: Record<NavItem, string> = {
     Home: '/',
-    Shop: '/pages/Shop',
-    Categories: '/pages/Categories',
-    'Contact Us': '/pages/ContactUs',
+    Shop: '/user/shop',
+    Categories: '/user/categories',
+    'Contact Us': '/user/contactUs',
 };
 
 const Header = () => {
