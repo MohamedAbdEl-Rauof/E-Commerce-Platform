@@ -13,7 +13,7 @@ const NAV_ITEMS = ['Home', 'Shop', 'Categories', 'Contact Us'] as const;
 type NavItem = (typeof NAV_ITEMS)[number];
 
 const ROUTES: Record<NavItem, string> = {
-    Home: '/',
+    Home: '/user',
     Shop: '/user/shop',
     Categories: '/user/categories',
     'Contact Us': '/user/contactUs',
