@@ -31,7 +31,7 @@ const Categories = () => {
             ) : (
                 categories.map((category, index) => (
                     <motion.div
-                        key={category.id || index}
+                        key={category._id || index}
                         initial="initial"
                         animate="animate"
                         variants={fadeInUp}

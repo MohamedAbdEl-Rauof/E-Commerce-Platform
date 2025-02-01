@@ -3,6 +3,7 @@ import {FaHeart, FaRegHeart} from 'react-icons/fa';
 import Rating from "@mui/material/Rating";
 import {useSession} from "next-auth/react";
 import {useCart} from "@/context/AddToCartContext";
+import Image from "next/image";
 
 interface Product {
     _id: string;
@@ -47,7 +48,9 @@ const ProductCard: React.FC<ProductCardProps> = ({product, isList, isFavorite, o
         >
             <div className={`relative ${isList ? "w-1/3" : "w-full"}`}>
                 <div className="aspect-w-1 aspect-h-1 overflow-hidden">
-                    <img
+                    <Image
+                        width={isList ? 200 : 400}
+                        height={isList ? 200 : 400}
                         src={product.image}
                         alt={product.name}
                         className="transition-transform duration-300 group-hover:scale-110"

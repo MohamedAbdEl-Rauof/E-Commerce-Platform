@@ -1,7 +1,8 @@
+"use client";
 import React, {createContext, useContext, useEffect, useState} from "react";
 
 interface Category {
-    id: string;
+    _id: string;
     image: string;
     name: string;
 }

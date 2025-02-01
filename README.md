@@ -87,13 +87,17 @@
 > email : HIHICaptain@gmail.com
 > password : HIHICaptain@gmail.com
 >
->  are you have any suggestion for enhance the performance and seo or asscecaplity
+>  are you have any suggestion for enhance the performance and seo or asscecaplity and best practice anduse materui
 > the Responsive
 > handle the light and dark mood
 
 
 
 
-
+> this is two page the first when user select on categories , send to the product page as context api , to open it ,
+> changethis struttre , when the user select on category , send the nameof this caegory in url , then open the info of
+> this product in another page , take care , make the struture withe material ui and handle the light ad dark page using
+> next theme , and sepraete it as many comp not all code , in same page , and handle ">  are you have any suggestion for
+> enhance the performance and seo or asscecaplity and best practice anduse materui ,,, handle this page firstly ""
 
 
