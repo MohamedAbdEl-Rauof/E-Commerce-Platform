@@ -1,5 +1,5 @@
 "use client";
-import React, {createContext, useContext, useEffect, useRef, useState} from "react";
+import React, {createContext, useContext, useEffect, useState} from "react";
 import {toast} from "react-toastify";
 import {useSession} from 'next-auth/react';
 import Swal from "sweetalert2";
@@ -46,7 +46,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
     const {data: session} = useSession();
     const userId = session?.user?.id;
     const router = useRouter();
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const [isOpen, setIsOpen] = useState(false);
 
