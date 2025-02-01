@@ -31,7 +31,7 @@
 │ ├── 👑 admin/ # Admin-specific components
 │ └── 👤 user/ # User-specific components
 │
-├── 🚀 api/ # API routes
+├── 🚀 pages - api/ # API routes
 │ ├── 🔐 auth/
 │ ├── 📦 products/
 │ ├── 📋 orders/
@@ -71,10 +71,6 @@
 │
 └── 🚦 middleware.ts # Next.js middleware for auth & routing
 
-
-> are you have any suggestion for enhance the performance and seo or asscecaplity
-> the Responsive
->
 >
 >
 > admin password
@@ -90,6 +86,10 @@
 >
 > email : HIHICaptain@gmail.com
 > password : HIHICaptain@gmail.com
+>
+>  are you have any suggestion for enhance the performance and seo or asscecaplity
+> the Responsive
+> handle the light and dark mood
 
 
 

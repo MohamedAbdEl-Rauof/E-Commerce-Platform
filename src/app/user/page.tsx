@@ -1,8 +1,12 @@
+"use client";
+import Home from "@/app/user/home/page";
+
 const Page = () => {
     return (
-        <div>
-            <h1>Hi Hi Captain</h1>
-        </div>
-    )
-}
+        <>
+            <Home/>
+        </>
+    );
+};
+
 export default Page;
