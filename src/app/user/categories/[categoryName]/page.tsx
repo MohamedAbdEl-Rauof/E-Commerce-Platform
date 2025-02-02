@@ -10,9 +10,6 @@ const CategoryProductsPage = ({params}: { params: Promise<{ categoryName: string
     const {products, loading: productsLoading, error: productsError} = useProduct();
     const {categories, loading: categoriesLoading, error: categoriesError} = useCategories();
 
-    console.log('Rendering CategoryProductsPage with products:', products);
-    console.log('Rendering CategoryProductsPage with categories:', categories);
-
     if (productsLoading || categoriesLoading) return <div>Loading...</div>;
     if (productsError || categoriesError) return <div>Error: {productsError || categoriesError}</div>;
 

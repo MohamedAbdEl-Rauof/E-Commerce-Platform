@@ -1,6 +1,6 @@
 import React from 'react';
-import { Grid, Box, Typography } from '@mui/material';
-import { motion } from 'framer-motion';
+import {Box, Grid, Typography} from '@mui/material';
+import {motion} from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -15,13 +15,13 @@ interface CategoryGridProps {
     categories: Category[];
 }
 
-const CategoryGrid:React.FC<CategoryGridProps> = ({ categories, loading }) => {
+const CategoryGrid: React.FC<CategoryGridProps> = ({categories, loading}) => {
     if (loading) {
         return (
             <Grid container spacing={4}>
                 {[...Array(4)].map((_, index) => (
                     <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-                        <Box className="animate-pulse rounded-lg h-64" style={{ background: 'var(--background)' }}></Box>
+                        <Box className="animate-pulse rounded-lg h-64" style={{background: 'var(--background)'}}></Box>
                     </Grid>
                 ))}
             </Grid>
@@ -29,7 +29,8 @@ const CategoryGrid:React.FC<CategoryGridProps> = ({ categories, loading }) => {
     }
 
     if (categories.length === 0) {
-        return <Typography className="text-center" style={{ color: 'var(--foreground)' }}>No categories found.</Typography>;
+        return <Typography className="text-center" style={{color: 'var(--foreground)'}}>No categories
+            found.</Typography>;
     }
 
     return (
@@ -37,11 +38,11 @@ const CategoryGrid:React.FC<CategoryGridProps> = ({ categories, loading }) => {
             {categories.map((category) => (
                 <Grid item key={category._id} xs={12} sm={6} md={4} lg={3}>
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3 }}
+                        initial={{opacity: 0, y: 20}}
+                        animate={{opacity: 1, y: 0}}
+                        transition={{duration: 0.3}}
                         className="group relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
-                        style={{ background: 'var(--background)' }}
+                        style={{background: 'var(--background)'}}
                     >
                         <Link href={`/user/categories/${encodeURIComponent(category.name)}`} passHref>
                             <Box className="aspect-w-16 aspect-h-9 relative h-64">
@@ -58,21 +59,23 @@ const CategoryGrid:React.FC<CategoryGridProps> = ({ categories, loading }) => {
                                         <Typography
                                             variant="h5"
                                             className="mb-2 transform transition-all duration-300 group-hover:translate-y-0"
-                                            style={{ color: 'var(--foreground)' }}
+                                            style={{color: 'var(--text-on-image)'}}
                                         >
                                             {category.name}
                                         </Typography>
                                         <Typography
                                             variant="body2"
                                             className="opacity-0 transform translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0"
-                                            style={{ color: 'var(--foreground)' }}
+                                            style={{color: 'var(--text-on-image)'}}
                                         >
                                             Explore our {category.name.toLowerCase()} collection
                                         </Typography>
                                     </Box>
                                 </Box>
                             </Box>
-                            <Box className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" style={{ background: 'var(--background)', opacity: 0.2 }}></Box>
+                            <Box
+                                className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                style={{background: 'var(--background)', opacity: 0.2}}></Box>
                         </Link>
                     </motion.div>
                 </Grid>
