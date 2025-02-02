@@ -1,17 +1,28 @@
 "use client";
-
 import React from 'react';
-import {useCategories} from '@/context/CategoriesContext';
-import CategoryList from './components/CategoryList';
-
+import { useTheme } from 'next-themes';
+import { Container, Typography } from '@mui/material';
+import { useCategories } from '@/context/CategoriesContext';
+import CategoryBanner from './components/CategoryBanner';
+import CategoryGrid from './components/CategoryGrid';
 
 const CategoriesPage = () => {
-    const {categories, loading, error} = useCategories();
+    const { theme } = useTheme();
+    const { categories, loading } = useCategories();
 
-    if (loading) return;
-    if (error) return;
-
-    return <CategoryList categories={categories}/>;
+    return (
+        <>
+            <div className="min-h-screen">
+                <Container maxWidth="xl">
+                    <CategoryBanner loading={loading} />
+                    <Typography variant="h4" component="h5" align="center" gutterBottom sx={{marginTop: '2.5rem',marginBottom: '4rem'}}>
+                        Explore Our Categories
+                    </Typography>
+                    <CategoryGrid categories={categories} loading={loading} />
+                </Container>
+            </div>
+        </>
+    );
 };
 
 export default CategoriesPage;
