@@ -16,12 +16,11 @@ interface Product {
 
 interface ProductGridProps {
     products: Product[];
-    view: string;
-    favorites: Set<string>;
-    toggleFavorite: (productId: string) => void;
+    categoryName: string;
+    view: "grid" | "large" | "split" | "list";
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({products, view, favorites, toggleFavorite}) => {
+const ProductGrid: React.FC<ProductGridProps> = ({products, view, categoryName}) => {
     const getGridProps = () => {
         switch (view) {
             case "large":
@@ -44,8 +43,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, view, favorites, tog
                     <ProductCard
                         product={product}
                         isList={view === "list"}
-                        onFavorite={toggleFavorite}
-                        isFavorite={favorites.has(product._id)}
+                        categoryName={categoryName}
                     />
                 </Grid>
             ))}

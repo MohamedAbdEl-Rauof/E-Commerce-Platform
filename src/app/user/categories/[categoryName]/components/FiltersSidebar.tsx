@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Button, FormControlLabel, IconButton, Radio, RadioGroup, Typography} from '@mui/material';
+import {Box, FormControlLabel, IconButton, Radio, RadioGroup, Typography} from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import {AnimatePresence, motion} from 'framer-motion';
@@ -28,7 +28,6 @@ interface FiltersSidebarProps {
 }
 
 const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
-                                                           categories,
                                                            priceRanges,
                                                            filters,
                                                            onFilterChange,
@@ -61,38 +60,6 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                 >
                     <CloseIcon/>
                 </IconButton>
-            </Box>
-            <Box component="section" sx={{mb: 4}}>
-                <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 2}}>Categories</Typography>
-                <AnimatePresence>
-                    <motion.div
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        exit={{opacity: 0}}
-                    >
-                        {categories.map((category) => (
-                            <motion.div key={category._id} whileHover={{scale: 1.05}} whileTap={{scale: 0.95}}>
-                                <Button
-                                    fullWidth
-                                    onClick={() => onFilterChange("categoryId", category._id)}
-                                    sx={{
-                                        justifyContent: 'flex-start',
-                                        px: 1,
-                                        py: 0.75,
-                                        mb: 1,
-                                        bgcolor: filters.categoryId === category._id ? 'primary.main' : 'transparent',
-                                        color: filters.categoryId === category._id ? 'primary.contrastText' : 'text.primary',
-                                        '&:hover': {
-                                            bgcolor: filters.categoryId === category._id ? 'primary.dark' : 'action.hover',
-                                        },
-                                    }}
-                                >
-                                    {category.name}
-                                </Button>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </AnimatePresence>
             </Box>
             <Box component="section" sx={{mb: 4}}>
                 <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 2}}>Price Range</Typography>
