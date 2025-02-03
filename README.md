@@ -101,3 +101,6 @@
 > enhance the performance and seo or asscecaplity and best practice anduse materui ,,, handle this page firstly ""
 
 
+> handle the light and dark mode as varible based on the globale.css, use it as variable not static color code
+> anmation
+> loading
