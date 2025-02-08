@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Avatar, Box, Button, Rating, Typography} from '@mui/material';
 import ReactionPicker from './ReactionPicker';
 import CommentForm from './CommentForm';
+import {Comment, ReactionType} from './types';
 
 interface CommentItemProps {
     comment: Comment;

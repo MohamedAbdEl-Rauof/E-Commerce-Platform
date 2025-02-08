@@ -4,6 +4,7 @@ import React from 'react';
 import {useProduct} from '@/context/ProductContext';
 import ProductDetails from './components/ProductDetails';
 import {Box, CircularProgress, Container, Typography} from '@mui/material';
+import {usePathname} from "next/navigation";
 
 interface Product {
     _id: string;
@@ -18,16 +19,27 @@ interface Product {
     discount?: number;
 }
 
-const ProductDetailsPage = ({params}: { params: Promise<{ categoryName: string; productName: string }> }) => {
-    const {categoryName, productName} = React.use(params);
-    const {products, loading, error} = useProduct();
-    console.log('categoryNamecategoryName:', categoryName);
-    console.log('productsproducts:', productName);
+const ProductDetailsPage = () => {
+    const pathname = usePathname();
+    const {products, loading, error} = useProduct(); // Call useProduct unconditionally
 
+    // Handle loading and error states
     if (loading) return <CircularProgress/>;
     if (error) return <Typography color="error">Error: {error}</Typography>;
 
-    const product = products.find(p => p.name === decodeURIComponent(productName)) as Product | undefined;
+    // Check if pathname is null
+    if (!pathname) {
+        return <Typography>Path not found</Typography>; // Handle the case when pathname is null
+    }
+
+    const pathParts = pathname.split('/');
+    const categoryName = decodeURIComponent(pathParts[pathParts.length - 2]);
+    const productName = decodeURIComponent(pathParts[pathParts.length - 1]);
+
+    console.log("Category Name:", categoryName);
+    console.log("Product Name:", productName);
+
+    const product = products.find(p => p.name === productName) as Product | undefined;
 
     if (!product) return <Typography>Product not found</Typography>;
 

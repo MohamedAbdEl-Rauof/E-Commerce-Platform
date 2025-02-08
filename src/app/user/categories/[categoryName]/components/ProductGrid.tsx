@@ -18,9 +18,11 @@ interface ProductGridProps {
     products: Product[];
     categoryName: string;
     view: "grid" | "large" | "split" | "list";
+    favorites: string[]; // Add this line
+    onToggleFavorite: (productId: string) => void; // Add this line
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({products, view, categoryName}) => {
+const ProductGrid: React.FC<ProductGridProps> = ({products, view, categoryName, favorites, onToggleFavorite}) => {
     const getGridProps = () => {
         switch (view) {
             case "large":
@@ -44,6 +46,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, view, categoryName})
                         product={product}
                         isList={view === "list"}
                         categoryName={categoryName}
+                        isFavorite={favorites.includes(product._id)}
+                        onFavorite={() => onToggleFavorite(product._id)}
                     />
                 </Grid>
             ))}

@@ -7,6 +7,7 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import {ReactionType} from './types';
 
+
 interface ReactionPickerProps {
     onReaction: (type: ReactionType) => void;
 }

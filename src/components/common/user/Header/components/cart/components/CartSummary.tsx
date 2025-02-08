@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Button, Typography } from "@mui/material";
+import {Button, Typography} from "@mui/material";
 import Link from "next/link";
 
 interface CartItem {
@@ -21,7 +21,7 @@ const calculateSubtotal = (cartItems: CartItem[]) => {
     return cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
 };
 
-const CartSummary: React.FC<CartSummaryProps> = ({ handleCheckout, cartItems }) => {
+const CartSummary: React.FC<CartSummaryProps> = ({handleCheckout, cartItems}) => {
     const subtotal = calculateSubtotal(cartItems);
 
     return (
@@ -58,7 +58,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ handleCheckout, cartItems }) 
                 Checkout
             </Button>
             <div className="text-center mt-3">
-                <Link href="/pages/ViewCart">
+                <Link href="/user/viewcart">
                     <button className="text-black text-xs sm:text-sm font-semibold">
                         <u className="text-black text-xs sm:text-sm font-semibold text-center">
                             View Cart

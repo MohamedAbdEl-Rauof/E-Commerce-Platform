@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { CiSearch } from 'react-icons/ci';
-import { FaRegCircleUser } from 'react-icons/fa6';
-import { IoCartOutline } from 'react-icons/io5';
-import { Badge, Button, Drawer, Menu, MenuItem, TextField } from '@mui/material';
-import { signOut } from 'next-auth/react';
+import React, {useState} from 'react';
+import {useRouter} from 'next/navigation';
+import {CiSearch} from 'react-icons/ci';
+import {FaRegCircleUser} from 'react-icons/fa6';
+import {IoCartOutline} from 'react-icons/io5';
+import {Badge, Button, Drawer, Menu, MenuItem, TextField} from '@mui/material';
+import {signOut} from 'next-auth/react';
 import Swal from 'sweetalert2';
 import CartDrawer from './cart/page';
 import DarkMoodSwitch from "@/components/common/user/DarkMoodSwitch";
-import { Session } from 'next-auth';
-import { CartItem } from '@/context/AddToCartContext';
-import { useTheme } from 'next-themes';
+import {Session} from 'next-auth';
+import {CartItem} from '@/context/AddToCartContext';
+import {useTheme} from 'next-themes';
 
 interface DesktopActionsProps {
     session: Session | null;
@@ -22,12 +22,12 @@ interface DesktopActionsProps {
     closeCart: () => void;
 }
 
-const DesktopActions: React.FC<DesktopActionsProps> = ({ session, cart, isOpen, openCart, closeCart }) => {
+const DesktopActions: React.FC<DesktopActionsProps> = ({session, cart, isOpen, openCart, closeCart}) => {
     const router = useRouter();
     const [isInputVisible, setIsInputVisible] = useState(false);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const { theme } = useTheme();
+    const {theme} = useTheme();
 
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -44,12 +44,12 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({ session, cart, isOpen, 
     };
 
     const handleMyAccount = () => {
-        router.push('/pages/UserAccount');
+        router.push('/user/useraccount');
         handleClose();
     };
 
     const handleLogout = async () => {
-        await signOut({ redirect: false });
+        await signOut({redirect: false});
         Swal.fire({
             position: 'center',
             icon: 'success',
@@ -76,7 +76,7 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({ session, cart, isOpen, 
                     className={`absolute top-0 right-10 transition-all duration-300 ${
                         isInputVisible ? 'w-40 opacity-100' : 'w-0 opacity-0'
                     }`}
-                    style={{ pointerEvents: isInputVisible ? 'auto' : 'none' }}
+                    style={{pointerEvents: isInputVisible ? 'auto' : 'none'}}
                 >
                     <TextField
                         id="outlined-basic"
@@ -92,7 +92,7 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({ session, cart, isOpen, 
                 />
             </div>
             <div>
-                <DarkMoodSwitch />
+                <DarkMoodSwitch/>
             </div>
 
             <div>
@@ -136,7 +136,7 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({ session, cart, isOpen, 
                         </Badge>
                     </Button>
                     <Drawer anchor="right" open={isOpen} onClose={closeCart}>
-                        <CartDrawer />
+                        <CartDrawer/>
                     </Drawer>
                 </div>
             </div>

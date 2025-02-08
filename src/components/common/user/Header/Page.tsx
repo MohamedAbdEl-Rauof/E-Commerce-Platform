@@ -8,6 +8,7 @@ import Navigation from './components/Navigation';
 import MobileMenu from './components/MobileMenu';
 import MobileSidebar from './components/MobileSidebar';
 import DesktopActions from './components/DesktopActions';
+import Announcement from './components/Announcement';
 
 const NAV_ITEMS = ['Home', 'Shop', 'Categories', 'Contact Us'] as const;
 type NavItem = (typeof NAV_ITEMS)[number];
@@ -16,7 +17,7 @@ const ROUTES: Record<NavItem, string> = {
     Home: '/user',
     Shop: '/user/shop',
     Categories: '/user/categories',
-    'Contact Us': '/user/contactUs',
+    'Contact Us': '/user/contactus',
 };
 
 const Header = () => {
@@ -37,33 +38,36 @@ const Header = () => {
     };
 
     return (
-        <header className="flex flex-col md:flex-row justify-between items-center w-[90%] mx-auto mt-11 text-3xl">
-            <Logo/>
-            <Navigation
-                NAV_ITEMS={NAV_ITEMS}
-                activeItem={activeItem}
-                handleItemClick={handleItemClick}
-            />
-            <MobileMenu
-                toggleSidebar={toggleSidebar}
-                openCart={openCart}
-            />
-            <MobileSidebar
-                isSidebarOpen={isSidebarOpen}
-                toggleSidebar={toggleSidebar}
-                NAV_ITEMS={NAV_ITEMS}
-                handleItemClick={handleItemClick}
-                session={session}
-                router={router}
-            />
-            <DesktopActions
-                session={session}
-                cart={cart}
-                isOpen={isOpen}
-                openCart={openCart}
-                closeCart={closeCart}
-            />
-        </header>
+        <>
+            <Announcement/>
+            <header className="flex flex-col md:flex-row justify-between items-center w-[90%] mx-auto mt-11 text-3xl">
+                <Logo/>
+                <Navigation
+                    NAV_ITEMS={NAV_ITEMS}
+                    activeItem={activeItem}
+                    handleItemClick={handleItemClick}
+                />
+                <MobileMenu
+                    toggleSidebar={toggleSidebar}
+                    openCart={openCart}
+                />
+                <MobileSidebar
+                    isSidebarOpen={isSidebarOpen}
+                    toggleSidebar={toggleSidebar}
+                    NAV_ITEMS={NAV_ITEMS}
+                    handleItemClick={handleItemClick}
+                    session={session}
+                    router={router}
+                />
+                <DesktopActions
+                    session={session}
+                    cart={cart}
+                    isOpen={isOpen}
+                    openCart={openCart}
+                    closeCart={closeCart}
+                />
+            </header>
+        </>
     );
 };
 

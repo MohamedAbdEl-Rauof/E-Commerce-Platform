@@ -84,8 +84,10 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryName, isList,
                         objectFit="cover"
                     />
                 </CardMedia>
-                <Link href={`/user/categories/${(categoryName)}/${encodeURIComponent(product.name)}`}
-                      passHref>
+                <Link
+                    href={`/user/categories/${(categoryName)}/${(product.name)}`}
+                    passHref
+                >
                     <IconButton
                         component="a"
                         sx={{

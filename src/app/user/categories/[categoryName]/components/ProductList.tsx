@@ -25,6 +25,7 @@ const ProductList: React.FC<ProductListProps> = ({products, categoryName}) => {
         search: "",
         categoryId: "",
     });
+    const [favorites, setFavorites] = useState<string[]>([]);
 
     const filteredProducts = useMemo(() => {
         let result = [...products];
@@ -71,6 +72,14 @@ const ProductList: React.FC<ProductListProps> = ({products, categoryName}) => {
     if (!products || products.length === 0) {
         return <Typography>No products found in this category.</Typography>;
     }
+
+    const handleToggleFavorite = (productId: string) => {
+        setFavorites(prev =>
+            prev.includes(productId)
+                ? prev.filter(id => id !== productId)
+                : [...prev, productId]
+        );
+    };
 
     const filtersSidebar = (
         <FiltersSidebar
@@ -130,6 +139,8 @@ const ProductList: React.FC<ProductListProps> = ({products, categoryName}) => {
                         products={filteredProducts}
                         view={filters.view}
                         categoryName={categoryName}
+                        favorites={favorites}
+                        onToggleFavorite={handleToggleFavorite}
                     />
                 </Grid>
             </Grid>

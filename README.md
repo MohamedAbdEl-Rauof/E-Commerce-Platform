@@ -104,3 +104,4 @@
 > handle the light and dark mode as varible based on the globale.css, use it as variable not static color code
 > anmation
 > loading
+> any

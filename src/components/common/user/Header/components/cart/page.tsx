@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
-import { Box, List, ListItem } from "@mui/material";
-import { useSession } from "next-auth/react";
+import {Box, List, ListItem} from "@mui/material";
+import {useSession} from "next-auth/react";
 import CartHeader from './components/CartHeader';
 import CartItem from './components/CartItem';
 import CartSummary from './components/CartSummary';
-import { useRouter } from "next/navigation";
-import { useProduct } from "@/context/ProductContext";
-import { useCart } from "@/context/AddToCartContext";
+import {useRouter} from "next/navigation";
+import {useProduct} from "@/context/ProductContext";
+import {useCart} from "@/context/AddToCartContext";
 
 interface CartItem {
     productId: string;
@@ -19,7 +19,7 @@ interface CartItem {
 }
 
 const Page = () => {
-    const { data: session } = useSession();
+    const {data: session} = useSession();
     const userId = session?.user?.id || "";
     const {
         cart,
@@ -30,12 +30,12 @@ const Page = () => {
         toggleFavorite,
         checkUserSignin,
     } = useCart();
-    const { products } = useProduct();
+    const {products} = useProduct();
 
     const router = useRouter();
 
     const handleCheckout = () => {
-        router.push("/pages/ViewCart");
+        router.push("/user/viewcart");
     };
 
     const cartItems: CartItem[] = cart
@@ -68,7 +68,7 @@ const Page = () => {
         >
             <List className="flex-grow">
                 <ListItem disablePadding className="block">
-                    <CartHeader closeCart={closeCart} />
+                    <CartHeader closeCart={closeCart}/>
                     {cartItems.map((item) => (
                         <CartItem
                             key={item.productId}
@@ -83,7 +83,7 @@ const Page = () => {
                     ))}
                 </ListItem>
             </List>
-            <CartSummary handleCheckout={handleCheckout} cartItems={cartItems} />
+            <CartSummary handleCheckout={handleCheckout} cartItems={cartItems}/>
         </Box>
     );
 };
