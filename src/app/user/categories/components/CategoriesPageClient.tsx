@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Container, Typography} from '@mui/material';
 import {useCategories} from '@/context/CategoriesContext';
 import CategoryBanner from './CategoryBanner';
@@ -7,6 +7,15 @@ import CategoryGrid from './CategoryGrid';
 
 const CategoriesPageClient = () => {
     const {categories, loading} = useCategories();
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return null; // or a loading spinner
+    }
 
     return (
         <div className="min-h-screen">
