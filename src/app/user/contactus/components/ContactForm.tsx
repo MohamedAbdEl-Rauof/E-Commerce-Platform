@@ -1,32 +1,28 @@
-import {Button, TextField} from "@mui/material";
-import {useState} from "react";
-import emailjs from "@emailjs/browser";
-import Swal from "sweetalert2";
+import React, {useState} from 'react';
+import {Box, Button, TextField} from '@mui/material';
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import emailjs from 'emailjs-com';
+import {useTheme} from 'next-themes';
 
 const ContactForm = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const {theme} = useTheme();
+    const isDarkTheme = theme === 'dark';
 
     const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (!name || !email || !message) {
-            Swal.fire({
-                title: "Validation Error",
-                text: "Please fill in all fields.",
-                icon: "warning",
-            });
+            toast.warning("Please fill in all fields.");
             return;
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            Swal.fire({
-                title: "Invalid Email",
-                text: "Please enter a valid email address.",
-                icon: "warning",
-            });
+            toast.warning("Please enter a valid email address.");
             return;
         }
 
@@ -39,27 +35,19 @@ const ContactForm = () => {
 
         emailjs
             .send(
-                "service_epqgw1w",
-                "template_2fuqx7u",
+                process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+                process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
                 templateParams,
-                "aDEejrGXwbo4CekBo"
+                process.env.NEXT_PUBLIC_EMAILJS_USER_ID
             )
             .then(
                 (result) => {
                     console.log(result.text);
-                    Swal.fire({
-                        title: "Email sent successfully!",
-                        text: "We will contact you soon.",
-                        icon: "success",
-                    });
+                    toast.success("Email sent successfully! We will contact you soon.");
                 },
                 (error) => {
                     console.log(error.text);
-                    Swal.fire({
-                        title: "Failed to send email",
-                        text: "Please try again later.",
-                        icon: "error",
-                    });
+                    toast.error("Failed to send email. Please try again later.");
                 }
             );
 
@@ -68,8 +56,28 @@ const ContactForm = () => {
         setMessage("");
     };
 
+    const inputStyles = {
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'var(--foreground)',
+            },
+            '&:hover fieldset': {
+                borderColor: 'var(--primary)',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'var(--primary)',
+            },
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--foreground)',
+        },
+        '& .MuiInputBase-input': {
+            color: 'var(--foreground)',
+        },
+    };
+
     return (
-        <form onSubmit={sendEmail} className="flex flex-col gap-4">
+        <Box component="form" onSubmit={sendEmail} display="flex" flexDirection="column" gap={3}>
             <TextField
                 id="outlined-name"
                 label="Name"
@@ -77,6 +85,7 @@ const ContactForm = () => {
                 fullWidth
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                sx={inputStyles}
             />
             <TextField
                 id="outlined-email"
@@ -85,6 +94,7 @@ const ContactForm = () => {
                 fullWidth
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                sx={inputStyles}
             />
             <TextField
                 id="outlined-message"
@@ -95,16 +105,27 @@ const ContactForm = () => {
                 fullWidth
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
+                sx={inputStyles}
             />
             <Button
                 variant="contained"
-                className="!bg-black !text-white w-44 hover:bg-gray-800"
+                sx={{
+                    bgcolor: 'var(--primary)',
+                    color: 'var(--text-on-image)',
+                    width: '11rem',
+                    borderRadius: 2,
+                    '&:hover': {
+                        bgcolor: 'var(--secondary)',
+                    },
+                    transition: 'background-color 0.3s ease',
+                }}
                 type="submit"
             >
                 Send Message
             </Button>
-        </form>
+            <ToastContainer position="top-right" theme={isDarkTheme ? 'dark' : 'light'}/>
+        </Box>
     );
-};
+}
 
 export default ContactForm;

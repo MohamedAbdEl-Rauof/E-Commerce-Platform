@@ -88,15 +88,6 @@
 > password : HIHICaptain@gmail.com
 >
 >
-> handle the ui & material ui and light and dark mood
-> handle the functionality
-> loading for each page
-> enhance the performance and seo and asscecaplity and best practice
->
-
-
-
-
 > this is two page the first when user select on categories , send to the product page as context api , to open it ,
 > changethis struttre , when the user select on category , send the nameof this caegory in url , then open the info of
 > this product in another page , take care , make the struture withe material ui and handle the light ad dark page using
@@ -108,3 +99,11 @@
 > anmation
 > loading
 > any
+>
+
+> handle the ui & material ui and responsive and light and dark mood
+> handle the functionality
+> loading for each page
+> enhance the performance and seo and asscecaplity and best practice
+
+> Home , Shop , Categories , Contact Us , Cart , View Cart , My Account , Login , Register , Header , footer
