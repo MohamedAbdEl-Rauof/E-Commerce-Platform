@@ -1,5 +1,5 @@
-import CategoriesPageClient from './components/CategoriesPageClient';
+import CategoriesPageWrapper from './components/CategoriesPageWrapper';
 
 export default function CategoriesPage() {
-    return <CategoriesPageClient/>;
+    return <CategoriesPageWrapper/>;
 }

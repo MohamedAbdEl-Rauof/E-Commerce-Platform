@@ -6,8 +6,8 @@ import CategoryBanner from './CategoryBanner';
 import CategoryGrid from './CategoryGrid';
 
 const CategoriesPageClient = () => {
-    const {categories, loading} = useCategories();
     const [isMounted, setIsMounted] = useState(false);
+    const {categories, loading} = useCategories();
 
     useEffect(() => {
         setIsMounted(true);
