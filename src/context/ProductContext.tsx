@@ -4,6 +4,7 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 export interface Product {
     _id: string;
     image: string;
+    categoryId: string;
     name: string;
     price: number;
     PriceBeforeDiscount: string;
@@ -40,6 +41,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({childr
                     console.error(`HTTP error! Status: ${response.status}`);
                 }
                 const data = await response.json();
+                console.log("Products fetched successfully:", data);
                 setProducts(data);
             } catch (error) {
                 setError("Error fetching products");

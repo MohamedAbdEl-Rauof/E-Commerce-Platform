@@ -113,7 +113,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
                                     }}
                                     variant="contained"
                                     className="bg-black hover:bg-gray-800"
-                                    onClick={() => router.push('/pages/UserAccount')}
+                                    onClick={() => router.push('/user/useraccount')}
                                 >
                                     My Account
                                 </Button>

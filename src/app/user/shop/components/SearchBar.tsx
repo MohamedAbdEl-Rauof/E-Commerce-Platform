@@ -1,5 +1,6 @@
 import React from 'react';
-import {FaSearch} from 'react-icons/fa';
+import {Box, InputAdornment, TextField} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface SearchBarProps {
     value: string;
@@ -8,18 +9,43 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({value, onChange}) => {
     return (
-        <div className="mt-8 mb-6">
-            <div className="relative max-w-xl mx-auto">
-                <input
-                    type="text"
+        <Box sx={{mt: 8, mb: 6}}>
+            <Box sx={{maxWidth: 'xl', mx: 'auto'}}>
+                <TextField
+                    fullWidth
+                    variant="outlined"
                     placeholder="Search products..."
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-black/20 transition-all"
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon color="action"/>
+                            </InputAdornment>
+                        ),
+                        sx: {
+                            borderRadius: '9999px',
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'grey.200',
+                            },
+                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'grey.300',
+                            },
+                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'black',
+                                borderWidth: '2px',
+                            },
+                            pl: 2,
+                        },
+                    }}
+                    sx={{
+                        '& .MuiInputBase-input': {
+                            py: 1.5,
+                        },
+                    }}
                 />
-                <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"/>
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
 

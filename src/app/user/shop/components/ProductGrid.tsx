@@ -1,4 +1,5 @@
 import React from 'react';
+import {Grid} from '@mui/material';
 import ProductCard from './ProductCard';
 
 interface Product {
@@ -21,31 +22,34 @@ interface ProductGridProps {
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({products, view, favorites, toggleFavorite}) => {
-    const getGridClasses = () => {
+    const getGridProps = () => {
         switch (view) {
             case "large":
-                return "grid-cols-1 lg:grid-cols-2 gap-8";
+                return {xs: 12, lg: 6, spacing: 4};
             case "split":
-                return "grid-cols-2 lg:grid-cols-3 gap-6";
+                return {xs: 6, lg: 4, spacing: 3};
             case "list":
-                return "grid-cols-1 gap-6";
+                return {xs: 12, spacing: 3};
             default:
-                return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6";
+                return {xs: 6, md: 4, lg: 3, spacing: 3};
         }
     };
 
+    const gridProps = getGridProps();
+
     return (
-        <div className={`grid ${getGridClasses()}`}>
+        <Grid container spacing={gridProps.spacing}>
             {products.map((product) => (
-                <ProductCard
-                    key={product._id}
-                    product={product}
-                    isList={view === "list"}
-                    onFavorite={toggleFavorite}
-                    isFavorite={favorites.has(product._id)}
-                />
+                <Grid item key={product._id} xs={gridProps.xs} md={gridProps.md} lg={gridProps.lg}>
+                    <ProductCard
+                        product={product}
+                        isList={view === "list"}
+                        onFavorite={toggleFavorite}
+                        isFavorite={favorites.has(product._id)}
+                    />
+                </Grid>
             ))}
-        </div>
+        </Grid>
     );
 };
 

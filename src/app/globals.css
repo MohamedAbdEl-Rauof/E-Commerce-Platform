@@ -4,11 +4,12 @@
 
 :root {
     --background: #f0f4f8;
-    --foreground: #333333;
+    --foreground: #000000;
     --primary: #1a73e8;
     --secondary: #ff6f61;
     --rating-color: #000000;
     --rating-unselected-color: #cccccc;
+    --text-on-image: #ffffff;
 }
 
 .dark {
@@ -18,6 +19,7 @@
     --secondary: #ff8a80;
     --rating-color: #e0e0e0;
     --rating-unselected-color: #cccccc;
+    --text-on-image: #ffffff;
 }
 
 html {

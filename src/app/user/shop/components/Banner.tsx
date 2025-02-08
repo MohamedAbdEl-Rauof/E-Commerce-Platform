@@ -1,41 +1,94 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import {Box, Breadcrumbs, Container, Typography} from '@mui/material';
+import {styled} from '@mui/system';
+
+const StyledImage = styled(Image)({
+    transform: 'scale(1)',
+    transition: 'transform 0.7s',
+    '&:hover': {
+        transform: 'scale(1.05)',
+    },
+});
 
 const Banner: React.FC = () => {
     return (
-        <section className="mt-14 relative h-[400px] rounded-xl overflow-hidden" aria-labelledby="banner-title">
-            <Image
+        <Box
+            sx={{
+                mt: 14,
+                position: 'relative',
+                height: 400,
+                borderRadius: 2,
+                overflow: 'hidden',
+            }}
+            aria-labelledby="banner-title"
+        >
+            <StyledImage
                 src="/images/Paste Image (1).jpg"
                 alt="Elegant interior design showcasing a modern living room"
                 layout="fill"
                 objectFit="cover"
                 priority
-                className="transform hover:scale-105 transition-transform duration-700"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
-            <div
-                className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20 flex flex-col items-center justify-center text-center"
+            <Box
+                sx={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0.2))',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                }}
             >
-                <nav aria-label="Breadcrumb" className="mb-4">
-                    <ol className="flex items-center space-x-2 text-white">
-                        <li>
-                            <Link href="/user" className="hover:text-gray-200 transition">
+                <Container maxWidth="lg">
+                    <Breadcrumbs
+                        aria-label="Breadcrumb"
+                        sx={{mb: 2, color: 'white'}}
+                    >
+                        <Link href="/user" passHref>
+                            <Typography
+                                component="a"
+                                sx={{
+                                    color: 'white',
+                                    '&:hover': {color: 'grey.200'},
+                                    transition: 'color 0.3s',
+                                }}
+                            >
                                 Home
-                            </Link>
-                        </li>
-                        <li aria-hidden="true">/</li>
-                        <li aria-current="page" className="text-gray-300">Shop</li>
-                    </ol>
-                </nav>
-                <h1 id="banner-title" className="text-4xl md:text-5xl font-bold text-white mb-4">
-                    Shop Page
-                </h1>
-                <p className="text-gray-200 max-w-2xl px-4">
-                    Let&#39;s design the place you always imagined.
-                </p>
-            </div>
-        </section>
+                            </Typography>
+                        </Link>
+                        <Typography color="grey.300">Shop</Typography>
+                    </Breadcrumbs>
+                    <Typography
+                        id="banner-title"
+                        variant="h2"
+                        component="h1"
+                        sx={{
+                            fontWeight: 'bold',
+                            color: 'white',
+                            mb: 2,
+                            fontSize: {xs: '2.5rem', md: '3rem'},
+                        }}
+                    >
+                        Shop Page
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            color: 'grey.200',
+                            maxWidth: '2xl',
+                            px: 2,
+                        }}
+                    >
+                        Let&#39;s design the place you always imagined.
+                    </Typography>
+                </Container>
+            </Box>
+        </Box>
     );
 };
 

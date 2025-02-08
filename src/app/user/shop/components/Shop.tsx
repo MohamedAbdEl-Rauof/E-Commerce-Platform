@@ -1,7 +1,20 @@
 "use client";
 import React, {useEffect, useMemo, useState} from "react";
-import {IoFilter} from "react-icons/io5";
-import {FaEquals, FaPause, FaTh, FaThLarge} from "react-icons/fa";
+import {FilterList, GridView, ViewModule, ViewStream, ViewWeek} from "@mui/icons-material";
+import {
+    Box,
+    Button,
+    Container,
+    Drawer,
+    FormControl,
+    Grid,
+    IconButton,
+    MenuItem,
+    Select,
+    Typography,
+    useMediaQuery,
+    useTheme
+} from "@mui/material";
 import Banner from "./Banner";
 import SearchBar from "./SearchBar";
 import FiltersSidebar from "./FiltersSidebar";
@@ -57,13 +70,15 @@ const SORT_OPTIONS = [
 ];
 
 const VIEW_OPTIONS = [
-    {icon: FaTh, label: "Grid View", value: "grid"},
-    {icon: FaThLarge, label: "Large Grid View", value: "large"},
-    {icon: FaPause, label: "Split View", value: "split"},
-    {icon: FaEquals, label: "List View", value: "list"},
+    {icon: GridView, label: "Grid View", value: "grid"},
+    {icon: ViewModule, label: "Large Grid View", value: "large"},
+    {icon: ViewStream, label: "Split View", value: "split"},
+    {icon: ViewWeek, label: "List View", value: "list"},
 ] as const;
 
 const Shop: React.FC = () => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
     const [isLoading, setIsLoading] = useState(true);
     const [categories, setCategories] = useState<Category[]>([]);
     const [products, setProducts] = useState<Product[]>([]);
@@ -162,24 +177,29 @@ const Shop: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <Container maxWidth="lg" sx={{py: 4}}>
             <Banner/>
-            <SearchBar
-                value={filters.search}
-                onChange={(value) => handleFilterChange("search", value)}
-            />
+            <Box sx={{mb: 4}}>
+                <SearchBar
+                    value={filters.search}
+                    onChange={(value) => handleFilterChange("search", value)}
+                />
+            </Box>
 
-            <div className="flex flex-col lg:flex-row gap-8">
+            <Grid container spacing={4}>
                 {/* Mobile Filters */}
-                <div
-                    className={`lg:hidden fixed inset-0 z-50 bg-white transition-transform duration-300 ease-in-out transform ${isMobileFiltersOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                    <div className="p-4">
-                        <button
-                            className="mb-4 text-gray-600"
+                <Drawer
+                    anchor="left"
+                    open={isMobileFiltersOpen}
+                    onClose={() => setIsMobileFiltersOpen(false)}
+                >
+                    <Box sx={{width: 250, p: 2}}>
+                        <Button
                             onClick={() => setIsMobileFiltersOpen(false)}
+                            sx={{mb: 2}}
                         >
                             Close Filters
-                        </button>
+                        </Button>
                         <FiltersSidebar
                             categories={categories}
                             priceRanges={PRICE_RANGES}
@@ -187,65 +207,66 @@ const Shop: React.FC = () => {
                             onFilterChange={handleFilterChange}
                             onClose={() => setIsMobileFiltersOpen(false)}
                         />
-                    </div>
-                </div>
+                    </Box>
+                </Drawer>
 
                 {/* Desktop Filters */}
-                <div className="hidden lg:block lg:w-1/4">
-                    <FiltersSidebar
-                        categories={categories}
-                        priceRanges={PRICE_RANGES}
-                        filters={filters}
-                        onFilterChange={handleFilterChange}
-                        onClose={() => {
-                        }}
-                    />
-                </div>
+                {!isMobile && (
+                    <Grid item xs={12} lg={3}>
+                        <FiltersSidebar
+                            categories={categories}
+                            priceRanges={PRICE_RANGES}
+                            filters={filters}
+                            onFilterChange={handleFilterChange}
+                            onClose={() => {
+                            }}
+                        />
+                    </Grid>
+                )}
 
-                <div className="lg:w-3/4">
-                    <div className="flex justify-between items-center mb-6">
-                        <button
-                            className="lg:hidden flex items-center space-x-2 text-gray-600"
-                            onClick={() => setIsMobileFiltersOpen(true)}
-                        >
-                            <IoFilter/>
-                            <span>Filters</span>
-                        </button>
-
-                        <div className="flex items-center space-x-4">
-                            <select
-                                value={filters.sortBy}
-                                onChange={(e) => handleFilterChange("sortBy", e.target.value)}
-                                className="border rounded-md px-2 py-1 text-sm"
+                <Grid item xs={12} lg={isMobile ? 12 : 9}>
+                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>
+                        {isMobile && (
+                            <Button
+                                startIcon={<FilterList/>}
+                                onClick={() => setIsMobileFiltersOpen(true)}
+                                variant="outlined"
                             >
-                                {SORT_OPTIONS.map((option) => (
-                                    <option key={option.value} value={option.value}>
-                                        {option.label}
-                                    </option>
-                                ))}
-                            </select>
+                                Filters
+                            </Button>
+                        )}
 
-                            <div className="flex space-x-2">
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 2, ml: 'auto'}}>
+                            <FormControl size="small">
+                                <Select
+                                    value={filters.sortBy}
+                                    onChange={(e) => handleFilterChange("sortBy", e.target.value as string)}
+                                >
+                                    {SORT_OPTIONS.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+
+                            <Box>
                                 {VIEW_OPTIONS.map((option) => (
-                                    <button
+                                    <IconButton
                                         key={option.value}
                                         onClick={() => handleFilterChange("view", option.value)}
-                                        className={`p-2 rounded ${
-                                            filters.view === option.value
-                                                ? "bg-black text-white"
-                                                : "text-gray-600 hover:bg-gray-100"
-                                        }`}
+                                        color={filters.view === option.value ? "primary" : "default"}
                                         title={option.label}
                                     >
                                         <option.icon/>
-                                    </button>
+                                    </IconButton>
                                 ))}
-                            </div>
-                        </div>
-                    </div>
+                            </Box>
+                        </Box>
+                    </Box>
 
                     {isLoading ? (
-                        <div>Loading...</div>
+                        <Typography>Loading...</Typography>
                     ) : (
                         <ProductGrid
                             products={filteredProducts}
@@ -254,9 +275,9 @@ const Shop: React.FC = () => {
                             toggleFavorite={toggleFavorite}
                         />
                     )}
-                </div>
-            </div>
-        </div>
+                </Grid>
+            </Grid>
+        </Container>
     );
 };
 

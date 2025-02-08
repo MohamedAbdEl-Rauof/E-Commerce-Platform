@@ -1,5 +1,7 @@
 import React from 'react';
-import {IoFilter} from 'react-icons/io5';
+import {Box, Button, FormControlLabel, IconButton, Radio, RadioGroup, Typography} from '@mui/material';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import CloseIcon from '@mui/icons-material/Close';
 import {AnimatePresence, motion} from 'framer-motion';
 
 interface Category {
@@ -32,91 +34,101 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                                                            onFilterChange,
                                                            onClose,
                                                        }) => {
-
     return (
-        <aside
-            className="sticky top-4 p-6 rounded-lg shadow-sm transition-colors duration-300"
-            style={{
-                backgroundColor: 'var(--background)',
-                color: 'var(--foreground)',
+        <Box
+            component="aside"
+            sx={{
+                position: 'sticky',
+                top: 4,
+                p: 3,
+                borderRadius: 2,
+                boxShadow: 1,
+                transition: 'background-color 0.3s, color 0.3s',
+                bgcolor: 'background.paper',
+                color: 'text.primary',
             }}
             aria-label="Filters"
         >
-            <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center space-x-2">
-                    <IoFilter className="text-xl" aria-hidden="true"/>
-                    <h2 className="text-lg font-semibold">Filters</h2>
-                </div>
-                <button
+            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3}}>
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                    <FilterListIcon fontSize="medium"/>
+                    <Typography variant="h6" component="h2">Filters</Typography>
+                </Box>
+                <IconButton
                     onClick={onClose}
-                    className="lg:hidden text-current"
+                    sx={{display: {xs: 'block', lg: 'none'}}}
                     aria-label="Close filters"
                 >
-                    ×
-                </button>
-            </div>
-            <section className="mb-8">
-                <h3 className="font-semibold mb-4">Categories</h3>
+                    <CloseIcon/>
+                </IconButton>
+            </Box>
+            <Box component="section" sx={{mb: 4}}>
+                <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 2}}>Categories</Typography>
                 <AnimatePresence>
                     <motion.div
-                        className="space-y-2"
                         initial={{opacity: 0}}
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
                     >
                         {categories.map((category) => (
-                            <motion.button
-                                key={category._id}
-                                onClick={() => onFilterChange("categoryId", category._id)}
-                                className={`block w-full text-left px-2 py-1.5 rounded transition-colors duration-300`}
-                                style={{
-                                    backgroundColor: filters.categoryId === category._id ? 'var(--primary)' : 'transparent',
-                                    color: filters.categoryId === category._id ? 'var(--background)' : 'var(--foreground)',
-                                }}
-                                whileHover={{scale: 1.05}}
-                                whileTap={{scale: 0.95}}
-                            >
-                                {category.name}
-                            </motion.button>
+                            <motion.div key={category._id} whileHover={{scale: 1.05}} whileTap={{scale: 0.95}}>
+                                <Button
+                                    fullWidth
+                                    onClick={() => onFilterChange("categoryId", category._id)}
+                                    sx={{
+                                        justifyContent: 'flex-start',
+                                        px: 1,
+                                        py: 0.75,
+                                        mb: 1,
+                                        bgcolor: filters.categoryId === category._id ? 'primary.main' : 'transparent',
+                                        color: filters.categoryId === category._id ? 'primary.contrastText' : 'text.primary',
+                                        '&:hover': {
+                                            bgcolor: filters.categoryId === category._id ? 'primary.dark' : 'action.hover',
+                                        },
+                                    }}
+                                >
+                                    {category.name}
+                                </Button>
+                            </motion.div>
                         ))}
                     </motion.div>
                 </AnimatePresence>
-            </section>
-            <section className="mb-8">
-                <h3 className="font-semibold mb-4">Price Range</h3>
+            </Box>
+            <Box component="section" sx={{mb: 4}}>
+                <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 2}}>Price Range</Typography>
                 <AnimatePresence>
                     <motion.div
-                        className="space-y-2"
                         initial={{opacity: 0}}
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
                     >
-                        {priceRanges.map((range) => (
-                            <motion.label
-                                key={range.range}
-                                className="flex items-center space-x-2 cursor-pointer p-2 rounded transition-colors duration-300"
-                                style={{
-                                    backgroundColor: filters.priceRange === range.range ? 'var(--secondary)' : 'transparent',
-                                    color: filters.priceRange === range.range ? 'var(--background)' : 'var(--foreground)',
-                                }}
-                                whileHover={{scale: 1.05}}
-                                whileTap={{scale: 0.95}}
-                            >
-                                <input
-                                    type="radio"
-                                    name="price"
-                                    checked={filters.priceRange === range.range}
-                                    onChange={() => onFilterChange("priceRange", range.range)}
-                                    className="form-radio"
-                                    style={{color: 'var(--primary)'}}
-                                />
-                                <span>{range.label}</span>
-                            </motion.label>
-                        ))}
+                        <RadioGroup
+                            value={filters.priceRange}
+                            onChange={(e) => onFilterChange("priceRange", e.target.value)}
+                        >
+                            {priceRanges.map((range) => (
+                                <motion.div key={range.range} whileHover={{scale: 1.05}} whileTap={{scale: 0.95}}>
+                                    <FormControlLabel
+                                        value={range.range}
+                                        control={<Radio color="primary"/>}
+                                        label={range.label}
+                                        sx={{
+                                            p: 1,
+                                            borderRadius: 1,
+                                            bgcolor: filters.priceRange === range.range ? 'secondary.main' : 'transparent',
+                                            color: filters.priceRange === range.range ? 'secondary.contrastText' : 'text.primary',
+                                            '&:hover': {
+                                                bgcolor: filters.priceRange === range.range ? 'secondary.dark' : 'action.hover',
+                                            },
+                                        }}
+                                    />
+                                </motion.div>
+                            ))}
+                        </RadioGroup>
                     </motion.div>
                 </AnimatePresence>
-            </section>
-        </aside>
+            </Box>
+        </Box>
     );
 };
 
