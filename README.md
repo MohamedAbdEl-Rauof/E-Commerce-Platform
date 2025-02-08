@@ -87,9 +87,12 @@
 > email : HIHICaptain@gmail.com
 > password : HIHICaptain@gmail.com
 >
->  are you have any suggestion for enhance the performance and seo or asscecaplity and best practice anduse materui
-> the Responsive
-> handle the light and dark mood
+>
+> handle the ui & material ui and light and dark mood
+> handle the functionality
+> loading for each page
+> enhance the performance and seo and asscecaplity and best practice
+>
 
 
 
