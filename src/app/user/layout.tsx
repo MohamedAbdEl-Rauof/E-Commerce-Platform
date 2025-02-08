@@ -6,22 +6,23 @@ import {CategoriesProvider} from "@/context/CategoriesContext";
 import Header from "@/components/common/user/Header/Page";
 import Footer from "@/components/common/user/Footer";
 
-// Import these from your root layout or define them here if they're user-specific
-import {Geist, Geist_Mono} from "next/font/google";
+import {Inter, Roboto_Mono} from 'next/font/google';
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
+const inter = Inter({
+    subsets: ['latin'],
+    display: 'swap',
+    variable: '--font-inter',
 });
 
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+const robotoMono = Roboto_Mono({
+    subsets: ['latin'],
+    display: 'swap',
+    variable: '--font-roboto-mono',
 });
 
 export default function UserLayout({children}: { children: React.ReactNode }) {
     return (
-        <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <div className={`${inter.variable} ${robotoMono.variable} antialiased`}>
             <SliderProvider>
                 <CategoriesProvider>
                     <ProductProvider>
