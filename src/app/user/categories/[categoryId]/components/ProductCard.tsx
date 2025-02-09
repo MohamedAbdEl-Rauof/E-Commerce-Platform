@@ -22,13 +22,13 @@ interface Product {
 
 interface ProductCardProps {
     product: Product;
-    categoryName: string;
+    categoryId: string;
     isList: boolean;
     isFavorite: boolean;
     onFavorite: (productId: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({product, categoryName, isList, isFavorite, onFavorite}) => {
+const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, isFavorite, onFavorite}) => {
     const {data: session} = useSession();
     const {addToCart, checkUserSignin} = useCart();
     const userId = session?.user?.id;
@@ -84,10 +84,8 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryName, isList,
                         objectFit="cover"
                     />
                 </CardMedia>
-                <Link
-                    href={`/user/categories/${(categoryName)}/${(product.name)}`}
-                    passHref
-                >
+                <Link href={`/user/categories/${(categoryId)}/${(product._id)}`}
+                      passHref>
                     <IconButton
                         component="a"
                         sx={{
