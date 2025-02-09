@@ -1,3 +1,4 @@
+"use client";
 import React, {useState} from 'react';
 import {Angry, Frown, Heart, Laugh, MessageCircle, ThumbsUp, Trash2} from 'lucide-react';
 import {AnimatePresence, motion} from 'framer-motion';
