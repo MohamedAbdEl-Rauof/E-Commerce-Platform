@@ -19,38 +19,7 @@ import Banner from "./Banner";
 import SearchBar from "./SearchBar";
 import FiltersSidebar from "./FiltersSidebar";
 import ProductGrid from "./ProductGrid";
-
-interface Category {
-    _id: string;
-    name: string;
-}
-
-interface Product {
-    _id: string;
-    name: string;
-    image: string;
-    price: number;
-    categoryId: string;
-    PriceBeforeDiscount?: string;
-    rating?: number;
-    isNew?: boolean;
-    discount?: number;
-}
-
-interface FilterState {
-    categoryId: string;
-    priceRange: string;
-    sortBy: string;
-    view: "grid" | "large" | "split" | "list";
-    search: string;
-}
-
-interface PriceRange {
-    label: string;
-    range: string;
-    min: number;
-    max: number | null;
-}
+import { Category, Product, FilterState, PriceRange, SortOption, ViewOption } from './types/shopTypes';
 
 const PRICE_RANGES: PriceRange[] = [
     {label: "All Price", range: "all", min: 0, max: null},
@@ -61,7 +30,7 @@ const PRICE_RANGES: PriceRange[] = [
     {label: "$400.00+", range: "400", min: 400, max: null},
 ];
 
-const SORT_OPTIONS = [
+const SORT_OPTIONS: SortOption[] = [
     {value: "featured", label: "Featured"},
     {value: "price-asc", label: "Price: Low to High"},
     {value: "price-desc", label: "Price: High to Low"},
@@ -69,12 +38,12 @@ const SORT_OPTIONS = [
     {value: "name-desc", label: "Name: Z to A"},
 ];
 
-const VIEW_OPTIONS = [
+const VIEW_OPTIONS: ViewOption[] = [
     {icon: GridView, label: "Grid View", value: "grid"},
     {icon: ViewModule, label: "Large Grid View", value: "large"},
     {icon: ViewStream, label: "Split View", value: "split"},
     {icon: ViewWeek, label: "List View", value: "list"},
-] as const;
+];
 
 const Shop: React.FC = () => {
     const theme = useTheme();
@@ -177,9 +146,16 @@ const Shop: React.FC = () => {
     };
 
     return (
-        <Container maxWidth="lg" sx={{py: 4}}>
+        <Container
+            maxWidth={false}
+            sx={{
+                maxWidth: '1770px',
+                backgroundColor: 'var(--background)',
+                color: 'var(--foreground)'
+            }}
+        >
             <Banner/>
-            <Box sx={{mb: 4}}>
+            <Box>
                 <SearchBar
                     value={filters.search}
                     onChange={(value) => handleFilterChange("search", value)}
