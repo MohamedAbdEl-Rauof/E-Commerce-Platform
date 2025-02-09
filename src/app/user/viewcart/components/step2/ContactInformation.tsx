@@ -1,38 +1,38 @@
-import React from "react";
-import {Box, TextField, Typography} from "@mui/material";
-import {Control, Controller, FieldErrors} from "react-hook-form";
-import {UserData} from "./UserData";
+import React from 'react';
+import { Box, TextField, Typography } from '@mui/material';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
+import { UserData } from '../../types/type';
 
 interface ContactInformationProps {
     control: Control<UserData>;
     errors: FieldErrors<UserData>;
 }
 
-const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}) => {
+const ContactInformation: React.FC<ContactInformationProps> = ({ control, errors }) => {
     return (
         <Box
             sx={{
                 padding: 3,
-                border: "1px solid #e0e0e0",
+                border: '1px solid #e0e0e0',
                 borderRadius: 2,
                 boxShadow: 3,
-                backgroundColor: "#fff",
+                backgroundColor: '#fff',
             }}
         >
-            <Typography variant="h6" sx={{fontWeight: "bold", mb: 2}}>
+            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
                 Contact Information
             </Typography>
-            <Box sx={{mt: 4}}>
+            <Box sx={{ mt: 4 }}>
                 <Box
                     display="flex"
-                    flexDirection={{xs: "column", sm: "row"}}
+                    flexDirection={{ xs: 'column', sm: 'row' }}
                     gap={2}
                     mb={3}
                 >
                     <Controller
                         name="firstName"
                         control={control}
-                        render={({field}) => (
+                        render={({ field }) => (
                             <TextField
                                 {...field}
                                 fullWidth
@@ -47,7 +47,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}
                     <Controller
                         name="lastName"
                         control={control}
-                        render={({field}) => (
+                        render={({ field }) => (
                             <TextField
                                 {...field}
                                 fullWidth
@@ -64,7 +64,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}
                     <Controller
                         name="phoneNumber"
                         control={control}
-                        render={({field}) => (
+                        render={({ field }) => (
                             <TextField
                                 {...field}
                                 fullWidth
@@ -79,7 +79,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}
                     <Controller
                         name="emailAddress"
                         control={control}
-                        render={({field}) => (
+                        render={({ field }) => (
                             <TextField
                                 {...field}
                                 fullWidth

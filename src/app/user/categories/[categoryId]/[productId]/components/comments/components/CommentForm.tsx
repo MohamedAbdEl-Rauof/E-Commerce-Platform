@@ -1,8 +1,34 @@
 import React, {useState} from 'react';
-import {Box, Paper, Typography} from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
-import {Comment, ReactionType} from './types';
+
+// Define the types here since they can't be imported
+interface Comment {
+    id: string;
+    userId: string;
+    text: string;
+    timestamp: number;
+    rating: number;
+    replies: Comment[];
+    parentId?: string;
+    level: number;
+    reaction?: ReactionType;
+}
+
+type ReactionType = 'like' | 'dislike';
+
+interface CommentFormProps {
+    onSubmit: (text: string, rating: number) => void;
+}
+
+interface CommentListProps {
+    comments: Comment[];
+    sessionId: string;
+    onAddComment: (text: string, rating: number, parentId?: string, level?: number) => void;
+    onDeleteComment: (commentId: string, parentId?: string) => void;
+    onReaction: (type: ReactionType, commentId: string) => void;
+}
 
 const ProductReviews: React.FC = () => {
     const [comments, setComments] = useState<Comment[]>([]);

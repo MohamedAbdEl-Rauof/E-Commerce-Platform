@@ -1,12 +1,18 @@
 import React from 'react';
 import Badge from "@mui/material/Badge";
-import {CartItem} from '../../../types';
+
+interface CartItem {
+    id: string;
+    image: string;
+    name: string;
+    quantity: number;
+}
 
 interface OrderBadgesProps {
     cartItems: CartItem[];
 }
 
-const OrderBadges: React.FC<OrderBadgesProps> = ({cartItems}) => (
+const OrderBadges: React.FC<OrderBadgesProps> = ({ cartItems }) => (
     <div className="pt-5 flex justify-center gap-4">
         {cartItems.map((item) => (
             <Badge

@@ -1,10 +1,19 @@
 import React from 'react';
-import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from "@mui/material";
-import {IoCloseOutline} from "react-icons/io5";
-import {CartItem} from '../../../types/CartItem';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    Box,
+} from "@mui/material";
+import { IoCloseOutline } from "react-icons/io5";
+import { Type } from '../../types/type';
 
 interface CartTableProps {
-    cartItems: CartItem[];
+    cartItems: Type[];
     handleIncreaseQuantity: (id: string) => void;
     handleDecreaseQuantity: (id: string) => void;
     deleteProduct: (id: string) => void;
@@ -21,38 +30,17 @@ const CartTable: React.FC<CartTableProps> = ({
             <Table aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{fontWeight: "bold", padding: "16px"}}>
-                            Product
-                        </TableCell>
-                        <TableCell
-                            align="left"
-                            sx={{fontWeight: "bold", padding: "16px"}}
-                        >
-                            Quantity
-                        </TableCell>
-                        <TableCell
-                            align="right"
-                            sx={{fontWeight: "bold", padding: "16px"}}
-                        >
-                            Price
-                        </TableCell>
-                        <TableCell
-                            align="right"
-                            sx={{fontWeight: "bold", padding: "16px"}}
-                        >
-                            Subtotal
-                        </TableCell>
+                        <TableCell sx={{ fontWeight: "bold", padding: "16px" }}>Product</TableCell>
+                        <TableCell align="left" sx={{ fontWeight: "bold", padding: "16px" }}>Quantity</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "bold", padding: "16px" }}>Price</TableCell>
+                        <TableCell align="right" sx={{ fontWeight: "bold", padding: "16px" }}>Subtotal</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {cartItems.map((cartItem) => (
                         <TableRow key={cartItem.id}>
-                            <TableCell
-                                component="th"
-                                scope="row"
-                                sx={{padding: "16px"}}
-                            >
-                                <Box sx={{display: "flex", alignItems: "center"}}>
+                            <TableCell component="th" scope="row" sx={{ padding: "16px" }}>
+                                <Box sx={{ display: "flex", alignItems: "center" }}>
                                     <img
                                         src={cartItem.image}
                                         alt={cartItem.name}
@@ -85,9 +73,8 @@ const CartTable: React.FC<CartTableProps> = ({
                                     </div>
                                 </Box>
                             </TableCell>
-                            <TableCell align="center" sx={{padding: "16px"}}>
-                                <div
-                                    className="flex items-center justify-center border border-gray-300 rounded-md bg-white w-20">
+                            <TableCell align="center" sx={{ padding: "16px" }}>
+                                <div className="flex items-center justify-center border border-gray-300 rounded-md bg-white w-20">
                                     <button
                                         onClick={() => handleDecreaseQuantity(cartItem.id)}
                                         className="text-lg font-bold text-gray-700 px-3 py-1 hover:bg-gray-200 rounded-l-md"
@@ -105,10 +92,10 @@ const CartTable: React.FC<CartTableProps> = ({
                                     </button>
                                 </div>
                             </TableCell>
-                            <TableCell align="right" sx={{padding: "16px"}}>
+                            <TableCell align="right" sx={{ padding: "16px" }}>
                                 {cartItem.price}
                             </TableCell>
-                            <TableCell align="right" sx={{padding: "16px"}}>
+                            <TableCell align="right" sx={{ padding: "16px" }}>
                                 {cartItem.price * cartItem.quantity}
                             </TableCell>
                         </TableRow>
