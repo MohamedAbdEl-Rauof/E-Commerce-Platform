@@ -19,7 +19,7 @@ import Banner from "./Banner";
 import SearchBar from "./SearchBar";
 import FiltersSidebar from "./FiltersSidebar";
 import ProductGrid from "./ProductGrid";
-import { Category, Product, FilterState, PriceRange, SortOption, ViewOption } from './types/shopTypes';
+import {Category, Product, FilterState, PriceRange, SortOption, ViewOption} from './types/shopTypes';
 
 const PRICE_RANGES: PriceRange[] = [
     {label: "All Price", range: "all", min: 0, max: null},
@@ -155,12 +155,7 @@ const Shop: React.FC = () => {
             }}
         >
             <Banner/>
-            <Box>
-                <SearchBar
-                    value={filters.search}
-                    onChange={(value) => handleFilterChange("search", value)}
-                />
-            </Box>
+
 
             <Grid container spacing={4}>
                 {/* Mobile Filters */}
@@ -201,7 +196,18 @@ const Shop: React.FC = () => {
                 )}
 
                 <Grid item xs={12} lg={isMobile ? 12 : 9}>
-                    <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>
+                    <Box sx={{ display: 'flex',
+                        flexDirection: { xs: 'column', md: 'row' },
+                        justifyContent: 'space-between',
+                        alignItems: 'stretch',
+                        gap: 2,
+                        mb: 3}}>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            width: '100%'
+                        }}>
                         {isMobile && (
                             <Button
                                 startIcon={<FilterList/>}
@@ -212,34 +218,52 @@ const Shop: React.FC = () => {
                             </Button>
                         )}
 
-                        <Box sx={{display: 'flex', alignItems: 'center', gap: 2, ml: 'auto'}}>
-                            <FormControl size="small">
-                                <Select
-                                    value={filters.sortBy}
-                                    onChange={(e) => handleFilterChange("sortBy", e.target.value as string)}
-                                >
-                                    {SORT_OPTIONS.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
 
-                            <Box>
-                                {VIEW_OPTIONS.map((option) => (
-                                    <IconButton
-                                        key={option.value}
-                                        onClick={() => handleFilterChange("view", option.value)}
-                                        color={filters.view === option.value ? "primary" : "default"}
-                                        title={option.label}
+                        <Box sx={{ flexGrow: 1, width: '100%', ml: isMobile ? 2 : 0 }} >
+                            <SearchBar
+                                value={filters.search}
+                                onChange={(value) => handleFilterChange("search", value)}
+                            />
+                        </Box>
+
+                        <Box>
+                            <Box sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                width: '100%'
+                            }}>
+                                <FormControl size="small" sx={{ minWidth: 120 }}>
+                                    <Select
+                                        value={filters.sortBy}
+                                        onChange={(e) => handleFilterChange("sortBy", e.target.value as string)}
                                     >
-                                        <option.icon/>
-                                    </IconButton>
-                                ))}
+                                        {SORT_OPTIONS.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                    {VIEW_OPTIONS.map((option) => (
+                                        <IconButton
+                                            key={option.value}
+                                            onClick={() => handleFilterChange("view", option.value)}
+                                            color={filters.view === option.value ? "primary" : "default"}
+                                            title={option.label}
+                                        >
+                                            <option.icon/>
+                                        </IconButton>
+                                    ))}
+                                </Box>
                             </Box>
                         </Box>
+
                     </Box>
+                    </Box>
+
 
                     {isLoading ? (
                         <Typography>Loading...</Typography>
