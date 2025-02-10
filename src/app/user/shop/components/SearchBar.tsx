@@ -9,7 +9,7 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
     return (
-        <Box sx={{ mt: 8, mb: 6 }}>
+        <Box >
             <Box sx={{width :'100%'}}>
                 <TextField
                     fullWidth

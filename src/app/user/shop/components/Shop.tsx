@@ -151,87 +151,79 @@ const Shop: React.FC = () => {
             sx={{
                 maxWidth: '1770px',
                 backgroundColor: 'var(--background)',
-                color: 'var(--foreground)'
+                color: 'var(--foreground)',
+                px: { xs: 2, sm: 3, md: 4 },
             }}
         >
-            <Banner/>
+            <Banner />
 
+            <Box sx={{ mt: 4 }}>
+                <Grid container spacing={2} alignItems="flex-start">
+                    {/* Filter Sidebar (Desktop) */}
+                    {!isMobile && (
+                        <Grid item xs={12} md={3} lg={3}>
+                            <Box sx={{
+                                position: 'sticky',
+                                top: 16,
+                                maxHeight: 'calc(100vh - 32px)',
+                                overflowY: 'auto',
+                            }}>
+                                <FiltersSidebar
+                                    categories={categories}
+                                    priceRanges={PRICE_RANGES}
+                                    filters={filters}
+                                    onFilterChange={handleFilterChange}
+                                    onClose={() => {}}
+                                />
+                            </Box>
+                        </Grid>
+                    )}
 
-            <Grid container spacing={4}>
-                {/* Mobile Filters */}
-                <Drawer
-                    anchor="left"
-                    open={isMobileFiltersOpen}
-                    onClose={() => setIsMobileFiltersOpen(false)}
-                >
-                    <Box sx={{width: 250, p: 2}}>
-                        <Button
-                            onClick={() => setIsMobileFiltersOpen(false)}
-                            sx={{mb: 2}}
-                        >
-                            Close Filters
-                        </Button>
-                        <FiltersSidebar
-                            categories={categories}
-                            priceRanges={PRICE_RANGES}
-                            filters={filters}
-                            onFilterChange={handleFilterChange}
-                            onClose={() => setIsMobileFiltersOpen(false)}
-                        />
-                    </Box>
-                </Drawer>
-
-                {/* Desktop Filters */}
-                {!isMobile && (
-                    <Grid item xs={12} lg={3}>
-                        <FiltersSidebar
-                            categories={categories}
-                            priceRanges={PRICE_RANGES}
-                            filters={filters}
-                            onFilterChange={handleFilterChange}
-                            onClose={() => {
-                            }}
-                        />
-                    </Grid>
-                )}
-
-                <Grid item xs={12} lg={isMobile ? 12 : 9}>
-                    <Box sx={{ display: 'flex',
-                        flexDirection: { xs: 'column', md: 'row' },
-                        justifyContent: 'space-between',
-                        alignItems: 'stretch',
-                        gap: 2,
-                        mb: 3}}>
+                    {/* Main Content */}
+                    <Grid item xs={12} md={isMobile ? 12 : 9} lg={isMobile ? 12 : 9}>
                         <Box sx={{
                             display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            width: '100%'
+                            flexDirection: 'column',
+                            gap: 2,
+                            mb: 3
                         }}>
-                        {isMobile && (
-                            <Button
-                                startIcon={<FilterList/>}
-                                onClick={() => setIsMobileFiltersOpen(true)}
-                                variant="outlined"
-                            >
-                                Filters
-                            </Button>
-                        )}
+                            {/* Top Bar */}
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                justifyContent: 'space-between',
+                                alignItems: { xs: 'stretch', sm: 'center' },
+                                gap: 2,
+                            }}>
+                                {/* Filter Button (Mobile) */}
+                                {isMobile && (
+                                    <Button
+                                        startIcon={<FilterList />}
+                                        onClick={() => setIsMobileFiltersOpen(true)}
+                                        variant="outlined"
+                                        fullWidth
+                                        sx={{ mb: { xs: 1, sm: 0 } }}
+                                    >
+                                        Filters
+                                    </Button>
+                                )}
 
+                                {/* Search Bar */}
+                                <Box sx={{ flexGrow: 1, width: '100%' }}>
+                                    <SearchBar
+                                        value={filters.search}
+                                        onChange={(value) => handleFilterChange("search", value)}
+                                    />
+                                </Box>
+                            </Box>
 
-                        <Box sx={{ flexGrow: 1, width: '100%', ml: isMobile ? 2 : 0 }} >
-                            <SearchBar
-                                value={filters.search}
-                                onChange={(value) => handleFilterChange("search", value)}
-                            />
-                        </Box>
-
-                        <Box>
+                            {/* Sort and View Options */}
                             <Box sx={{
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
-                                width: '100%'
+                                flexWrap: 'wrap',
+                                gap: 2,
                             }}>
                                 <FormControl size="small" sx={{ minWidth: 120 }}>
                                     <Select
@@ -254,29 +246,50 @@ const Shop: React.FC = () => {
                                             color={filters.view === option.value ? "primary" : "default"}
                                             title={option.label}
                                         >
-                                            <option.icon/>
+                                            <option.icon />
                                         </IconButton>
                                     ))}
                                 </Box>
                             </Box>
                         </Box>
 
-                    </Box>
-                    </Box>
-
-
-                    {isLoading ? (
-                        <Typography>Loading...</Typography>
-                    ) : (
-                        <ProductGrid
-                            products={filteredProducts}
-                            view={filters.view}
-                            favorites={favorites}
-                            toggleFavorite={toggleFavorite}
-                        />
-                    )}
+                        {/* Product Grid */}
+                        {isLoading ? (
+                            <Typography>Loading...</Typography>
+                        ) : (
+                            <ProductGrid
+                                products={filteredProducts}
+                                view={filters.view}
+                                favorites={favorites}
+                                toggleFavorite={toggleFavorite}
+                            />
+                        )}
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Box>
+
+            {/* Mobile Filters Drawer */}
+            <Drawer
+                anchor="left"
+                open={isMobileFiltersOpen}
+                onClose={() => setIsMobileFiltersOpen(false)}
+            >
+                <Box sx={{ width: 250, p: 2 }}>
+                    <Button
+                        onClick={() => setIsMobileFiltersOpen(false)}
+                        sx={{ mb: 2 }}
+                    >
+                        Close Filters
+                    </Button>
+                    <FiltersSidebar
+                        categories={categories}
+                        priceRanges={PRICE_RANGES}
+                        filters={filters}
+                        onFilterChange={handleFilterChange}
+                        onClose={() => setIsMobileFiltersOpen(false)}
+                    />
+                </Box>
+            </Drawer>
         </Container>
     );
 };
