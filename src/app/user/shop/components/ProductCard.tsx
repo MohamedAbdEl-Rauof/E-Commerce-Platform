@@ -1,33 +1,31 @@
 import React from 'react';
-import {Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography} from '@mui/material';
+import { Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Rating from "@mui/material/Rating";
-import {useSession} from "next-auth/react";
-import {useCart} from "@/context/AddToCartContext";
+import { useSession } from "next-auth/react";
+import { useCart } from "@/context/AddToCartContext";
 import Image from "next/image";
 
-interface Product {
-    _id: string;
-    name: string;
-    image: string;
-    price: number;
-    PriceBeforeDiscount?: string;
-    rating?: number;
-    isNew?: boolean;
-    discount?: number;
-}
-
 interface ProductCardProps {
-    product: Product;
+    product: {
+        _id: string;
+        name: string;
+        image: string;
+        price: number;
+        PriceBeforeDiscount?: string;
+        rating?: number;
+        isNew?: boolean;
+        discount?: number;
+    };
     isList: boolean;
     isFavorite: boolean;
     onFavorite: (productId: string) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({product, isList, isFavorite, onFavorite}) => {
-    const {data: session} = useSession();
-    const {addToCart, checkUserSignin} = useCart();
+const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, onFavorite }) => {
+    const { data: session } = useSession();
+    const { addToCart, checkUserSignin } = useCart();
     const userId = session?.user?.id;
 
     const handleAddToCart = (productId: string) => {
@@ -46,24 +44,31 @@ const ProductCard: React.FC<ProductCardProps> = ({product, isList, isFavorite, o
         <Card sx={{
             display: isList ? 'flex' : 'block',
             height: '100%',
-            transition: 'all 0.3s',
+            transition: 'all 0.3s ease-in-out',
+            backgroundColor: 'var(--background)',
+            color: 'var(--foreground)',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            boxShadow: '0 4px 6px var(--shadow)',
             '&:hover': {
-                boxShadow: 6,
+                boxShadow: '0 8px 16px var(--shadow)',
+                transform: 'translateY(-4px)',
                 '& .MuiCardMedia-root': {
-                    transform: 'scale(1.1)',
+                    transform: 'scale(1.05)',
                 },
                 '& .add-to-cart': {
                     opacity: 1,
+                    transform: 'translateY(0)',
                 },
             },
         }}>
-            <Box sx={{position: 'relative', width: isList ? '33%' : '100%'}}>
+            <Box sx={{ position: 'relative', width: isList ? '33%' : '100%', overflow: 'hidden' }}>
                 <CardMedia
                     component="div"
                     sx={{
                         position: 'relative',
                         paddingTop: '100%',
-                        transition: 'transform 0.3s',
+                        transition: 'transform 0.3s ease-in-out',
                     }}
                 >
                     <Image
@@ -79,48 +84,77 @@ const ProductCard: React.FC<ProductCardProps> = ({product, isList, isFavorite, o
                         position: 'absolute',
                         top: 8,
                         right: 8,
-                        bgcolor: 'background.paper',
-                        '&:hover': {bgcolor: 'background.paper'},
+                        bgcolor: 'white',
+                        transition: 'all 0.2s ease-in-  out',
+                        '&:hover': {
+                            bgcolor: 'var(--hover)',
+                            transform: 'scale(1.1)',
+                        },
                     }}
                 >
                     {isFavorite ? (
-                        <FavoriteIcon color="error"/>
+                        <FavoriteIcon sx={{ color: 'var(--danger)' }} />
                     ) : (
-                        <FavoriteBorderIcon/>
+                        <FavoriteBorderIcon />
                     )}
                 </IconButton>
                 {product.isNew && (
                     <Chip
                         label="New"
-                        color="primary"
+                        sx={{
+                            position: 'absolute',
+                            top: 8,
+                            left: 8,
+                            bgcolor: 'var(--primary)',
+                            color: 'var(--text-on-image)',
+                        }}
                         size="small"
-                        sx={{position: 'absolute', top: 8, left: 8}}
                     />
                 )}
                 {product.discount && (
                     <Chip
                         label={`-${product.discount}%`}
-                        color="error"
+                        sx={{
+                            position: 'absolute',
+                            top: 40,
+                            left: 8,
+                            bgcolor: 'var(--danger)',
+                            color: 'var(--text-on-image)',
+                        }}
                         size="small"
-                        sx={{position: 'absolute', top: 40, left: 8}}
                     />
                 )}
             </Box>
-            <CardContent sx={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
-                <Typography variant="h6" component="h3" gutterBottom noWrap>
+            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', p: 2 }}>
+                <Typography variant="h6" component="h3" gutterBottom noWrap sx={{ fontWeight: 'bold' }}>
                     {product.name}
                 </Typography>
                 <Rating
-                    value={product.rating || 0}
-                    readOnly
-                    size="small"
+                    name="simple-controlled"
+                    // value={cartItem?.rating ?? null}
+                    sx={{
+                        "& .MuiRating-iconFilled": {
+                            color: "var(--rating-color)",
+                            border: "1px solid var(--rating-border-color)",
+                        },
+                        "& .MuiRating-iconEmpty": {
+                            color: "var(--rating-unselected-color)",
+                        },
+                    }}
+                    // onChange={(event, newValue) => {
+                    //     if (newValue !== null && userId) {
+                    //         updateRating(userId, item._id, newValue);
+                    //     } else {
+                    //         checkUserSignin();
+                    //     }
+                    // }}
                 />
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mt: 1}}>
-                    <Typography variant="h6" component="span">
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                    <Typography variant="h6" component="span" sx={{ fontWeight: 'bold', color: 'var(--foreground)' }}>
                         ${product.price.toFixed(2)}
                     </Typography>
                     {product.PriceBeforeDiscount && (
-                        <Typography variant="body2" color="text.secondary" sx={{textDecoration: 'line-through'}}>
+                        <Typography variant="body2" sx={{ textDecoration: 'line-through', color: 'var(--muted)' }}>
                             ${product.PriceBeforeDiscount}
                         </Typography>
                     )}
@@ -132,7 +166,14 @@ const ProductCard: React.FC<ProductCardProps> = ({product, isList, isFavorite, o
                     sx={{
                         mt: 'auto',
                         opacity: 0,
-                        transition: 'opacity 0.3s',
+                        transform: 'translateY(10px)',
+                        transition: 'all 0.3s ease-in-out',
+                        bgcolor: 'var(--foreground)',
+                        color: 'var(--background)',
+                        '&:hover': {
+                            bgcolor: 'var(--muted)',
+                            filter: 'brightness(110%)',
+                        },
                     }}
                     className="add-to-cart"
                 >

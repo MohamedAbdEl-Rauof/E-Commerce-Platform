@@ -1,49 +1,15 @@
 "use client";
-import React, {useEffect, useMemo, useState} from "react";
-import {FilterList, GridView, ViewModule, ViewStream, ViewWeek} from "@mui/icons-material";
+import React, { useEffect, useMemo, useState } from "react";
+import { FilterList } from "@mui/icons-material";
 import {
-    Box,
-    Button,
-    Container,
-    Drawer,
-    FormControl,
-    Grid,
-    IconButton,
-    MenuItem,
-    Select,
-    Typography,
-    useMediaQuery,
-    useTheme
+    Box, Button, Container, Drawer, FormControl, Grid, IconButton, MenuItem, Select, Typography, useMediaQuery, useTheme
 } from "@mui/material";
 import Banner from "./Banner";
 import SearchBar from "./SearchBar";
 import FiltersSidebar from "./FiltersSidebar";
 import ProductGrid from "./ProductGrid";
-import {Category, Product, FilterState, PriceRange, SortOption, ViewOption} from './types/shopTypes';
+import { Category, Product, FilterState, PRICE_RANGES, SORT_OPTIONS, VIEW_OPTIONS } from './types/shopTypes';
 
-const PRICE_RANGES: PriceRange[] = [
-    {label: "All Price", range: "all", min: 0, max: null},
-    {label: "$0.00 - $99.99", range: "0-99.99", min: 0, max: 99.99},
-    {label: "$100.00 - $199.99", range: "100-199.99", min: 100, max: 199.99},
-    {label: "$200.00 - $299.99", range: "200-299.99", min: 200, max: 299.99},
-    {label: "$300.00 - $399.99", range: "300-399.99", min: 300, max: 399.99},
-    {label: "$400.00+", range: "400", min: 400, max: null},
-];
-
-const SORT_OPTIONS: SortOption[] = [
-    {value: "featured", label: "Featured"},
-    {value: "price-asc", label: "Price: Low to High"},
-    {value: "price-desc", label: "Price: High to Low"},
-    {value: "name-asc", label: "Name: A to Z"},
-    {value: "name-desc", label: "Name: Z to A"},
-];
-
-const VIEW_OPTIONS: ViewOption[] = [
-    {icon: GridView, label: "Grid View", value: "grid"},
-    {icon: ViewModule, label: "Large Grid View", value: "large"},
-    {icon: ViewStream, label: "Split View", value: "split"},
-    {icon: ViewWeek, label: "List View", value: "list"},
-];
 
 const Shop: React.FC = () => {
     const theme = useTheme();
@@ -54,11 +20,7 @@ const Shop: React.FC = () => {
     const [favorites, setFavorites] = useState<Set<string>>(new Set());
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
     const [filters, setFilters] = useState<FilterState>({
-        categoryId: "all",
-        priceRange: "all",
-        sortBy: "featured",
-        view: "grid",
-        search: "",
+        categoryId: "all", priceRange: "all", sortBy: "featured", view: "grid", search: "",
     });
 
     useEffect(() => {
@@ -69,11 +31,9 @@ const Shop: React.FC = () => {
                     fetch("/api/categories"),
                     fetch("/api/products"),
                 ]);
-
                 const categoriesData = await categoriesRes.json();
                 const productsData = await productsRes.json();
-
-                setCategories([{_id: "all", name: "All Rooms"}, ...categoriesData]);
+                setCategories([{ _id: "all", name: "All Rooms" }, ...categoriesData]);
                 setProducts(productsData);
             } catch (error) {
                 console.error("Error fetching initial data:", error);
@@ -81,26 +41,18 @@ const Shop: React.FC = () => {
                 setIsLoading(false);
             }
         };
-
         fetchInitialData();
     }, []);
 
     const filteredProducts = useMemo(() => {
         let result = [...products];
-
         if (filters.search) {
             const searchTerm = filters.search.toLowerCase();
-            result = result.filter((product) =>
-                product.name.toLowerCase().includes(searchTerm)
-            );
+            result = result.filter((product) => product.name.toLowerCase().includes(searchTerm));
         }
-
         if (filters.categoryId !== "all") {
-            result = result.filter(
-                (product) => product.categoryId === filters.categoryId
-            );
+            result = result.filter((product) => product.categoryId === filters.categoryId);
         }
-
         if (filters.priceRange !== "all") {
             const range = PRICE_RANGES.find((r) => r.range === filters.priceRange);
             if (range) {
@@ -110,22 +62,12 @@ const Shop: React.FC = () => {
                 });
             }
         }
-
         switch (filters.sortBy) {
-            case "price-asc":
-                result.sort((a, b) => a.price - b.price);
-                break;
-            case "price-desc":
-                result.sort((a, b) => b.price - a.price);
-                break;
-            case "name-asc":
-                result.sort((a, b) => a.name.localeCompare(b.name));
-                break;
-            case "name-desc":
-                result.sort((a, b) => b.name.localeCompare(a.name));
-                break;
+            case "price-asc": result.sort((a, b) => a.price - b.price); break;
+            case "price-desc": result.sort((a, b) => b.price - a.price); break;
+            case "name-asc": result.sort((a, b) => a.name.localeCompare(b.name)); break;
+            case "name-desc": result.sort((a, b) => b.name.localeCompare(a.name)); break;
         }
-
         return result;
     }, [products, filters]);
 
@@ -142,145 +84,123 @@ const Shop: React.FC = () => {
     };
 
     const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => ({...prev, [key]: value}));
+        setFilters((prev) => ({ ...prev, [key]: value }));
     };
 
     return (
-        <Container
-            maxWidth={false}
-            sx={{
-                maxWidth: '1770px',
-                backgroundColor: 'var(--background)',
-                color: 'var(--foreground)',
-                px: { xs: 2, sm: 3, md: 4 },
-            }}
-        >
-            <Banner />
-
-            <Box sx={{ mt: 4 }}>
-                <Grid container spacing={2} alignItems="flex-start">
-                    {/* Filter Sidebar (Desktop) */}
-                    {!isMobile && (
-                        <Grid item xs={12} md={3} lg={3}>
-                            <Box sx={{
-                                position: 'sticky',
-                                top: 16,
-                                maxHeight: 'calc(100vh - 32px)',
-                                overflowY: 'auto',
-                            }}>
-                                <FiltersSidebar
-                                    categories={categories}
-                                    priceRanges={PRICE_RANGES}
-                                    filters={filters}
-                                    onFilterChange={handleFilterChange}
-                                    onClose={() => {}}
-                                />
-                            </Box>
-                        </Grid>
-                    )}
-
-                    {/* Main Content */}
-                    <Grid item xs={12} md={isMobile ? 12 : 9} lg={isMobile ? 12 : 9}>
-                        <Box sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 2,
-                            mb: 3
-                        }}>
-                            {/* Top Bar */}
-                            <Box sx={{
-                                display: 'flex',
-                                flexDirection: { xs: 'column', sm: 'row' },
-                                justifyContent: 'space-between',
-                                alignItems: { xs: 'stretch', sm: 'center' },
-                                gap: 2,
-                            }}>
-                                {/* Filter Button (Mobile) */}
-                                {isMobile && (
-                                    <Button
-                                        startIcon={<FilterList />}
-                                        onClick={() => setIsMobileFiltersOpen(true)}
-                                        variant="outlined"
-                                        fullWidth
-                                        sx={{ mb: { xs: 1, sm: 0 } }}
-                                    >
-                                        Filters
-                                    </Button>
-                                )}
-
-                                {/* Search Bar */}
-                                <Box sx={{ flexGrow: 1, width: '100%' }}>
-                                    <SearchBar
-                                        value={filters.search}
-                                        onChange={(value) => handleFilterChange("search", value)}
+        <Container maxWidth={false} sx={{ maxWidth: '2000px', backgroundColor: 'var(--background)', color: 'var(--foreground)', px: { xs: 2, sm: 3, md: 4 } }}>
+            <Container maxWidth={false} sx={{ maxWidth: '1750px' }}>
+                <Box sx={{width: '100%', pt: 5}}>
+                    <Banner />
+                </Box>
+                <Box sx={{ mt: 4 }}>
+                    <Grid container spacing={2} alignItems="flex-start">
+                        {!isMobile && (
+                            <Grid item xs={12} md={3} lg={3}>
+                                <Box sx={{ position: 'sticky', top: 16, maxHeight: 'calc(100vh - 32px)', overflowY: 'auto' }}>
+                                    <FiltersSidebar
+                                        categories={categories}
+                                        priceRanges={PRICE_RANGES}
+                                        filters={filters}
+                                        onFilterChange={handleFilterChange}
+                                        onClose={() => {}}
                                     />
                                 </Box>
-                            </Box>
-
-                            {/* Sort and View Options */}
-                            <Box sx={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                gap: 2,
-                            }}>
-                                <FormControl size="small" sx={{ minWidth: 120 }}>
-                                    <Select
-                                        value={filters.sortBy}
-                                        onChange={(e) => handleFilterChange("sortBy", e.target.value as string)}
-                                    >
-                                        {SORT_OPTIONS.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-
-                                <Box sx={{ display: 'flex', gap: 1 }}>
-                                    {VIEW_OPTIONS.map((option) => (
-                                        <IconButton
-                                            key={option.value}
-                                            onClick={() => handleFilterChange("view", option.value)}
-                                            color={filters.view === option.value ? "primary" : "default"}
-                                            title={option.label}
+                            </Grid>
+                        )}
+                        <Grid item xs={12} md={isMobile ? 12 : 9} lg={isMobile ? 12 : 9}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 3 }}>
+                                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'stretch', sm: 'center' }, gap: 2 }}>
+                                    {isMobile && (
+                                        <Button startIcon={<FilterList />} onClick={() => setIsMobileFiltersOpen(true)} variant="outlined" fullWidth sx={{ mb: { xs: 1, sm: 0 } }}>
+                                            Filters
+                                        </Button>
+                                    )}
+                                    <Box sx={{ flexGrow: 1, width: '100%' }}>
+                                        <SearchBar value={filters.search} onChange={(value) => handleFilterChange("search", value)} />
+                                    </Box>
+                                </Box>
+                                <Box sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    flexWrap: 'wrap',
+                                    gap: 2,
+                                    backgroundColor: 'var(--background)',
+                                    color: 'var(--foreground)',
+                                    padding: 2,
+                                }}>
+                                    <FormControl size="small" sx={{
+                                        minWidth: 120,
+                                        '& .MuiOutlinedInput-root': {
+                                            color: 'var(--foreground)',
+                                            '& fieldset': {
+                                                borderColor: 'var(--border)',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'var(--primary)',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'var(--focus)',
+                                            },
+                                        },
+                                        '& .MuiSelect-icon': {
+                                            color: 'var(--foreground)',
+                                        },
+                                    }}>
+                                        <Select
+                                            value={filters.sortBy}
+                                            onChange={(e) => handleFilterChange("sortBy", e.target.value as string)}
+                                            sx={{
+                                                backgroundColor: 'var(--light)',
+                                                '&:hover': {
+                                                    backgroundColor: 'var(--hover)',
+                                                },
+                                            }}
                                         >
-                                            <option.icon />
-                                        </IconButton>
-                                    ))}
+                                            {SORT_OPTIONS.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                    <Box sx={{ display: 'flex', gap: 1 }}>
+                                        {VIEW_OPTIONS.map((option) => (
+                                            <IconButton
+                                                key={option.value}
+                                                onClick={() => handleFilterChange("view", option.value)}
+                                                color={filters.view === option.value ? "primary" : "default"}
+                                                title={option.label}
+                                                sx={{
+                                                    color: filters.view === option.value ? 'var(--primary)' : 'var(--foreground)',
+                                                    backgroundColor: 'var(--light)',
+                                                    '&:hover': {
+                                                        backgroundColor: 'var(--hover)',
+                                                    },
+                                                }}
+                                            >
+                                                <option.icon />
+                                            </IconButton>
+                                        ))}
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
-
-                        {/* Product Grid */}
-                        {isLoading ? (
-                            <Typography>Loading...</Typography>
-                        ) : (
-                            <ProductGrid
-                                products={filteredProducts}
-                                view={filters.view}
-                                favorites={favorites}
-                                toggleFavorite={toggleFavorite}
-                            />
-                        )}
+                            {isLoading ? (
+                                <Typography>Loading...</Typography>
+                            ) : (
+                                <ProductGrid
+                                    products={filteredProducts}
+                                    view={filters.view}
+                                    favorites={favorites}
+                                    toggleFavorite={toggleFavorite}
+                                />
+                            )}
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Box>
-
-            {/* Mobile Filters Drawer */}
-            <Drawer
-                anchor="left"
-                open={isMobileFiltersOpen}
-                onClose={() => setIsMobileFiltersOpen(false)}
-            >
+                </Box>
+            </Container>
+            <Drawer anchor="left" open={isMobileFiltersOpen} onClose={() => setIsMobileFiltersOpen(false)}>
                 <Box sx={{ width: 250, p: 2 }}>
-                    <Button
-                        onClick={() => setIsMobileFiltersOpen(false)}
-                        sx={{ mb: 2 }}
-                    >
-                        Close Filters
-                    </Button>
+                    <Button onClick={() => setIsMobileFiltersOpen(false)} sx={{ mb: 2 }}>Close Filters</Button>
                     <FiltersSidebar
                         categories={categories}
                         priceRanges={PRICE_RANGES}

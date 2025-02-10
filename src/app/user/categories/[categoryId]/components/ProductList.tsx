@@ -82,8 +82,8 @@ const ProductList: React.FC<ProductListProps> = ({products, categoryId}) => {
     );
 
     return (
-        <Container maxWidth={false} sx={{maxWidth: '2000px', py: 4}}>
-            <Box sx={{mb: 4, maxWidth: 600, mx: 'auto'}}>
+        <Container maxWidth={false} sx={{ maxWidth: '1700px', py: 4 }}>
+            <Box sx={{ mb: 4, maxWidth: 600, mx: 'auto' }}>
                 <SearchBar
                     value={filters.search}
                     onChange={(value) => handleFilterChange("search", value)}
@@ -91,24 +91,30 @@ const ProductList: React.FC<ProductListProps> = ({products, categoryId}) => {
             </Box>
 
             <Grid container spacing={4}>
-                {/* Desktop Filters Sidebar */}
-                <Grid item xs={12} lg={3} sx={{display: {xs: 'none', lg: 'block'}}}>
+                <Grid item xs={12} lg={3} sx={{ display: { xs: 'none', lg: 'block' } }}>
                     {filtersSidebar}
                 </Grid>
 
-                {/* Mobile Filters Drawer */}
                 <Drawer
                     anchor="left"
                     open={isMobileFiltersOpen}
                     onClose={() => setIsMobileFiltersOpen(false)}
-                    sx={{display: {xs: 'block', lg: 'none'}}}
+                    sx={{ display: { xs: 'block', lg: 'none' } }}
                 >
-                    <Box sx={{width: 280, p: 3}}>
+                    <Box sx={{ width: 280, p: 3, bgcolor: 'var(--background)' }}>
                         <Button
                             onClick={() => setIsMobileFiltersOpen(false)}
                             variant="outlined"
                             fullWidth
-                            sx={{mb: 3}}
+                            sx={{
+                                mb: 3,
+                                color: 'var(--text)',
+                                borderColor: 'var(--border)',
+                                '&:hover': {
+                                    bgcolor: 'var(--background-hover)',
+                                    borderColor: 'var(--border-hover)',
+                                },
+                            }}
                         >
                             Close Filters
                         </Button>

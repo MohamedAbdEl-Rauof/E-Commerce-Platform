@@ -24,11 +24,10 @@ interface ProductCardProps {
     product: Product;
     categoryId: string;
     isList: boolean;
-    isFavorite: boolean;
-    onFavorite: (productId: string) => void;
+
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, isFavorite, onFavorite}) => {
+const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList}) => {
     const {data: session} = useSession();
     const {addToCart, checkUserSignin} = useCart();
     const userId = session?.user?.id;
@@ -44,7 +43,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
 
     const handleFavoriteToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        onFavorite(product._id);
+        // onFavorite(product._id);
     };
 
     if (!product) {
@@ -57,18 +56,19 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
             height: '100%',
             transition: 'all 0.3s',
             textDecoration: 'none',
-            color: 'inherit',
+            color: 'var(--text)',
+            bgcolor: 'var(--background)',
             '&:hover': {
                 boxShadow: 6,
                 '& .MuiCardMedia-root': {
-                    transform: 'scale(1.1)',
+                    transform: 'scale(1.05)',
                 },
                 '& .add-to-cart': {
                     opacity: 1,
                 },
             },
         }}>
-            <Box sx={{position: 'relative', width: isList ? '33%' : '100%'}}>
+            <Box sx={{ position: 'relative', width: isList ? '33%' : '100%', overflow: 'hidden' }}>
                 <CardMedia
                     component="div"
                     sx={{
@@ -84,19 +84,19 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
                         objectFit="cover"
                     />
                 </CardMedia>
-                <Link href={`/user/categories/${(categoryId)}/${(product._id)}`}
-                      passHref>
+                <Link href={`/user/categories/${categoryId}/${product._id}`} passHref>
                     <IconButton
                         component="a"
                         sx={{
                             position: 'absolute',
                             top: 8,
                             left: 8,
-                            bgcolor: 'background.paper',
-                            '&:hover': {bgcolor: 'background.paper'},
+                            bgcolor: 'var(--background)',
+                            color: 'var(--text)',
+                            '&:hover': { bgcolor: 'var(--background-hover)' },
                         }}
                     >
-                        <InfoIcon/>
+                        <InfoIcon />
                     </IconButton>
                 </Link>
                 <IconButton
@@ -105,22 +105,25 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
                         position: 'absolute',
                         top: 8,
                         right: 8,
-                        bgcolor: 'background.paper',
-                        '&:hover': {bgcolor: 'background.paper'},
+                        bgcolor: 'var(--background)',
+                        // color: isFavorite ? 'var(--error)' : 'var(--text)',
+                        '&:hover': { bgcolor: 'var(--background-hover)' },
                     }}
                 >
-                    {isFavorite ? (
-                        <FavoriteIcon color="error"/>
-                    ) : (
-                        <FavoriteBorderIcon/>
-                    )}
+                    {/*{isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}*/}
                 </IconButton>
                 {product.isNew && (
                     <Chip
                         label="New"
                         color="primary"
                         size="small"
-                        sx={{position: 'absolute', top: 40, left: 8}}
+                        sx={{
+                            position: 'absolute',
+                            top: 40,
+                            left: 8,
+                            bgcolor: 'var(--primary)',
+                            color: 'var(--text-on-primary)',
+                        }}
                     />
                 )}
                 {product.discount && (
@@ -128,25 +131,37 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
                         label={`-${product.discount}%`}
                         color="error"
                         size="small"
-                        sx={{position: 'absolute', top: product.isNew ? 72 : 40, left: 8}}
+                        sx={{
+                            position: 'absolute',
+                            top: product.isNew ? 72 : 40,
+                            left: 8,
+                            bgcolor: 'var(--error)',
+                            color: 'var(--text-on-error)',
+                        }}
                     />
                 )}
             </Box>
-            <CardContent sx={{flexGrow: 1, display: 'flex', flexDirection: 'column'}}>
-                <Typography variant="h6" component="h3" gutterBottom noWrap>
+            <CardContent sx={{
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                bgcolor: 'var(--background)',
+            }}>
+                <Typography variant="h6" component="h3" gutterBottom noWrap sx={{ color: 'var(--text)' }}>
                     {product.name}
                 </Typography>
                 <Rating
                     value={product.rating || 0}
                     readOnly
                     size="small"
+                    sx={{ color: 'var(--primary)' }}
                 />
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mt: 1}}>
-                    <Typography variant="h6" component="span">
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                    <Typography variant="h6" component="span" sx={{ color: 'var(--text)' }}>
                         ${product.price.toFixed(2)}
                     </Typography>
                     {product.PriceBeforeDiscount && (
-                        <Typography variant="body2" color="text.secondary" sx={{textDecoration: 'line-through'}}>
+                        <Typography variant="body2" sx={{ color: 'var(--text-secondary)', textDecoration: 'line-through' }}>
                             ${product.PriceBeforeDiscount}
                         </Typography>
                     )}
@@ -159,6 +174,11 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
                         mt: 'auto',
                         opacity: 0,
                         transition: 'opacity 0.3s',
+                        bgcolor: 'var(--primary)',
+                        color: 'var(--text-on-primary)',
+                        '&:hover': {
+                            bgcolor: 'var(--primary-dark)',
+                        },
                     }}
                     className="add-to-cart"
                 >
