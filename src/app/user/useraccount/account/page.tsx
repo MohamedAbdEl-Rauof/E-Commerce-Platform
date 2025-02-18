@@ -1,12 +1,12 @@
 // pages/UserAccount/orders/page.tsx
 
-import OrdersList from "./components/OrdersList";
+import AccountDetails from "./components/AccountDetails";
 import Box from "@mui/material/Box";
 
-export default function OrdersPage() {
+export default function AccountPage() {
     return (
         <Box style={{maxWidth: 1200, margin: '2rem auto', padding: '0 1rem'}}>
-            <OrdersList/>
+            <AccountDetails/>
         </Box>
     );
 }
