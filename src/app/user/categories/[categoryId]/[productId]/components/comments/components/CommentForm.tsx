@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import { Box, Paper, Typography } from '@mui/material';
+import {Box, Paper, Typography} from '@mui/material';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
+import {Comment, ReactionType} from './types';
 
 // Define the types here since they can't be imported
 interface Comment {
