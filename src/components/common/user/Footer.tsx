@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Footer = () => {
     return (
-        <FlowbiteFooter container className="w-full p-0 ">
+        <FlowbiteFooter container className="w-full p-0 mt-24 ">
             <div className="w-full pt-20 pb-16 bg-black text-white px-6 sm:px-16 md:px-24">
                 <div
                     className="flex flex-col sm:flex-row w-full sm:justify-between md:grid-cols-1 space-y-8 sm:space-y-0">

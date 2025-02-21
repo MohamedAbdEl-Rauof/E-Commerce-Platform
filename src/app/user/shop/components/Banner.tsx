@@ -16,11 +16,10 @@ const Banner: React.FC = () => {
     return (
         <Box
             sx={{
-                mt: 14,
                 position: 'relative',
                 height: 400,
                 borderRadius: 2,
-                overflow: 'hidden',
+                overflow: 'hidden'
             }}
             aria-labelledby="banner-title"
         >
@@ -45,24 +44,37 @@ const Banner: React.FC = () => {
                 }}
             >
                 <Container maxWidth="lg">
-                    <Breadcrumbs
-                        aria-label="Breadcrumb"
-                        sx={{mb: 2, color: 'white'}}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            width: '100%',
+                        }}
                     >
-                        <Link href="/user" passHref>
-                            <Typography
-                                component="a"
-                                sx={{
-                                    color: 'white',
-                                    '&:hover': {color: 'grey.200'},
-                                    transition: 'color 0.3s',
-                                }}
-                            >
-                                Home
-                            </Typography>
-                        </Link>
-                        <Typography color="grey.300">Shop</Typography>
-                    </Breadcrumbs>
+                        <Breadcrumbs
+                            aria-label="Breadcrumb"
+                            sx={{
+                                mb: 2,
+                                color: 'white',
+                                display: 'flex',
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <Link href="/user" passHref>
+                                <Typography
+                                    component="a"
+                                    sx={{
+                                        color: 'white',
+                                        '&:hover': {color: 'grey.200'},
+                                        transition: 'color 0.3s',
+                                    }}
+                                >
+                                    Home
+                                </Typography>
+                            </Link>
+                            <Typography color="grey.300">Shop</Typography>
+                        </Breadcrumbs>
+                    </Box>
                     <Typography
                         id="banner-title"
                         variant="h2"
