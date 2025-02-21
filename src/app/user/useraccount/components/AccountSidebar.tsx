@@ -28,11 +28,14 @@ const StyledListItem = styled(ListItem, {
     shouldForwardProp: (prop) => prop !== "active",
 })<{ active?: boolean }>(({theme, active}) => ({
     borderRadius: theme.shape.borderRadius,
-    marginBottom: theme.spacing(0.5),
-    backgroundColor: active ? "white" : "transparent",
+    marginBottom: theme.spacing(1),
+    backgroundColor: active ? "var(--foreground)" : "transparent",
+    color: active ? "var(--background)" : "red",
     boxShadow: active ? theme.shadows[1] : "none",
+    transition: "background-color 0.3s, color 0.3s, box-shadow 0.3s",
     "&:hover": {
-        backgroundColor: active ? "white" : "rgba(255, 255, 255, 0.5)",
+        // backgroundColor: active ? "var(--foreground)" : "var(--hover)",
+        boxShadow: active ? theme.shadows[2] : theme.shadows[1],
     },
 }));
 
@@ -103,11 +106,11 @@ export default function AccountSidebar() {
             showConfirmButton: false,
             timer: 1500,
         });
-        router.push("/pages/Home");
+        router.push("/user/home");
     };
 
     return (
-        <Card sx={{p: 3, bgcolor: "grey.50", border: 0}}>
+        <Card sx={{p: 3, bgcolor: "var(--background)", border: '1px solid var(--muted)', boxShadow: 'var(--shadow)'}}>
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -122,9 +125,9 @@ export default function AccountSidebar() {
                             position: "absolute",
                             bottom: 0,
                             right: 0,
-                            bgcolor: "white",
+                            bgcolor: "var(--foreground)",
+                            color: "var(--background)",
                             boxShadow: 2,
-                            "&:hover": {bgcolor: "white"},
                         }}
                         onClick={handleIconClick}
                     >
@@ -138,7 +141,7 @@ export default function AccountSidebar() {
                         onChange={handleFileChange}
                     />
                 </Box>
-                <Typography variant="h6" sx={{mt: 2}}>
+                <Typography variant="h6" sx={{mt: 2 , color: "var(--foreground)"}}>
                     {userData ? userData.name : "Loading..."}
                 </Typography>
             </Box>
@@ -151,12 +154,13 @@ export default function AccountSidebar() {
                         style={{textDecoration: "none", color: "inherit"}}
                     >
                         <StyledListItem active={pathname === item.href}>
-                            <ListItemIcon sx={{minWidth: 40}}>
+                            <ListItemIcon style={{minWidth: 40 ,color: "var(--foreground)"}}>
                                 <item.icon size={20}/>
                             </ListItemIcon>
                             <ListItemText
                                 primary={item.label}
                                 primaryTypographyProps={{fontWeight: 500}}
+                                style={{color: "var(--foreground)"}}
                             />
                         </StyledListItem>
                     </Link>

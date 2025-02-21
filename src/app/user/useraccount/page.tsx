@@ -1,10 +1,9 @@
-// pages/UserAccount/page.tsx
-"use client"; // Ensures the page is client-side
+"use client";
 
-import AccountDetails from "./components/AccountDetails";
+import AccountPage from "./account/page"
 
-export default function AccountPage() {
+export default function Page() {
     return (
-        <AccountDetails/>
+        <AccountPage/>
     );
 }
