@@ -106,5 +106,6 @@
 > handle the functionality
 > loading for each page
 > enhance the performance and seo and asscecaplity and best practice
+> handle the anmation
 
 > Home , Shop , Categories , Contact Us , Cart , View Cart , My Account , Login , Register , Header , footer

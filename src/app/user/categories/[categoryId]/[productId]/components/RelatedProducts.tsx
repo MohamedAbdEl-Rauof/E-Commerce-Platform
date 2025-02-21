@@ -1,17 +1,15 @@
 import React from 'react';
-import { Typography, Grid, Box } from '@mui/material';
-import { useProduct } from '@/context/ProductContext';
-import ProductCard from '../../components/ProductCard';
+import {Box, Grid, Typography} from '@mui/material';
+import {useProduct} from '@/context/ProductContext';
+import ProductCard from '../../components/ProductCard'
 
-const RelatedProducts = ({ categoryId, currentProductId }: { categoryId: string; currentProductId: string }) => {
-    const { products } = useProduct();
+const RelatedProducts = ({categoryId, currentProductId}: { categoryId: string; currentProductId: string }) => {
+    const {products} = useProduct();
+    const [favorites, setFavorites] = React.useState<Set<string>>(new Set());
 
     const relatedProducts = products
         .filter(p => p.categoryId === categoryId && p._id !== currentProductId)
-        .slice(0, 4); // Show up to 4 related products
-
-    // Add these state and handler
-    const [favorites, setFavorites] = React.useState<Set<string>>(new Set());
+        .slice(0, 4);
 
     const handleFavoriteToggle = (productId: string) => {
         setFavorites(prevFavorites => {
@@ -27,7 +25,15 @@ const RelatedProducts = ({ categoryId, currentProductId }: { categoryId: string;
 
     return (
         <Box mt={6}>
-            <Typography variant="h5" gutterBottom>
+            <Typography
+                variant="h5"
+                gutterBottom
+                sx={{
+                    color: 'var(--foreground)',
+                    fontWeight: 'bold',
+                    marginBottom: '3rem'
+                }}
+            >
                 Related Products
             </Typography>
             <Grid container spacing={3}>
@@ -45,6 +51,6 @@ const RelatedProducts = ({ categoryId, currentProductId }: { categoryId: string;
             </Grid>
         </Box>
     );
-};
+}
 
 export default RelatedProducts;

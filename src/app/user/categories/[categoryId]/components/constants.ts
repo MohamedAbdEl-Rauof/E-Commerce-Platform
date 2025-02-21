@@ -1,4 +1,4 @@
-import {GridView, ViewModule, ViewStream, ViewWeek} from "@mui/icons-material";
+import {GridView, ViewModule, ViewStream} from "@mui/icons-material";
 import {PriceRange} from "./types";
 
 export const PRICE_RANGES: PriceRange[] = [
@@ -19,10 +19,10 @@ export const SORT_OPTIONS = [
 ];
 
 export const VIEW_OPTIONS = [
-    {icon: GridView, label: "Grid View", value: "grid"},
-    {icon: ViewModule, label: "Large Grid View", value: "large"},
+    {icon: ViewModule, label: "Grid View", value: "grid"},
     {icon: ViewStream, label: "Split View", value: "split"},
-    {icon: ViewWeek, label: "List View", value: "list"},
+    {icon: GridView, label: "Large Grid View", value: "large"},
 ] as const;
+
 
 export type ViewOption = typeof VIEW_OPTIONS[number];

@@ -1,5 +1,5 @@
 import React from 'react';
-import {ToggleButton, ToggleButtonGroup} from '@mui/material';
+import {Box, IconButton} from '@mui/material';
 import {ViewOption} from './constants';
 
 interface ViewToggleProps {
@@ -10,18 +10,25 @@ interface ViewToggleProps {
 
 const ViewToggle: React.FC<ViewToggleProps> = ({view, onChange, options}) => {
     return (
-        <ToggleButtonGroup
-            value={view}
-            exclusive
-            onChange={(_, newView) => newView && onChange(newView)}
-            aria-label="view"
-        >
+        <Box sx={{display: 'flex', gap: 1}}>
             {options.map((option) => (
-                <ToggleButton key={option.value} value={option.value} aria-label={option.label}>
+                <IconButton
+                    key={option.value}
+                    onClick={() => onChange(option.value)}
+                    color={view === option.value ? "primary" : "default"}
+                    title={option.label}
+                    sx={{
+                        color: view === option.value ? 'var(--primary)' : 'var(--foreground)',
+                        backgroundColor: 'var(--light)',
+                        '&:hover': {
+                            backgroundColor: 'var(--hover)',
+                        },
+                    }}
+                >
                     <option.icon/>
-                </ToggleButton>
+                </IconButton>
             ))}
-        </ToggleButtonGroup>
+        </Box>
     );
 };
 

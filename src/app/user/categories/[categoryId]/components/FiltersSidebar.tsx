@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Chip, Divider, IconButton, Radio, RadioGroup, Typography, useTheme} from '@mui/material';
+import {Box, FormControlLabel, IconButton, Radio, RadioGroup, Typography} from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import {AnimatePresence, motion} from 'framer-motion';
@@ -33,44 +33,46 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                                                            onFilterChange,
                                                            onClose,
                                                        }) => {
-    const theme = useTheme();
-
     return (
         <Box
             component="aside"
             sx={{
-                width: '100%',
-                maxWidth: 280,
-                bgcolor: 'background.paper',
+                position: 'sticky',
+                top: 4,
+                p: 3,
                 borderRadius: 2,
-                boxShadow: 3,
-                overflow: 'hidden',
+                boxShadow: 'var(--shadow)',
+                transition: 'background-color 0.3s, color 0.3s',
+                bgcolor: 'var(--background)',
+                color: 'var(--foreground)',
+                width: '100%',
+                maxWidth: '300px',
+                border: '1px solid var(--muted)',
             }}
+            aria-label="Filters"
         >
-            <Box sx={{p: 2, bgcolor: 'primary.main', color: 'primary.contrastText'}}>
-                <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                        <FilterListIcon fontSize="small"/>
-                        <Typography variant="h6" component="h2">Filters</Typography>
-                    </Box>
-                    <IconButton
-                        onClick={onClose}
-                        sx={{
-                            display: {xs: 'block', lg: 'none'},
-                            color: 'inherit',
-                            '&:hover': {bgcolor: 'primary.dark'}
-                        }}
-                        aria-label="Close filters"
-                    >
-                        <CloseIcon fontSize="small"/>
-                    </IconButton>
+            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                    <FilterListIcon fontSize="small"/>
+                    <Typography variant="h6" component="h2">Filters</Typography>
                 </Box>
+                <IconButton
+                    onClick={onClose}
+                    sx={{
+                        display: {xs: 'block', lg: 'none'},
+                        color: 'inherit',
+                        '&:hover': {bgcolor: 'var(--hover)'}
+                    }}
+                    aria-label="Close filters"
+                >
+                    <CloseIcon fontSize="small"/>
+                </IconButton>
             </Box>
 
-            <Divider/>
-
-            <Box sx={{p: 2}}>
-                <Typography variant="subtitle2" sx={{mb: 2, fontWeight: 'bold'}}>Price Range</Typography>
+            <Box component="section" sx={{mb: 4}}>
+                <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 2, color: 'var(--foreground)'}}>
+                    Price Range
+                </Typography>
                 <AnimatePresence>
                     <motion.div
                         initial={{opacity: 0}}
@@ -83,28 +85,29 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                         >
                             {priceRanges.map((range) => (
                                 <motion.div key={range.range} whileHover={{scale: 1.02}} whileTap={{scale: 0.98}}>
-                                    <Chip
-                                        icon={<Radio
-                                            checked={filters.priceRange === range.range}
-                                            sx={{
-                                                '&.Mui-checked': {color: 'primary.main'},
-                                                '& .MuiSvgIcon-root': {fontSize: 20}
-                                            }}
-                                        />}
+                                    <FormControlLabel
+                                        value={range.range}
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    color: filters.priceRange === range.range ? 'var(--background)' : 'var(--foreground)',
+                                                    '&.Mui-checked': {color: 'var(--background)'},
+                                                    '& .MuiSvgIcon-root': {fontSize: 20}
+                                                }}
+                                            />
+                                        }
                                         label={range.label}
-                                        onClick={() => onFilterChange("priceRange", range.range)}
                                         sx={{
                                             width: '100%',
-                                            justifyContent: 'flex-start',
-                                            my: 0.5,
-                                            py: 1.5,
-                                            bgcolor: filters.priceRange === range.range ? 'primary.light' : 'background.default',
-                                            color: filters.priceRange === range.range ? 'primary.main' : 'text.primary',
+                                            m: 0,
+                                            p: 1,
+                                            borderRadius: 1,
+                                            bgcolor: filters.priceRange === range.range ? 'var(--foreground)' : 'transparent',
+                                            color: filters.priceRange === range.range ? 'var(--background)' : 'var(--foreground)',
                                             '&:hover': {
-                                                bgcolor: filters.priceRange === range.range ? 'primary.light' : 'action.hover',
+                                                bgcolor: filters.priceRange === range.range ? 'var(--foreground)' : 'var(--hover)',
                                             },
-                                            transition: theme.transitions.create(['background-color', 'box-shadow']),
-                                            boxShadow: filters.priceRange === range.range ? 1 : 0,
+                                            transition: 'background-color 0.3s, color 0.3s',
                                         }}
                                     />
                                 </motion.div>
