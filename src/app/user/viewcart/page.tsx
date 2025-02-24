@@ -82,17 +82,40 @@ export default function ViewCart() {
     }, [activeStep, cartItems, handleCheckout, selectedShipping, setCartItems]);
 
     return (
-        <Box sx={{width: '85%', mx: 'auto', mt: 12}}>
+        <Box sx={{width: '85%', maxWidth: '1500px', mx: 'auto', mt: 12}}>
             <Box sx={{width: '100%'}}>
                 <Stepper
                     nonLinear
                     activeStep={activeStep}
-                    sx={{mb: 5}}
+                    sx={{
+                        mb: 5,
+                        '& .MuiStepLabel-root .Mui-completed': {
+                            color: 'var(--primary)',
+                        },
+                        '& .MuiStepLabel-root .Mui-active': {
+                            color: 'var(--primary)',
+                        },
+                    }}
                 >
                     {STEPS.map((label, index) => (
                         <Step key={label} completed={completed[index]}>
-                            <StepButton onClick={() => setActiveStep(index)}>
-                                <Typography variant="body2">{label}</Typography>
+                            <StepButton
+                                onClick={() => setActiveStep(index)}
+                                sx={{
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover)',
+                                    },
+                                }}
+                            >
+                                <Typography
+                                    variant="body2"
+                                    sx={{
+                                        color: 'var(--foreground)',
+                                        fontWeight: activeStep === index ? 'bold' : 'normal',
+                                    }}
+                                >
+                                    {label}
+                                </Typography>
                             </StepButton>
                         </Step>
                     ))}
@@ -107,10 +130,10 @@ export default function ViewCart() {
                             mr: 1,
                             color: activeStep === 0 ? 'var(--muted-foreground)' : 'var(--background)',
                             backgroundColor: activeStep === 0 ? 'transparent' : 'var(--foreground)',
-                            borderColor: activeStep === 0 ? 'var(--muted-foreground)' : 'var(--primary)',
+                            borderColor: 'var(--primary)',
                             '&:hover': {
-                                backgroundColor: activeStep === 0 ? 'transparent' : 'var(--dark)',
-                                borderColor: activeStep === 0 ? 'var(--muted-foreground)' : 'var(--primary-dark)',
+                                backgroundColor: activeStep === 0 ? 'var(--hover)' : 'var(--muted)',
+                                borderColor: 'var(--primary-dark)',
                             },
                             '&.Mui-disabled': {
                                 color: 'var(--muted-foreground)',

@@ -1,7 +1,8 @@
-import React from 'react';
-import { Box, TextField, Typography, Checkbox } from '@mui/material';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { UserData } from '../../types/type';
+import React from "react";
+import {Box, Checkbox, ListItemButton, ListItemText, Typography} from "@mui/material";
+import {Control, FieldErrors} from "react-hook-form";
+import {UserData} from "../../types/type";
+import {CheckCircle, CreditCard, RadioButtonUnchecked} from "@mui/icons-material";
 
 interface ShippingAddressProps {
     control: Control<UserData, any>;
@@ -9,114 +10,68 @@ interface ShippingAddressProps {
     handleSelect: (method: string) => void;
 }
 
-const ShippingAddress: React.FC<ShippingAddressProps> = ({ control, errors,handleSelect }) => {
+const PaymentMethod: React.FC<ShippingAddressProps> = ({control, errors, handleSelect}) => {
+    // const {paymentMethod} = useWatch(control);
+
     return (
         <Box
             sx={{
                 padding: 3,
-                border: '1px solid #e0e0e0',
+                border: "1px solid #e0e0e0",
                 borderRadius: 2,
                 boxShadow: 3,
-                backgroundColor: '#fff',
+                backgroundColor: "#fff",
             }}
         >
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
-                Shipping Address
+            <Typography variant="h6" sx={{fontWeight: "bold", mb: 2}}>
+                Payment Method
             </Typography>
-            <Box sx={{ mt: 4 }}>
-                <Controller
-                    name="streetAddress"
-                    control={control}
-                    render={({ field }) => (
-                        <TextField
-                            {...field}
-                            fullWidth
-                            id="street-address"
-                            label="Street Address"
-                            variant="outlined"
-                            error={!!errors.streetAddress}
-                            helperText={errors.streetAddress?.message}
-                        />
-                    )}
-                />
-                <Controller
-                    name="country"
-                    control={control}
-                    render={({ field }) => (
-                        <TextField
-                            {...field}
-                            fullWidth
-                            id="country"
-                            label="Country"
-                            variant="outlined"
-                            sx={{ mt: 2 }}
-                            error={!!errors.country}
-                            helperText={errors.country?.message}
-                        />
-                    )}
-                />
-                <Controller
-                    name="city"
-                    control={control}
-                    render={({ field }) => (
-                        <TextField
-                            {...field}
-                            fullWidth
-                            id="city"
-                            label="Town / City"
-                            variant="outlined"
-                            sx={{ mt: 2 }}
-                            error={!!errors.city}
-                            helperText={errors.city?.message}
-                        />
-                    )}
-                />
-                <Box
-                    display="flex"
-                    flexDirection={{ xs: 'column', sm: 'row' }}
-                    gap={2}
-                    mt={2}
+            <Box sx={{mt: 4, borderBottom: "1px solid #e0e0e0", pb: 1}}>
+                {/* Credit Card Option */}
+                <ListItemButton
+                    sx={{
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "8px",
+                        padding: "8px",
+                    }}
+                    onClick={() => handleSelect("credit-card")}
                 >
-                    <Controller
-                        name="state"
-                        control={control}
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                fullWidth
-                                id="state"
-                                label="State"
-                                variant="outlined"
-                                error={!!errors.state}
-                                helperText={errors.state?.message}
-                            />
-                        )}
+                    <Checkbox
+                        icon={<RadioButtonUnchecked/>}
+                        checkedIcon={<CheckCircle/>}
+                        // checked={paymentMethod === "credit-card"}
                     />
-                    <Controller
-                        name="zipCode"
-                        control={control}
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                fullWidth
-                                id="zip-code"
-                                label="Zip Code"
-                                variant="outlined"
-                                error={!!errors.zipCode}
-                                helperText={errors.zipCode?.message}
-                            />
-                        )}
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "100%",
+                        }}
+                    >
+                        <ListItemText primary="Pay By Card Credit"/>
+                        <CreditCard style={{fontSize: 24}}/>
+                    </Box>
+                </ListItemButton>
+
+                {/* PayPal Option */}
+                <ListItemButton
+                    sx={{
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "8px",
+                        padding: "8px",
+                    }}
+                    onClick={() => handleSelect("paypal")}
+                >
+                    <Checkbox
+                        icon={<RadioButtonUnchecked/>}
+                        checkedIcon={<CheckCircle/>}
+                        // checked={paymentMethod === "paypal"}
                     />
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-                    <Checkbox />
-                    <Typography component="label" sx={{ ml: 1 }}>
-                        Use a different billing address (optional)
-                    </Typography>
-                </Box>
+                    <ListItemText primary="PayPal"/>
+                </ListItemButton>
             </Box>
         </Box>
     );
 };
 
-export default ShippingAddress;
+export default PaymentMethod;

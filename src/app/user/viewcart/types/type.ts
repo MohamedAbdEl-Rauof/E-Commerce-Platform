@@ -14,6 +14,23 @@ export interface Type {
     maxQuantity?: number;
 }
 
+export interface CartItem {
+    id: string;
+    image: string;
+    name: string;
+    price: number;
+    isFavourite: boolean;
+    quantity: number;
+    productId: string;
+}
+
+export interface StepProps {
+    cartItems: CartItem[];
+    setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
+    selectedShipping: number;
+    handleCheckout: () => void;
+}
+
 export interface UserData {
     firstName: string;
     lastName: string;
@@ -25,17 +42,7 @@ export interface UserData {
     state: string;
     zipCode: string;
     cardNumber: string;
+    password: string;
     expirationDate: string;
     cvc: string;
-    password: string;
-}
-
-export interface CartItem {
-    id: string;
-    productId: string;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-    isFavourite?: boolean;
 }

@@ -1,16 +1,23 @@
 import React from 'react';
 import {
+    Box,
+    Button,
+    IconButton,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
-    Box,
+    Typography,
 } from "@mui/material";
-import { IoCloseOutline } from "react-icons/io5";
-import { Type } from '../../types/type';
+import {styled} from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import CloseIcon from '@mui/icons-material/Close';
+import {Type} from '../../types/type';
+import Image from 'next/image';
 
 interface CartTableProps {
     cartItems: Type[];
@@ -19,6 +26,37 @@ interface CartTableProps {
     deleteProduct: (id: string) => void;
 }
 
+const StyledTableCell = styled(TableCell)({
+    fontWeight: 'bold',
+    padding: '16px',
+    color: 'var(--foreground)',
+    // backgroundColor: 'var(--background)',
+});
+
+const StyledTableRow = styled(TableRow)({
+    '&:hover': {
+        backgroundColor: 'var(--hover)',
+    },
+});
+
+const QuantityButton = styled(IconButton)({
+    color: 'var(--foreground)',
+    '&:hover': {
+        backgroundColor: 'var(--hover)',
+    },
+    padding: '4px',
+});
+
+const QuantityControlBox = styled(Box)({
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '1px solid var(--border)',
+    borderRadius: '4px',
+    padding: '2px',
+    maxWidth: 'fit-content',
+});
+
 const CartTable: React.FC<CartTableProps> = ({
                                                  cartItems,
                                                  handleIncreaseQuantity,
@@ -26,79 +64,80 @@ const CartTable: React.FC<CartTableProps> = ({
                                                  deleteProduct,
                                              }) => {
     return (
-        <TableContainer component={Paper} elevation={3}>
-            <Table aria-label="simple table">
+        <TableContainer component={Paper} elevation={3} sx={{backgroundColor: 'var(--background)'}}>
+            <Table aria-label="cart table">
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: "bold", padding: "16px" }}>Product</TableCell>
-                        <TableCell align="left" sx={{ fontWeight: "bold", padding: "16px" }}>Quantity</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", padding: "16px" }}>Price</TableCell>
-                        <TableCell align="right" sx={{ fontWeight: "bold", padding: "16px" }}>Subtotal</TableCell>
+                        <StyledTableCell>Product</StyledTableCell>
+                        <StyledTableCell align="center">Quantity</StyledTableCell>
+                        <StyledTableCell align="right">Price</StyledTableCell>
+                        <StyledTableCell align="right">Subtotal</StyledTableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {cartItems.map((cartItem) => (
-                        <TableRow key={cartItem.id}>
-                            <TableCell component="th" scope="row" sx={{ padding: "16px" }}>
-                                <Box sx={{ display: "flex", alignItems: "center" }}>
-                                    <img
+                        <StyledTableRow key={cartItem.id}>
+                            <TableCell component="th" scope="row" sx={{padding: 2}}>
+                                <Box sx={{display: "flex", alignItems: "center"}}>
+                                    <Image
                                         src={cartItem.image}
                                         alt={cartItem.name}
+                                        width={50}
+                                        height={50}
                                         style={{
-                                            width: 50,
-                                            height: 50,
                                             marginRight: 16,
                                             borderRadius: "5px",
+                                            objectFit: "cover",
                                         }}
                                     />
-                                    <div>
-                                        <div className="font-semibold">{cartItem.name}</div>
-                                        <Box
-                                            sx={{
-                                                display: "flex",
-                                                justifyContent: "flex-end",
-                                                alignItems: "center",
-                                                marginTop: 1,
-                                            }}
+                                    <Box>
+                                        <Typography variant="subtitle1"
+                                                    sx={{fontWeight: 'bold', color: 'var(--foreground)'}}>
+                                            {cartItem.name}
+                                        </Typography>
+                                        <Button
+                                            startIcon={<CloseIcon/>}
+                                            onClick={() => deleteProduct(cartItem.id)}
+                                            sx={{color: 'var(--danger)', mt: 1}}
                                         >
-                                            <IoCloseOutline
-                                                style={{
-                                                    cursor: "pointer",
-                                                    marginLeft: 8,
-                                                }}
-                                                onClick={() => deleteProduct(cartItem.id)}
-                                            />
-                                            <span>Remove</span>
-                                        </Box>
-                                    </div>
+                                            Remove
+                                        </Button>
+                                    </Box>
                                 </Box>
                             </TableCell>
-                            <TableCell align="center" sx={{ padding: "16px" }}>
-                                <div className="flex items-center justify-center border border-gray-300 rounded-md bg-white w-20">
-                                    <button
+                            <TableCell align="center" sx={{padding: '8px'}}>  {/* Added padding */}
+                                <QuantityControlBox>
+                                    <QuantityButton
                                         onClick={() => handleDecreaseQuantity(cartItem.id)}
-                                        className="text-lg font-bold text-gray-700 px-3 py-1 hover:bg-gray-200 rounded-l-md"
+                                        size="small"
                                     >
-                                        -
-                                    </button>
-                                    <span className="text-base font-medium text-gray-800">
-                    {cartItem.quantity}
-                  </span>
-                                    <button
+                                        <RemoveIcon fontSize="small"/>
+                                    </QuantityButton>
+                                    <Typography
+                                        sx={{
+                                            mx: 1,
+                                            color: 'var(--foreground)',
+                                            minWidth: '20px',
+                                            textAlign: 'center'
+                                        }}
+                                    >
+                                        {cartItem.quantity}
+                                    </Typography>
+                                    <QuantityButton
                                         onClick={() => handleIncreaseQuantity(cartItem.id)}
-                                        className="text-lg font-bold text-gray-700 px-3 py-1 hover:bg-gray-200 rounded-r-md"
+                                        size="small"
                                     >
-                                        +
-                                    </button>
-                                </div>
+                                        <AddIcon fontSize="small"/>
+                                    </QuantityButton>
+                                </QuantityControlBox>
                             </TableCell>
-                            <TableCell align="right" sx={{ padding: "16px" }}>
-                                {cartItem.price}
+                            <TableCell align="right" sx={{color: 'var(--foreground)'}}>
+                                ${cartItem.price.toFixed(2)}
                             </TableCell>
-                            <TableCell align="right" sx={{ padding: "16px" }}>
-                                {cartItem.price * cartItem.quantity}
+                            <TableCell align="right" sx={{color: 'var(--foreground)'}}>
+                                ${(cartItem.price * cartItem.quantity).toFixed(2)}
                             </TableCell>
-                        </TableRow>
+                        </StyledTableRow>
                     ))}
                 </TableBody>
             </Table>
