@@ -16,7 +16,20 @@ interface UserData {
 
 const StyledTextField = styled(TextField)({
     "& .MuiOutlinedInput-root": {
-        backgroundColor: "white",
+        backgroundColor: "var(--search-bar-bg)",
+        color: "var(--search-bar-text)",
+        "& fieldset": {
+            borderColor: "var(--border)",
+        },
+        "&:hover fieldset": {
+            borderColor: "var(--primary)",
+        },
+        "&.Mui-focused fieldset": {
+            borderColor: "var(--focus)",
+        },
+    },
+    "& .MuiInputLabel-root": {
+        color: "var(--muted)",
     },
 });
 
@@ -72,20 +85,20 @@ export default function AccountDetails() {
         console.log("Form submitted:", formData);
 
         try {
-            // Send the PUT request to the backend with the form data in the body, NOT in the URL
+                // Send the PUT request to the backend with the form data in the body, NOT in the URL
             const response = await fetch("/api/users", {
                 method: "PUT", // Method should be PUT for updating
                 headers: {
                     "Content-Type": "application/json", // Specify JSON content type
                 },
                 body: JSON.stringify({
-                    id: userId, // Include user ID to identify the user
-                    ...formData, // Spread the form data into the request body
+                    id: userId,
+                    ...formData,
                 }),
             });
 
             if (response.ok) {
-                const data = await response.json(); // Parse the JSON response
+                const data = await response.json();
                 console.log("User updated:", data);
                 // Optionally refresh or redirect after a successful update
                 window.location.reload(); // Reload the page to reflect changes
@@ -100,11 +113,16 @@ export default function AccountDetails() {
     };
 
     return (
-        <Card sx={{p: 4}}>
+        <Card sx={{
+            p: 4,
+            bgcolor: "var(--background)",
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow)',
+        }}>
             <form onSubmit={handleSubmit}>
                 <Box sx={{display: "flex", flexDirection: "column", gap: 4}}>
-                    <div>
-                        <Typography variant="h5" sx={{mb: 3}}>
+                    <Box>
+                        <Typography variant="h5" sx={{mb: 3, color: "var(--foreground)"}}>
                             Account Details
                         </Typography>
                         <Box sx={{display: "flex", flexDirection: "column", gap: 2}}>
@@ -142,7 +160,7 @@ export default function AccountDetails() {
                                 fullWidth
                             />
                         </Box>
-                    </div>
+                    </Box>
 
                     <Button
                         type="submit"
@@ -150,6 +168,11 @@ export default function AccountDetails() {
                         sx={{
                             width: {xs: "100%", md: "auto"},
                             alignSelf: {md: "flex-start"},
+                            bgcolor: "var(--primary)",
+                            color: "var(--light)",
+                            '&:hover': {
+                                bgcolor: "var(--accent)",
+                            },
                         }}
                     >
                         Save changes

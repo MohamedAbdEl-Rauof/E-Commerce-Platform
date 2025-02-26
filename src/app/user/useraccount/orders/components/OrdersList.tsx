@@ -1,5 +1,3 @@
-// /pages/UserAccount/components/OrdersList.tsx
-
 "use client";
 
 import {useEffect, useState} from "react";
@@ -16,6 +14,8 @@ import {
     Typography,
 } from "@mui/material";
 import {useSession} from "next-auth/react";
+import {styled} from "@mui/material/styles";
+
 
 interface OrderItem {
     productId: string;
@@ -39,16 +39,44 @@ interface Order {
     };
 }
 
+const StyledCard = styled(Card)(({theme}) => ({
+    padding: theme.spacing(4),
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
+    border: "1px solid var(--border)",
+    boxShadow: "var(--shadow)",
+}));
+
+const StyledTable = styled(Table)(({theme}) => ({
+    "& .MuiTableCell-head": {
+        backgroundColor: "var(--card-bg)",
+        color: "var(--heading)",
+        fontWeight: "bold",
+    },
+    "& .MuiTableCell-body": {
+        color: "var(--foreground)",
+    },
+    "& .MuiTableRow-root": {
+        "&:nth-of-type(odd)": {
+            backgroundColor: "var(--card-bg)",
+        },
+        "&:hover": {
+            backgroundColor: "var(--hover-bg)",
+        },
+    },
+}));
+
+
 const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
         case "delivered":
-            return "success";
+            return "var(--success)";
         case "processing":
-            return "warning";
+            return "var(--warning)";
         case "cancelled":
-            return "error";
+            return "var(--error)";
         default:
-            return "default";
+            return "var(--muted)";
     }
 };
 
@@ -106,14 +134,22 @@ export default function OrdersList() {
         );
     }
 
+    if (isLoading) {
+        return (
+            <StyledCard sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400}}>
+                <CircularProgress sx={{color: "var(--primary)"}}/>
+            </StyledCard>
+        );
+    }
+
     return (
-        <Card sx={{p: 4}}>
-            <Typography variant="h5" sx={{mb: 4}}>
+        <StyledCard>
+            <Typography variant="h5" sx={{mb: 4, color: "var(--heading)"}}>
                 My Orders
             </Typography>
 
             <TableContainer>
-                <Table>
+                <StyledTable>
                     <TableHead>
                         <TableRow>
                             <TableCell>Order Code</TableCell>
@@ -131,7 +167,14 @@ export default function OrdersList() {
                                 <TableCell>{order.orderCode}</TableCell>
                                 <TableCell>{formatDate(order.createdAt)}</TableCell>
                                 <TableCell>
-                                    <Chip label="Processing" color={getStatusColor("processing")} size="small"/>
+                                    <Chip
+                                        label="Processing"
+                                        sx={{
+                                            backgroundColor: getStatusColor("processing"),
+                                            color: "var(--background)",
+                                        }}
+                                        size="small"
+                                    />
                                 </TableCell>
                                 <TableCell>{order.items.reduce((sum, item) => sum + item.quantity, 0)}</TableCell>
                                 <TableCell>{order.shoppingandTotal.shippingType}</TableCell>
@@ -140,8 +183,8 @@ export default function OrdersList() {
                             </TableRow>
                         ))}
                     </TableBody>
-                </Table>
+                </StyledTable>
             </TableContainer>
-        </Card>
+        </StyledCard>
     );
 }

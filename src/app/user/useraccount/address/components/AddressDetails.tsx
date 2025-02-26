@@ -3,6 +3,8 @@
 import {useEffect, useState} from "react";
 import {Box, Card, Grid, Paper, Typography} from "@mui/material";
 import {useSession} from "next-auth/react";
+import {styled} from "@mui/material/styles";
+
 
 interface OrderItem {
     productId: string;
@@ -43,6 +45,24 @@ interface Order {
     orderCode: string;
 }
 
+const StyledCard = styled(Card)(({theme}) => ({
+    padding: theme.spacing(4),
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
+    border: "1px solid var(--border)",
+    boxShadow: "var(--shadow)",
+}));
+
+const StyledPaper = styled(Paper)(({theme}) => ({
+    padding: theme.spacing(3),
+    height: "100%",
+    backgroundColor: "var(--card-bg)",
+    color: "var(--card-text)",
+    border: "1px solid var(--border)",
+    boxShadow: "var(--shadow)",
+}));
+
+
 export default function AddressDetails() {
     const [orderData, setOrderData] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -69,24 +89,24 @@ export default function AddressDetails() {
 
     if (isLoading) {
         return (
-            <Card sx={{p: 4, display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400}}>
+            <StyledCard sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400}}>
                 <Typography>Loading addresses...</Typography>
-            </Card>
+            </StyledCard>
         );
     }
 
     return (
-        <Card sx={{p: 4}}>
+        <StyledCard>
             <Box sx={{display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4}}>
-                <Typography variant="h5">My Addresses</Typography>
+                <Typography variant="h5" sx={{color: "var(--heading)"}}>My Addresses</Typography>
             </Box>
 
             <Grid container spacing={3}>
                 {orderData.length > 0 ? (
                     orderData.map((order) => (
                         <Grid item xs={12} md={6} key={order._id}>
-                            <Paper sx={{p: 3, height: "100%"}}>
-                                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                            <StyledPaper>
+                                <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{color: "var(--primary)"}}>
                                     Shipping Address for Order: {order.orderCode}
                                 </Typography>
                                 <Box sx={{mt: 2}}>
@@ -97,15 +117,15 @@ export default function AddressDetails() {
                                     </Typography>
                                     <Typography>{order.shippingAddress.country}</Typography>
                                 </Box>
-                            </Paper>
+                            </StyledPaper>
                         </Grid>
                     ))
                 ) : (
                     <Grid item xs={12}>
-                        <Typography>No addresses found.</Typography>
+                        <Typography sx={{color: "var(--muted)"}}>No addresses found.</Typography>
                     </Grid>
                 )}
             </Grid>
-        </Card>
+        </StyledCard>
     );
 }
