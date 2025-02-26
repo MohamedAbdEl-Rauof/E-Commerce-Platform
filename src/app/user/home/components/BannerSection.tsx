@@ -90,7 +90,7 @@ const BannerSection = () => {
                         <Typography variant="h3" fontWeight="bold">
                             New lower prices!
                         </Typography>
-                        <Typography variant="body1" mt={3} color="text.secondary">
+                        <Typography variant="body1" mt={3} color="var(--foreground)">
                             It's more affordable than ever to give every room in your home a stylish makeover
                         </Typography>
                         <Box mt={3}>
