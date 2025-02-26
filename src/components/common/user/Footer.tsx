@@ -1,92 +1,96 @@
+"use client";
 import React from "react";
-import {Footer as FlowbiteFooter} from "flowbite-react";
-import {BsFacebook, BsGithub, BsLinkedin} from "react-icons/bs";
+import { Typography, Grid, Box, Link as MuiLink, Divider, IconButton, Container } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { GitHub, LinkedIn, Facebook } from "@mui/icons-material";
 import Link from "next/link";
+
+const StyledFooter = styled('footer')(({ theme }) => ({
+    width: '100%',
+    padding: 0,
+    backgroundColor: 'var(--dark)',
+    color: 'var(--light)',
+}));
+
+const FooterContent = styled(Container)(({ theme }) => ({
+    width: '100vw',
+    maxWidth: 'none',
+    padding: theme.spacing(10, 3, 8),
+    [theme.breakpoints.up('sm')]: {
+        padding: theme.spacing(10, 8, 8),
+    },
+    [theme.breakpoints.up('md')]: {
+        padding: theme.spacing(10, 12, 8),
+    },
+}));
+
+const FooterLink = styled(MuiLink)(({ theme }) => ({
+    color: 'var(--light)',
+    cursor: 'pointer',
+    textDecoration: 'none',
+    '&:hover': {
+        color: 'var(--focus)',
+    },
+}));
 
 const Footer = () => {
     return (
-        <FlowbiteFooter container className="w-full p-0 mt-24 ">
-            <div className="w-full pt-20 pb-16 bg-black text-white px-6 sm:px-16 md:px-24">
-                <div
-                    className="flex flex-col sm:flex-row w-full sm:justify-between md:grid-cols-1 space-y-8 sm:space-y-0">
-                    <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-x-4 text-white">
-                        <h1 className="text-3xl">3𝓵𝓮𝓰𝓪𝓷𝓽</h1>
+        <StyledFooter>
+            <FooterContent>
+                <Grid container spacing={4}>
+                    <Grid item xs={12} sm={6} md={4}>
+                        <Box display="flex" flexDirection="column" alignItems={{ xs: 'center', sm: 'flex-start' }}>
+                            <Typography variant="h4" component="h1" sx={{ color: 'var(--light)' }}>3𝓵𝓮𝓰𝓪𝓷𝓽</Typography>
+                            <Typography variant="body1" sx={{ mt: 1, color: 'var(--muted)' }}>Gift & Decoration Store</Typography>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={8}>
+                        <Box display="flex" justifyContent={{ xs: 'center', sm: 'flex-end' }} gap={4}>
+                            <Link href="/user" passHref legacyBehavior>
+                                <FooterLink>Home</FooterLink>
+                            </Link>
+                            <Link href="/user/shop" passHref legacyBehavior>
+                                <FooterLink>Shop</FooterLink>
+                            </Link>
+                            <Link href="/user/categories" passHref legacyBehavior>
+                                <FooterLink>Categories</FooterLink>
+                            </Link>
+                            <Link href="/user/contactus" passHref legacyBehavior>
+                                <FooterLink>Contact Us</FooterLink>
+                            </Link>
+                        </Box>
+                    </Grid>
+                </Grid>
 
-                        <div className="hidden sm:block border-l-2 border-gray-300 h-6"></div>
-                        <p>Gift & Decoration Store</p>
-                    </div>
+                <Divider sx={{ my: 4, borderColor: 'var(--border)' }} />
 
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 text-white text-center sm:text-left">
-                        <Link href="/pages/Home" passHref>
-                            <FlowbiteFooter.Title
-                                title="Home"
-                                className="text-white cursor-pointer sm:pt-8"
-                            />
-                        </Link>
-                        <Link href="/pages/Shop" passHref>
-                            <FlowbiteFooter.Title
-                                title="Shop"
-                                className="text-white cursor-pointer sm:pt-8"
-                            />
-                        </Link>
-                        <Link href="/pages/Categories" passHref>
-                            <FlowbiteFooter.Title
-                                title="Categories"
-                                className="text-white cursor-pointer sm:pt-8"
-                            />
-                        </Link>
-                        <Link href="/pages/ContactUs" passHref>
-                            <FlowbiteFooter.Title
-                                title="Contact Us"
-                                className="text-white cursor-pointer sm:pt-8"
-                            />
-                        </Link>
-                    </div>
-                </div>
-
-                <hr className="my-4 border-gray-300 mt-16"/>
-
-                <div
-                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-white space-y-4 sm:space-y-0 mt-10">
-                    {/* Left Section */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <h1 className="sm:text-base md:text-base">
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12} sm={6}>
+                        <Typography variant="body2" align="center" sx={{ textAlign: { sm: 'left' }, color: 'var(--muted)' }}>
                             Copyright © 2025 3legant. All rights reserved
-                        </h1>
-                        <div className="flex space-x-5">
-                            <a href="#" className="text-white font-extrabold">
-                                Privacy Policy
-                            </a>
-                            <a href="#" className="text-white font-extrabold">
-                                Terms of Use
-                            </a>
-                        </div>
-                    </div>
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <Box display="flex" justifyContent={{ xs: 'center', sm: 'flex-end' }} gap={2}>
+                            <FooterLink href="#">Privacy Policy</FooterLink>
+                            <FooterLink href="#">Terms of Use</FooterLink>
+                        </Box>
+                    </Grid>
+                </Grid>
 
-                    {/* Right Section with Social Media Links */}
-                    <div className="flex w-full sm:w-auto justify-end space-x-6 text-white text-2xl">
-                        <FlowbiteFooter.Icon
-                            href="https://github.com/MohamedAbdEl-Rauof"
-                            icon={BsGithub}
-                            target="_blank"
-                            className="cursor-pointer"
-                        />
-                        <FlowbiteFooter.Icon
-                            href="https://linkedin.com/in/mohamed-abd-el-raouf-6b5b3b235"
-                            icon={BsLinkedin}
-                            target="_blank"
-                            className="cursor-pointer"
-                        />
-                        <FlowbiteFooter.Icon
-                            href="https://www.facebook.com/p/mohamed-abd-el-raouf-100040578035349/"
-                            icon={BsFacebook}
-                            target="_blank"
-                            className="cursor-pointer"
-                        />
-                    </div>
-                </div>
-            </div>
-        </FlowbiteFooter>
+                <Box display="flex" justifyContent="center" mt={4}>
+                    <IconButton href="https://github.com/MohamedAbdEl-Rauof" target="_blank" sx={{ color: 'var(--light)' }}>
+                        <GitHub />
+                    </IconButton>
+                    <IconButton href="https://linkedin.com/in/mohamed-abd-el-raouf-6b5b3b235" target="_blank" sx={{ color: 'var(--light)' }}>
+                        <LinkedIn />
+                    </IconButton>
+                    <IconButton href="https://www.facebook.com/p/mohamed-abd-el-raouf-100040578035349/" target="_blank" sx={{ color: 'var(--light)' }}>
+                        <Facebook />
+                    </IconButton>
+                </Box>
+            </FooterContent>
+        </StyledFooter>
     );
 };
 

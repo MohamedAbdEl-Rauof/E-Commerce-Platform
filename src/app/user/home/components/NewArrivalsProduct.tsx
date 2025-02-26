@@ -48,17 +48,17 @@ const NewArrivalsProduct = () => {
                         <title>New Arrivals</title>
                         <meta name="description" content="Check out the latest arrivals in our store."/>
                     </Head>
-                    <div className="mt-14">
+                    <div>
                         <header className="flex justify-between items-center">
                             <h1 className="text-4xl font-bold">New Arrivals</h1>
                             <u className="flex items-center text-black font-bold cursor-pointer hover:underline">
-                                <Link href="ظuser/Categories"> More Products</Link>
+                                <Link href="/user/categories"> More Products</Link>
                                 <FaArrowRight
                                     className="ml-1 transform transition-transform duration-300 hover:translate-x-1"/>
                             </u>
 
                         </header>
-                        <main className="mt-7 mb-36 flex justify-center">
+                        <main className="mt-7  flex justify-center">
                             <div className="relative w-full overflow-x-auto scroll-container">
                                 <div className="flex gap-6 justify-start items-stretch">
                                     {filteredProducts.map((item) => {

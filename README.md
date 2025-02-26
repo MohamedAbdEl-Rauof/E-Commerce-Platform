@@ -102,7 +102,7 @@
 > any
 >
 
-> handle the ui & material ui and responsive and light and dark mood
+> handle the ui & material ui and responsive and light and dark mood  
 > handle the functionality
 > loading for each page
 > enhance the performance and seo and asscecaplity and best practice

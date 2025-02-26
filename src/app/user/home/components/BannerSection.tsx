@@ -1,56 +1,107 @@
-import {FaArrowRight} from "react-icons/fa";
 import React from "react";
 import Link from "next/link";
-import BannerSectionLoading from "@/components/userUiLoading/Home/BannerSectionLoading";
-import {useSlider} from "@/context/SliderContext";
-import {useCategories} from "@/context/CategoriesContext";
 import Image from "next/image";
+import { FaArrowRight } from "react-icons/fa";
+import { Box, Typography, Container, Grid, Button } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import BannerSectionLoading from "@/components/userUiLoading/Home/BannerSectionLoading";
+import { useSlider } from "@/context/SliderContext";
+import { useCategories } from "@/context/CategoriesContext";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    marginTop: theme.spacing(2.5),
+    height: "auto",
+    minHeight: 120,
+    backgroundColor: "var(--background)",
+    color: "var(--text)",
+    [theme.breakpoints.up("md")]: {
+        flexDirection: "row",
+        height: 650,
+    },
+}));
+
+const ImageContainer = styled(Box)({
+    flex: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "var(--secondary-light)",
+});
+
+const ContentContainer = styled(Box)(({ theme }) => ({
+    flex: 1,
+    padding: theme.spacing(3),
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    backgroundColor: "var(--background-light)",
+    [theme.breakpoints.up("md")]: {
+        padding: theme.spacing(2),
+    },
+}));
+
+const StyledTypography = styled(Typography)({
+    color: "var(--primary)",
+});
+
+const StyledLink = styled(Link)({
+    color: "var(--text)",
+    fontWeight: "bold",
+    cursor: "pointer",
+    textDecoration: "underline",
+    display: "flex",
+    alignItems: "center",
+    "&:hover": {
+        color: "var(--primary)",
+    },
+});
 
 const BannerSection = () => {
-    const {loading: sliderLoading} = useSlider();
-    const {loading: categoriesLoading} = useCategories();
+    const { loading: sliderLoading } = useSlider();
+    const { loading: categoriesLoading } = useCategories();
+
+    if (sliderLoading && categoriesLoading) {
+        return <BannerSectionLoading />;
+    }
 
     return (
-        <div>
-            {(sliderLoading && categoriesLoading) ? (
-                <BannerSectionLoading/>
-            ) : (
-                <div
-                    className="flex flex-col md:flex-row justify-between mt-20 h-auto min-h-[120px] md:h-[650px] bg-white text-black">
-                    <div className="bg-slate-200 flex-1 flex justify-center items-center">
-                        <Image
-                            src="/images/Paste image.jpg"
-                            alt="Sign Up"
-                            width={500}
-                            height={500}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
+            <StyledBox>
+                <ImageContainer>
+                    <Image
+                        src="/images/Paste image.jpg"
+                        alt="Sign Up"
+                        width={500}
+                        height={500}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                </ImageContainer>
 
-                    {/* Right Content Section */}
-                    <div className="flex-1 p-6 md:p-4 flex flex-col justify-center bg-gray-100">
-                        <div className="pl-9 text-center md:text-left mx-auto md:mx-0 md:w-10/12 lg:w-8/12">
-                            <p className="mt-6 text-blue-500 font-bold text-lg md:text-xl">
-                                SALE UP TO 35% OFF
-                            </p>
-                            <div className="mt-4 font-bold text-3xl md:text-4xl lg:text-5xl">
-                                <h1>HUNDREDS of</h1>
-                                <h1>New lower prices!</h1>
-                            </div>
-                            <p className="mt-6 text-gray-700 text-sm md:text-base">
-                                It’s more affordable than ever to give every room in your home a
-                                stylish makeover
-                            </p>
-                            <u className="mt-7 flex justify-center md:justify-start items-center text-black font-bold cursor-pointer hover:underline">
-                                <Link href="/pages/Categories">Show More</Link>
-                                <FaArrowRight
-                                    className="ml-1 transform transition-transform duration-300 hover:translate-x-1"/>
-                            </u>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+                <ContentContainer>
+                    <Box sx={{ pl: 2, textAlign: { xs: 'center', md: 'left' }, mx: { xs: 'auto', md: 0 }, width: { md: '83.33%', lg: '66.67%' } }}>
+                        <StyledTypography variant="h5" fontWeight="bold" mt={3}>
+                            SALE UP TO 35% OFF
+                        </StyledTypography>
+                        <Typography variant="h3" fontWeight="bold" mt={2}>
+                            HUNDREDS of
+                        </Typography>
+                        <Typography variant="h3" fontWeight="bold">
+                            New lower prices!
+                        </Typography>
+                        <Typography variant="body1" mt={3} color="text.secondary">
+                            It's more affordable than ever to give every room in your home a stylish makeover
+                        </Typography>
+                        <Box mt={3}>
+                            <StyledLink href="/user/categories">
+                                Show More
+                                <FaArrowRight style={{ marginLeft: 8, transition: 'transform 0.3s' }} />
+                            </StyledLink>
+                        </Box>
+                    </Box>
+                </ContentContainer>
+            </StyledBox>
     );
 };
 
