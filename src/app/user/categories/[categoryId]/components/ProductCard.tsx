@@ -1,13 +1,12 @@
-import React from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography} from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import InfoIcon from '@mui/icons-material/Info';
 import Rating from "@mui/material/Rating";
 import {useSession} from "next-auth/react";
 import {useCart} from "@/context/AddToCartContext";
 import Image from "next/image";
 import Link from 'next/link';
+import {FaHeart, FaRegHeart} from "react-icons/fa";
 
 interface ProductCardProps {
     product: {
@@ -23,25 +22,42 @@ interface ProductCardProps {
     categoryId: string;
     isList: boolean;
     isFavorite: boolean;
-    onFavorite: (productId: string) => void;
+    onFavorite?: (productId: string) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, isFavorite, onFavorite}) => {
-    const {data: session} = useSession();
-    const {addToCart, checkUserSignin} = useCart();
+    const { data: session } = useSession();
     const userId = session?.user?.id;
+    const { addToCart, toggleFavorite, updateRating, cart, checkUserSignin } = useCart();
 
-    const handleAddToCart = () => {
-        if (session && session.user && userId) {
+    const handleAddToCart = useCallback(() => {
+        if (userId) {
             addToCart(userId, product._id);
         } else {
             checkUserSignin();
         }
-    };
+    }, [userId, addToCart, checkUserSignin, product._id]);
 
-    const handleFavoriteToggle = () => {
-        onFavorite(product._id);
-    };
+    const handleFavoriteToggle = useCallback(() => {
+        if (userId) {
+            toggleFavorite(userId, product._id);
+            if (onFavorite) {
+                onFavorite(product._id);
+            }
+        } else {
+            checkUserSignin();
+        }
+    }, [userId, product._id, toggleFavorite, checkUserSignin, onFavorite]);
+
+    const cartItem = useMemo(() => cart.find(item => item.productId === product._id), [cart, product._id]);
+
+    const handleRatingChange = useCallback((event: React.ChangeEvent<{}>, newValue: number | null) => {
+        if (newValue !== null && userId) {
+            updateRating(userId, product._id, newValue);
+        } else {
+            checkUserSignin();
+        }
+    }, [userId, product._id, updateRating, checkUserSignin]);
 
     return (
         <Card sx={{
@@ -113,10 +129,10 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
                         },
                     }}
                 >
-                    {isFavorite ? (
-                        <FavoriteIcon sx={{color: 'var(--danger)'}}/>
+                    {cartItem?.isFavourite ? (
+                        <FaHeart className="text-red-500"/>
                     ) : (
-                        <FavoriteBorderIcon/>
+                        <FaRegHeart/>
                     )}
                 </IconButton>
                 {product.isNew && (
@@ -152,7 +168,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
                 </Typography>
                 <Rating
                     name="simple-controlled"
-                    // value={cartItem?.rating ?? null}
+                    value={cartItem?.rating ?? null}
                     sx={{
                         "& .MuiRating-iconFilled": {
                             color: "var(--rating-color)",
@@ -162,13 +178,7 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
                             color: "var(--rating-unselected-color)",
                         },
                     }}
-                    // onChange={(event, newValue) => {
-                    //     if (newValue !== null && userId) {
-                    //         updateRating(userId, item._id, newValue);
-                    //     } else {
-                    //         checkUserSignin();
-                    //     }
-                    // }}
+                    onChange={handleRatingChange}
                 />
                 <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mt: 1}}>
                     <Typography variant="h6" component="span" sx={{fontWeight: 'bold', color: 'var(--foreground)'}}>

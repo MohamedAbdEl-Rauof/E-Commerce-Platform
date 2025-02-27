@@ -9,14 +9,14 @@ import {
     ListItem,
     ListItemButton,
     ListItemText,
-    Paper
+    Paper,
 } from '@mui/material';
-import {IoMdClose} from 'react-icons/io';
+import { IoMdClose } from 'react-icons/io';
 import SearchIcon from '@mui/icons-material/Search';
-import {Session} from 'next-auth';
-import {useRouter} from 'next/navigation';
-import {signOut} from 'next-auth/react';
-import {NavItem} from "./Navigation";
+import { Session } from 'next-auth';
+import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+import { NavItem } from "./Navigation";
 import Swal from "sweetalert2";
 
 interface MobileSidebarProps {
@@ -53,18 +53,24 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
     };
 
     return (
-        <div className="relative md:hidden">
+        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
             <Drawer
                 anchor="left"
                 open={isSidebarOpen}
                 onClose={toggleSidebar(false)}
+                PaperProps={{
+                    sx: {
+                        backgroundColor: 'var(--background)',
+                        color: 'var(--foreground)',
+                    }
+                }}
             >
-                <Box sx={{width: 250}} role="presentation">
+                <Box sx={{ width: 250, height: '100%', backgroundColor: 'var(--background)' }} role="presentation">
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton onClick={toggleSidebar(false)}>
-                                <ListItemText primary="3𝓵𝓮𝓰𝓪𝓷𝓽"/>
-                                <IoMdClose className="text-xl ml-2 text-gray-500"/>
+                                <ListItemText primary="3𝓵𝓮𝓰𝓪𝓷𝓽" />
+                                <IoMdClose style={{ fontSize: '1.25rem', marginLeft: '0.5rem', color: 'var(--muted)' }} />
                             </ListItemButton>
                         </ListItem>
                     </List>
@@ -77,68 +83,97 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
                             alignItems: 'center',
                             width: 230,
                             m: '0 10px',
+                            backgroundColor: 'var(--search-bar-bg)',
                         }}
                     >
                         <InputBase
-                            sx={{ml: 1, flex: 1}}
+                            sx={{ ml: 1, flex: 1, color: 'var(--search-bar-text)' }}
                             placeholder="Search"
-                            inputProps={{'aria-label': 'search'}}
+                            inputProps={{ 'aria-label': 'search' }}
                         />
-                        <IconButton type="button" sx={{p: '1px'}} aria-label="search">
-                            <SearchIcon/>
+                        <IconButton type="button" sx={{ p: '1px', color: 'var(--search-bar-text)' }} aria-label="search">
+                            <SearchIcon />
                         </IconButton>
                     </Paper>
 
                     <List>
                         {NAV_ITEMS.map((item) => (
                             <ListItem key={item} disablePadding>
-                                <ListItemButton onClick={() => handleItemClick(item)}>
-                                    <ListItemText primary={item}/>
+                                <ListItemButton
+                                    onClick={() => handleItemClick(item)}
+                                    sx={{
+                                        '&:hover': {
+                                            backgroundColor: 'var(--hover)',
+                                        },
+                                    }}
+                                >
+                                    <ListItemText primary={item} />
                                 </ListItemButton>
                             </ListItem>
                         ))}
                     </List>
 
-                    <Box sx={{position: 'fixed', bottom: 20, width: 250}}>
+                    <Box sx={{ position: 'fixed', bottom: 20, width: 250 }}>
                         {session?.user?.id ? (
-                            <div className="flex items-center space-x-4 p-2">
+                            <Box sx={{ display: 'flex', justifyContent: 'space-around', p: 2 }}>
                                 <Button
                                     sx={{
-                                        width: '150px',
+                                        width: '45%',
                                         height: '40px',
                                         borderRadius: '8px',
                                         textTransform: 'none',
                                         fontWeight: 'bold',
                                         fontSize: '0.8rem',
+                                        backgroundColor: 'var(--primary)',
+                                        color: 'var(--text-on-image)',
+                                        '&:hover': {
+                                            backgroundColor: 'var(--hover)',
+                                        },
                                     }}
                                     variant="contained"
-                                    className="bg-black hover:bg-gray-800"
                                     onClick={() => router.push('/user/useraccount')}
                                 >
                                     My Account
                                 </Button>
                                 <Button
                                     sx={{
-                                        width: '150px',
+                                        width: '45%',
                                         height: '40px',
                                         borderRadius: '8px',
                                         textTransform: 'none',
                                         fontWeight: 'bold',
                                         fontSize: '0.8rem',
+                                        backgroundColor: 'var(--danger)',
+                                        color: 'var(--text-on-image)',
+                                        '&:hover': {
+                                            backgroundColor: 'var(--danger)',
+                                            opacity: 0.9,
+                                        },
                                     }}
                                     variant="contained"
-                                    className="bg-red-500 hover:bg-red-700"
                                     onClick={handleLogout}
                                 >
                                     Logout
                                 </Button>
-                            </div>
+                            </Box>
                         ) : (
                             <Button
-                                sx={{width: '90%', mx: '5%'}}
+                                sx={{
+                                    width: '90%',
+                                    mx: '5%',
+                                    height: '40px',
+                                    borderRadius: '8px',
+                                    textTransform: 'none',
+                                    fontWeight: 'bold',
+                                    fontSize: '0.8rem',
+                                    backgroundColor: 'var(--primary)',
+                                    color: 'var(--text-on-image)',
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover)',
+                                    },
+                                }}
                                 variant="contained"
-                                className="bg-black hover:bg-gray-800"
-                                onClick={() => router.push('/Signin')}
+                                onClick={() => router.push('/signin')}
                             >
                                 Sign in
                             </Button>
@@ -146,7 +181,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
                     </Box>
                 </Box>
             </Drawer>
-        </div>
+        </Box>
     );
 };
 

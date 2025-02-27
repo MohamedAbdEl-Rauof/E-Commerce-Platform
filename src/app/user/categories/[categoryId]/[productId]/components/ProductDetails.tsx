@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
-import {Box, Button, CircularProgress, Grid, Typography} from '@mui/material';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
 import Image from 'next/image';
-import {motion} from 'framer-motion';
+import { motion } from 'framer-motion';
 import Rating from "@mui/material/Rating";
-import {FaHeart} from 'react-icons/fa';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import CountDown from "@/components/common/user/CountDown";
 import Link from 'next/link';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useSession } from "next-auth/react";
+import { useCart } from "@/context/AddToCartContext";
 
 interface ProductDetailsProps {
     product: {
@@ -22,32 +24,55 @@ interface ProductDetailsProps {
     categoryId: string;
 }
 
-const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) => {
+const ProductDetails: React.FC<ProductDetailsProps> = ({ product, categoryId }) => {
+    const { data: session } = useSession();
+    const userId = session?.user?.id;
+    const { addToCart, toggleFavorite, updateRating, cart, checkUserSignin } = useCart();
     const [quantity, setQuantity] = useState(1);
+
+    const handleAddToCart = useCallback(() => {
+        if (userId && product) {
+            addToCart(userId, product._id, quantity);
+        } else {
+            checkUserSignin();
+        }
+    }, [userId, addToCart, checkUserSignin, product, quantity]);
+
+    const handleFavoriteToggle = useCallback(() => {
+        if (userId && product) {
+            toggleFavorite(userId, product._id);
+        } else {
+            checkUserSignin();
+        }
+    }, [userId, product, toggleFavorite, checkUserSignin]);
+
+    const cartItem = useMemo(() => product ? cart.find(item => item.productId === product._id) : undefined, [cart, product]);
+
+    const handleRatingChange = useCallback((event: React.ChangeEvent<{}>, newValue: number | null) => {
+        if (newValue !== null && userId && product) {
+            updateRating(userId, product._id, newValue);
+        } else {
+            checkUserSignin();
+        }
+    }, [userId, product, updateRating, checkUserSignin]);
 
     const handleIncrement = () => setQuantity(prev => prev + 1);
     const handleDecrement = () => setQuantity(prev => Math.max(1, prev - 1));
 
-    const toggleFavorite = (productId: string) => {
-        // Implement toggle favorite logic here
-        console.log(`Toggling favorite for product ${productId}`);
-    };
-
     if (!product) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <CircularProgress/>
+                <CircularProgress />
             </Box>
         );
     }
-
 
     return (
         <Box>
             <Link href={`/user/categories/${categoryId}`} passHref>
                 <Button
                     component="a"
-                    startIcon={<ArrowBackIcon/>}
+                    startIcon={<ArrowBackIcon />}
                     sx={{
                         marginBottom: '2rem',
                         textTransform: 'none',
@@ -61,9 +86,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                     Back to Categories
                 </Button>
             </Link>
-            <Box sx={{padding: '2rem', maxWidth: '1200px', margin: '0 auto'}}>
-
-
+            <Box sx={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
                 <Grid
                     container
                     spacing={4}
@@ -73,41 +96,43 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                         overflow: 'hidden',
                         backgroundColor: 'var(--background)',
                     }}
-                > <Grid item xs={12} md={6}>
-                    <motion.div
-                        initial={{opacity: 0, y: 20}}
-                        animate={{opacity: 1, y: 0}}
-                        transition={{duration: 0.5}}
-                    >
-                        <Box
-                            sx={{
-                                position: 'relative',
-                                width: '100%',
-                                paddingTop: '75%', // 4:3 aspect ratio
-                                borderRadius: '8px',
-                                overflow: 'hidden',
-                                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                            }}
-                        >
-                            <Image
-                                src={product?.image || '/placeholder-image.jpg'}
-                                alt={product?.name || 'Product Image'}
-                                layout="fill"
-                                objectFit="cover"
-                            />
-                        </Box>
-                    </motion.div>
-                </Grid>
+                >
                     <Grid item xs={12} md={6}>
                         <motion.div
-                            initial={{opacity: 0, y: 20}}
-                            animate={{opacity: 1, y: 0}}
-                            transition={{duration: 0.5, delay: 0.2}}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5 }}
                         >
-                            <Grid container spacing={2} alignItems="center" sx={{marginBottom: '1.5rem'}}>
+                            <Box
+                                sx={{
+                                    position: 'relative',
+                                    width: '100%',
+                                    paddingTop: '75%',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                                }}
+                            >
+                                <Image
+                                    src={product?.image || '/placeholder-image.jpg'}
+                                    alt={product?.name || 'Product Image'}
+                                    layout="fill"
+                                    objectFit="cover"
+                                />
+                            </Box>
+                        </motion.div>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                        >
+                            <Grid container spacing={2} alignItems="center" sx={{ marginBottom: '1.5rem' }}>
                                 <Grid item>
                                     <Rating
                                         name="simple-controlled"
+                                        value={cartItem?.rating ?? null}
                                         sx={{
                                             "& .MuiRating-iconFilled": {
                                                 color: "var(--rating-color)",
@@ -117,6 +142,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                                                 color: "var(--rating-unselected-color)",
                                             },
                                         }}
+                                        onChange={handleRatingChange}
                                     />
                                 </Grid>
                                 <Grid item>
@@ -129,11 +155,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                             <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
                                 {product.name}
                             </Typography>
-                            <Typography variant="body1" paragraph sx={{marginBottom: '1.5rem'}}>
+                            <Typography variant="body1" paragraph sx={{ marginBottom: '1.5rem' }}>
                                 {product.description}
                             </Typography>
 
-                            <Grid container spacing={2} alignItems="baseline" sx={{marginBottom: '1.5rem'}}>
+                            <Grid container spacing={2} alignItems="baseline" sx={{ marginBottom: '1.5rem' }}>
                                 <Grid item>
                                     <Typography variant="h5" fontWeight="bold">
                                         ${product.price}
@@ -141,22 +167,21 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                                 </Grid>
                                 {product.PriceBeforeDiscount && (
                                     <Grid item>
-                                        <Typography variant="body1" color="text.secondary"
-                                                    style={{textDecoration: 'line-through'}}>
+                                        <Typography variant="body1" style={{ textDecoration: 'line-through' }}>
                                             ${product.PriceBeforeDiscount}
                                         </Typography>
                                     </Grid>
                                 )}
                             </Grid>
 
-                            <Box sx={{marginBottom: '2rem'}}>
+                            <Box sx={{ marginBottom: '2rem' }}>
                                 <Typography variant="h6" gutterBottom fontWeight="bold">
                                     Offer Expires in:
                                 </Typography>
-                                <CountDown/>
+                                <CountDown />
                             </Box>
 
-                            <Box sx={{display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                 <Box display="flex" alignItems="center" gap={6}>
                                     <Box
                                         display="flex"
@@ -165,7 +190,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                                         borderColor="var(--foreground)"
                                         borderRadius={1}
                                         bgcolor="var(--background)"
-                                        sx={{height: '32px'}}
+                                        sx={{ height: '32px' }}
                                     >
                                         <Button
                                             onClick={handleDecrement}
@@ -179,12 +204,13 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                                             -
                                         </Button>
                                         <Typography
+                                            component="span"
                                             px={1.5}
-                                            borderX={1}
-                                            borderColor="var(--foreground)"
                                             sx={{
                                                 lineHeight: '32px',
-                                                color: 'var(--foreground)'
+                                                color: 'var(--foreground)',
+                                                borderLeft: '1px solid var(--foreground)',
+                                                borderRight: '1px solid var(--foreground)',
                                             }}
                                         >
                                             {quantity}
@@ -193,7 +219,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                                             onClick={handleIncrement}
                                             sx={{
                                                 minWidth: '32px',
-                                                height: '100px',
+                                                height: '32px',
                                                 p: 0,
                                                 color: 'var(--foreground)'
                                             }}
@@ -202,9 +228,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                                         </Button>
                                     </Box>
                                     <motion.button
-                                        whileHover={{scale: 1.05}}
-                                        whileTap={{scale: 0.95}}
-                                        onClick={() => toggleFavorite(product._id)}
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        onClick={handleFavoriteToggle}
                                         style={{
                                             background: 'none',
                                             border: 'none',
@@ -215,17 +241,22 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                                             color: 'var(--foreground)'
                                         }}
                                     >
-                                        <FaHeart size={16}/>
+                                        {cartItem?.isFavourite ? (
+                                            <FaHeart size={16} className="text-red-500" />
+                                        ) : (
+                                            <FaRegHeart size={16} />
+                                        )}
                                         <Typography component="span" ml={0.5} variant="body2">
                                             Wishlist
                                         </Typography>
                                     </motion.button>
                                 </Box>
 
-                                <Box sx={{padding: '14px'}}>
+                                <Box sx={{ padding: '14px' }}>
                                     <motion.button
-                                        whileHover={{scale: 1.02}}
-                                        whileTap={{scale: 0.98}}
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleAddToCart}
                                         style={{
                                             width: '100%',
                                             backgroundColor: 'var(--foreground)',
@@ -240,14 +271,12 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({product, categoryId}) =>
                                         Add to Cart
                                     </motion.button>
                                 </Box>
-
                             </Box>
                         </motion.div>
                     </Grid>
                 </Grid>
             </Box>
         </Box>
-
     );
 };
 

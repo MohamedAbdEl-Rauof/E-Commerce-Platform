@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import { Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Rating from "@mui/material/Rating";
 import { useSession } from "next-auth/react";
 import { useCart } from "@/context/AddToCartContext";
 import Image from "next/image";
+import {FaHeart, FaRegHeart} from "react-icons/fa";
 
 interface ProductCardProps {
     product: {
@@ -25,20 +24,35 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, onFavorite }) => {
     const { data: session } = useSession();
-    const { addToCart, checkUserSignin } = useCart();
     const userId = session?.user?.id;
+    const { addToCart, toggleFavorite, updateRating, cart, checkUserSignin } = useCart();
 
-    const handleAddToCart = (productId: string) => {
-        if (session && session.user && userId) {
-            addToCart(userId, productId);
+    const handleAddToCart = useCallback(() => {
+        if (userId) {
+            addToCart(userId, product._id);
         } else {
             checkUserSignin();
         }
-    };
+    }, [userId, addToCart, checkUserSignin, product._id]);
 
-    const handleFavoriteToggle = () => {
-        onFavorite(product._id);
-    };
+    const handleFavoriteToggle = useCallback(() => {
+        if (userId) {
+            toggleFavorite(userId, product._id);
+            onFavorite(product._id);
+        } else {
+            checkUserSignin();
+        }
+    }, [userId, product._id, toggleFavorite, checkUserSignin, onFavorite]);
+
+    const cartItem = useMemo(() => cart.find(item => item.productId === product._id), [cart, product._id]);
+
+    const handleRatingChange = useCallback((event: React.ChangeEvent<{}>, newValue: number | null) => {
+        if (newValue !== null && userId) {
+            updateRating(userId, product._id, newValue);
+        } else {
+            checkUserSignin();
+        }
+    }, [userId, product._id, updateRating, checkUserSignin]);
 
     return (
         <Card sx={{
@@ -92,12 +106,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                         },
                     }}
                 >
-                    {isFavorite ? (
-                        <FavoriteIcon sx={{ color: 'var(--danger)' }} />
+                    {cartItem?.isFavourite ? (
+                        <FaHeart className="text-red-500"/>
                     ) : (
-                        <FavoriteBorderIcon />
+                        <FaRegHeart/>
                     )}
                 </IconButton>
+
                 {product.isNew && (
                     <Chip
                         label="New"
@@ -131,7 +146,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                 </Typography>
                 <Rating
                     name="simple-controlled"
-                    // value={cartItem?.rating ?? null}
+                    value={cartItem?.rating ?? null}
                     sx={{
                         "& .MuiRating-iconFilled": {
                             color: "var(--rating-color)",
@@ -141,13 +156,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                             color: "var(--rating-unselected-color)",
                         },
                     }}
-                    // onChange={(event, newValue) => {
-                    //     if (newValue !== null && userId) {
-                    //         updateRating(userId, item._id, newValue);
-                    //     } else {
-                    //         checkUserSignin();
-                    //     }
-                    // }}
+                    onChange={handleRatingChange}
                 />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
                     <Typography variant="h6" component="span" sx={{ fontWeight: 'bold', color: 'var(--foreground)' }}>
@@ -162,7 +171,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                 <Button
                     variant="contained"
                     fullWidth
-                    onClick={() => handleAddToCart(product._id)}
+                    onClick={handleAddToCart}
                     sx={{
                         mt: 'auto',
                         opacity: 0,

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTheme } from 'next-themes';
+import { Box, Button, styled } from '@mui/material';
 
 type NavItem = 'Home' | 'Shop' | 'Categories' | 'Contact Us';
 
@@ -11,25 +12,38 @@ interface NavigationProps {
     handleItemClick: (item: NavItem) => void;
 }
 
+const StyledButton = styled(Button)(({ theme }) => ({
+    textTransform: 'none',
+    fontWeight: 'normal',
+    fontSize: '1rem',
+    padding: '6px 12px',
+    marginRight: '2rem',
+    color: 'var(--foreground)',
+    '&:hover': {
+        backgroundColor: 'var(--hover)',
+        color: 'var(--primary)',
+    },
+    '&.active': {
+        fontWeight: 'bold',
+        color: 'var(--primary)',
+    },
+}));
+
 const Navigation: React.FC<NavigationProps> = ({ NAV_ITEMS, activeItem, handleItemClick }) => {
     const { theme } = useTheme();
 
     return (
-        <nav className="hidden md:flex">
-            <ul className="flex space-x-9">
-                {NAV_ITEMS.map((item) => (
-                    <li
-                        key={item}
-                        onClick={() => handleItemClick(item)}
-                        className={`cursor-pointer transition-colors duration-200 md:text-base ${
-                            theme === 'dark' ? 'text-white hover:text-gray-300' : 'text-gray-600 hover:text-black'
-                        } ${activeItem === item ? (theme === 'dark' ? 'text-white font-medium' : 'text-black font-medium') : ''}`}
-                    >
-                        {item}
-                    </li>
-                ))}
-            </ul>
-        </nav>
+        <Box component="nav" sx={{ display: { xs: 'none', md: 'flex' } }}>
+            {NAV_ITEMS.map((item) => (
+                <StyledButton
+                    key={item}
+                    onClick={() => handleItemClick(item)}
+                    className={activeItem === item ? 'active' : ''}
+                >
+                    {item}
+                </StyledButton>
+            ))}
+        </Box>
     );
 };
 
