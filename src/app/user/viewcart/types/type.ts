@@ -1,27 +1,21 @@
-export interface Type {
-    id: string;
-    productId: string;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-    description?: string;
-    sku?: string;
-    category?: string;
-    brand?: string;
-    variantId?: string;
-    variantName?: string;
-    maxQuantity?: number;
-}
-
 export interface CartItem {
     id: string;
-    image: string;
+    productId: string;
+    quantity: number;
+    isFavourite: boolean;
     name: string;
     price: number;
-    isFavourite: boolean;
-    quantity: number;
-    productId: string;
+    image: string;
+    rating: number;
+}
+
+export interface Product {
+    _id: string;
+    name: string;
+    price: number;
+    image: string;
+    rating: number;
+    // ... other properties
 }
 
 export interface StepProps {

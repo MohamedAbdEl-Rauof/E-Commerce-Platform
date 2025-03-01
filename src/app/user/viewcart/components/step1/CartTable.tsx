@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Box,
     Button,
+    CircularProgress,
     IconButton,
     Paper,
     Table,
@@ -16,21 +17,22 @@ import {styled} from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import CloseIcon from '@mui/icons-material/Close';
-import {Type} from '../../types/type';
 import Image from 'next/image';
+import {CartItem} from '@/context/AddToCartContext';
+import {useSession} from "next-auth/react";
 
 interface CartTableProps {
-    cartItems: Type[];
-    handleIncreaseQuantity: (id: string) => void;
-    handleDecreaseQuantity: (id: string) => void;
-    deleteProduct: (id: string) => void;
+    cartItems: CartItem[];
+    addToCart: (userId: string, productId: string) => void;
+    decrementFromCart: (userId: string, productId: string) => void;
+    deleteItem: (productId: string) => void;
+    loading: boolean
 }
 
 const StyledTableCell = styled(TableCell)({
     fontWeight: 'bold',
     padding: '16px',
     color: 'var(--foreground)',
-    // backgroundColor: 'var(--background)',
 });
 
 const StyledTableRow = styled(TableRow)({
@@ -57,12 +59,34 @@ const QuantityControlBox = styled(Box)({
     maxWidth: 'fit-content',
 });
 
-const CartTable: React.FC<CartTableProps> = ({
-                                                 cartItems,
-                                                 handleIncreaseQuantity,
-                                                 handleDecreaseQuantity,
-                                                 deleteProduct,
-                                             }) => {
+const CartTable: React.FC<CartTableProps> = React.memo(({
+                                                            cartItems,
+                                                            addToCart,
+                                                            decrementFromCart,
+                                                            deleteItem,
+                                                            loading
+                                                        }) => {
+    const {data: session} = useSession();
+    const userId = session?.user?.id || "";
+
+    if (loading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="200px">
+                <CircularProgress/>
+            </Box>
+        );
+    }
+
+    if (cartItems.length === 0) {
+        return (
+            <Paper elevation={3} sx={{p: 3, backgroundColor: 'var(--background)', textAlign: 'center'}}>
+                <Typography variant="h6" sx={{color: 'var(--foreground)'}}>
+                    Your cart is empty, let&#39;s Shop Now
+                </Typography>
+            </Paper>
+        );
+    }
+
     return (
         <TableContainer component={Paper} elevation={3} sx={{backgroundColor: 'var(--background)'}}>
             <Table aria-label="cart table">
@@ -76,7 +100,7 @@ const CartTable: React.FC<CartTableProps> = ({
                 </TableHead>
                 <TableBody>
                     {cartItems.map((cartItem) => (
-                        <StyledTableRow key={cartItem.id}>
+                        <StyledTableRow key={cartItem.productId}>
                             <TableCell component="th" scope="row" sx={{padding: 2}}>
                                 <Box sx={{display: "flex", alignItems: "center"}}>
                                     <Image
@@ -97,7 +121,7 @@ const CartTable: React.FC<CartTableProps> = ({
                                         </Typography>
                                         <Button
                                             startIcon={<CloseIcon/>}
-                                            onClick={() => deleteProduct(cartItem.id)}
+                                            onClick={() => deleteItem(cartItem.productId)}
                                             sx={{color: 'var(--danger)', mt: 1}}
                                         >
                                             Remove
@@ -108,7 +132,7 @@ const CartTable: React.FC<CartTableProps> = ({
                             <TableCell align="center" sx={{padding: '8px'}}>  {/* Added padding */}
                                 <QuantityControlBox>
                                     <QuantityButton
-                                        onClick={() => handleDecreaseQuantity(cartItem.id)}
+                                        onClick={() => (decrementFromCart(userId, cartItem.productId))}
                                         size="small"
                                     >
                                         <RemoveIcon fontSize="small"/>
@@ -124,7 +148,7 @@ const CartTable: React.FC<CartTableProps> = ({
                                         {cartItem.quantity}
                                     </Typography>
                                     <QuantityButton
-                                        onClick={() => handleIncreaseQuantity(cartItem.id)}
+                                        onClick={() => (addToCart(userId, cartItem.productId))}
                                         size="small"
                                     >
                                         <AddIcon fontSize="small"/>
@@ -143,6 +167,8 @@ const CartTable: React.FC<CartTableProps> = ({
             </Table>
         </TableContainer>
     );
-};
+});
+
+CartTable.displayName = 'CartTable';
 
 export default CartTable;

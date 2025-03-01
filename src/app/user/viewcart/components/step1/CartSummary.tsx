@@ -1,16 +1,35 @@
 import React from 'react';
-import {Box, Button, Checkbox, Divider, ListItemButton, ListItemText, Paper, Typography,} from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
-import {Type} from '../../types/type';
+import {
+    Box,
+    Button,
+    Checkbox,
+    CircularProgress,
+    Divider,
+    ListItemButton,
+    ListItemText,
+    Paper,
+    Typography,
+    useMediaQuery,
+    useTheme
+} from '@mui/material';
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import {CartItem} from '@/context/AddToCartContext';
 
 interface CartSummaryProps {
-    cartItems: Type[];
+    cartItems: CartItem[];
     selectedShipping: number;
     handleSelectShipping: (optionId: number) => void;
     total: number;
     handleCheckout: () => void;
+    loading: boolean;
 }
+
+const shippingOptions = [
+    {id: 1, label: "Free Shipping", price: "$0.00"},
+    {id: 2, label: "Express Shipping", price: "+ $15.00"},
+    {id: 3, label: "Pickup", price: "- $21.00"},
+];
 
 const CartSummary: React.FC<CartSummaryProps> = ({
                                                      cartItems,
@@ -18,16 +37,20 @@ const CartSummary: React.FC<CartSummaryProps> = ({
                                                      handleSelectShipping,
                                                      total,
                                                      handleCheckout,
+                                                     loading
                                                  }) => {
-    const calculateSubtotal = (cartItems: Type[]) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const calculateSubtotal = React.useMemo(() => {
         return cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
-    };
+    }, [cartItems]);
 
     return (
         <Paper
             elevation={3}
             sx={{
-                width: 400,
+                width: isMobile ? '100%' : 400,
                 p: 2,
                 borderRadius: 2,
                 backgroundColor: 'var(--background)',
@@ -42,13 +65,12 @@ const CartSummary: React.FC<CartSummaryProps> = ({
 
             {/* Shipping Options */}
             <Box>
-                {[
-                    {id: 1, label: "Free Shipping", price: "$0.00"},
-                    {id: 2, label: "Express Shipping", price: "+ $15.00"},
-                    {id: 3, label: "Pickup", price: "- %21.00"},
-                ].map((option, index) => (
+                {shippingOptions.map((option, index) => (
                     <React.Fragment key={option.id}>
-                        <ListItemButton onClick={() => handleSelectShipping(option.id)}>
+                        <ListItemButton
+                            onClick={() => handleSelectShipping(option.id)}
+                            disabled={loading}
+                        >
                             <Checkbox
                                 checked={selectedShipping === option.id}
                                 icon={<RadioButtonUncheckedIcon/>}
@@ -57,11 +79,13 @@ const CartSummary: React.FC<CartSummaryProps> = ({
                             />
                             <Box sx={{display: "flex", justifyContent: "space-between", width: "100%"}}>
                                 <ListItemText primary={option.label} sx={{color: 'var(--foreground)'}}/>
-                                <ListItemText primary={option.price}
-                                              sx={{textAlign: "right", color: 'var(--foreground)'}}/>
+                                <ListItemText
+                                    primary={option.price}
+                                    sx={{textAlign: "right", color: 'var(--foreground)'}}
+                                />
                             </Box>
                         </ListItemButton>
-                        {index < 2 && <Divider/>}
+                        {index < shippingOptions.length - 1 && <Divider/>}
                     </React.Fragment>
                 ))}
             </Box>
@@ -70,7 +94,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
             <Box sx={{display: "flex", justifyContent: "space-between", mt: 2}}>
                 <Typography variant="subtitle1" sx={{color: 'var(--foreground)'}}>Subtotal</Typography>
                 <Typography variant="subtitle1" sx={{color: 'var(--foreground)'}}>
-                    ${calculateSubtotal(cartItems).toFixed(2)}
+                    ${calculateSubtotal.toFixed(2)}
                 </Typography>
             </Box>
 
@@ -89,13 +113,23 @@ const CartSummary: React.FC<CartSummaryProps> = ({
             <Button
                 variant="contained"
                 fullWidth
-                sx={{mt: 3, backgroundColor: 'var(--primary)', '&:hover': {backgroundColor: 'var(--focus)'}}}
+                sx={{
+                    mt: 3,
+                    backgroundColor: 'var(--primary)',
+                    '&:hover': {backgroundColor: 'var(--focus)'},
+                    '&:disabled': {backgroundColor: 'var(--disabled)'},
+                }}
                 onClick={handleCheckout}
+                disabled={loading}
             >
-                Checkout
+                {loading ? (
+                    <CircularProgress size={24} color="inherit"/>
+                ) : (
+                    'Checkout'
+                )}
             </Button>
         </Paper>
     );
 };
 
-export default CartSummary;
+export default React.memo(CartSummary);

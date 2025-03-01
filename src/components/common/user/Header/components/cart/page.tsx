@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import {Box, List, ListItem} from "@mui/material";
+import {Box, List, ListItem, useMediaQuery} from "@mui/material";
 import {useSession} from "next-auth/react";
 import CartHeader from './components/CartHeader';
 import CartItem from './components/CartItem';
@@ -19,6 +19,7 @@ interface CartItem {
 }
 
 const Page = () => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
     const {data: session} = useSession();
     const userId = session?.user?.id || "";
     const {
@@ -58,10 +59,11 @@ const Page = () => {
         <Box
             sx={{
                 width: {
-                    xs: "100%",
-                    sm: "350px",
+                    xs: '100%',
+                    sm: isSmallScreen ? '100%' : '350px',
+                    backgroundColor: "var(--background)",
                 },
-                maxWidth: "100%",
+                maxWidth: '100%',
             }}
             role="presentation"
             className="flex flex-col h-full p-4 sm:p-0"

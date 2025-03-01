@@ -12,6 +12,9 @@ interface CartItem {
     isFavourite: boolean;
     rating: number;
     id?: string;
+    price: number;
+    image: string;
+    name: string;
 }
 
 export type {CartItem};

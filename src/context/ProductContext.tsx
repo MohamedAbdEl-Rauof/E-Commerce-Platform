@@ -9,6 +9,7 @@ export interface Product {
     price: number;
     PriceBeforeDiscount: string;
     createdAt: Date;
+    rating: number;
 }
 
 interface ProductContextType {

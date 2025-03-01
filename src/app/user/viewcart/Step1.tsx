@@ -1,36 +1,36 @@
-import React, {useEffect, useState} from "react";
-import {Box} from "@mui/material";
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import {Box} from '@mui/material';
 import CartTable from './components/step1/CartTable';
 import CartSummary from './components/step1/CartSummary';
-import {Type} from './types/type';
+import {CartItem} from './types/type';
 
 interface StepProps {
-    cartItems: Type[];
-    setCartItems: React.Dispatch<React.SetStateAction<Type[]>>;
+    cartItems: CartItem[];
     handleCheckout: () => void;
     selectedShipping: number;
-    setSelectedShipping: React.Dispatch<React.SetStateAction<number>>;
+    setSelectedShipping: Dispatch<SetStateAction<number>>;
+    deleteItem: (productId: string) => Promise<void>;
+    toggleFavorite: (userId: string, productId: string) => Promise<void>;
+    decrementFromCart: (userId: string, productId: string) => Promise<void>;
+    addToCart: (userId: string, productId: string) => Promise<void>;
+    loading: boolean;
 }
 
 const Step1: React.FC<StepProps> = ({
                                         cartItems,
-                                        setCartItems,
                                         handleCheckout,
                                         selectedShipping,
                                         setSelectedShipping,
+                                        deleteItem,
+                                        decrementFromCart,
+                                        addToCart,
+                                        loading
                                     }) => {
     const [total, setTotal] = useState<number>(0);
-    const [changes, setChanges] = useState<Map<string, Type>>(new Map());
-    // const {data: session} = useSession();
-    // const userId = session?.user?.id;
 
     // Calculate Subtotal
-    const calculateSubtotal = (cartItems: Type[]) => {
-        return cartItems.reduce((acc, item) => acc + item.quantity * item.price, 0);
-    };
-
-    const handleSelectShipping = (optionId: number) => {
-        setSelectedShipping(optionId);
+    const calculateSubtotal = (items: CartItem[]) => {
+        return items.reduce((acc, item) => acc + item.quantity * (item.price || 0), 0);
     };
 
     // Update total on cartItems or selectedShipping change
@@ -47,69 +47,39 @@ const Step1: React.FC<StepProps> = ({
         setTotal(subtotal + shippingCost);
     }, [cartItems, selectedShipping]);
 
-    const handleIncreaseQuantity = (id: string) => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === id ? {...item, quantity: item.quantity + 1} : item
-            )
-        );
-
-        setChanges((prevChanges) => {
-            const newChanges = new Map(prevChanges);
-            const item = cartItems.find((item) => item.id === id);
-            if (item) {
-                newChanges.set(id, {...item, quantity: item.quantity + 1});
-            }
-            return newChanges;
-        });
+    const handleSelectShipping = (optionId: number) => {
+        setSelectedShipping(optionId);
     };
-
-    const handleDecreaseQuantity = (id: string) => {
-        setCartItems((prevItems) =>
-            prevItems.map((item) =>
-                item.id === id && item.quantity > 1
-                    ? {...item, quantity: item.quantity - 1}
-                    : item
-            )
-        );
-
-        setChanges((prevChanges) => {
-            const newChanges = new Map(prevChanges);
-            const item = cartItems.find((item) => item.id === id);
-            if (item && item.quantity > 1) {
-                newChanges.set(id, {...item, quantity: item.quantity - 1});
-            }
-            return newChanges;
-        });
-    };
-
-    const deleteProduct = (id: string) => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-        setChanges((prevChanges) => {
-            const newChanges = new Map(prevChanges);
-            newChanges.delete(id);
-            return newChanges;
-        });
-    };
-
 
     return (
         <Box className="flex flex-col md:flex-row gap-8">
             <Box sx={{flex: 1}}>
                 <CartTable
                     cartItems={cartItems}
-                    handleIncreaseQuantity={handleIncreaseQuantity}
-                    handleDecreaseQuantity={handleDecreaseQuantity}
-                    deleteProduct={deleteProduct}
+                    addToCart={addToCart}
+                    decrementFromCart={decrementFromCart}
+                    deleteItem={deleteItem}
+                    loading={loading}
                 />
             </Box>
-            <CartSummary
-                cartItems={cartItems}
-                selectedShipping={selectedShipping}
-                handleSelectShipping={handleSelectShipping}
-                total={total}
-                handleCheckout={handleCheckout}
-            />
+            <Box>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: {xs: 'center', sm: 'center'},
+                    width: {xs: '100%', md: 'auto'},
+                    mt: {xs: 4, md: 0}
+                }}>
+                    <CartSummary
+                        cartItems={cartItems}
+                        selectedShipping={selectedShipping}
+                        handleSelectShipping={handleSelectShipping}
+                        total={total}
+                        handleCheckout={handleCheckout}
+                        loading={loading}
+                    />
+                </Box>
+            </Box>
+
         </Box>
     );
 };
