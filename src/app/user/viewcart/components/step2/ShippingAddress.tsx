@@ -1,14 +1,15 @@
 import React from 'react';
-import { Box, TextField, Typography, Checkbox } from '@mui/material';
-import { Control, Controller, FieldErrors } from 'react-hook-form';
-import { UserData } from '../../types/type';
+import {Box, Checkbox, TextField, Typography} from '@mui/material';
+import {Control, Controller, FieldErrors, UseFormTrigger} from 'react-hook-form';
+import {UserData} from '../../types/type';
 
 interface ShippingAddressProps {
     control: Control<UserData>;
     errors: FieldErrors<UserData>;
+    trigger: UseFormTrigger<UserData>;
 }
 
-const ShippingAddress: React.FC<ShippingAddressProps> = ({ control, errors }) => {
+const ShippingAddress: React.FC<ShippingAddressProps> = ({control, errors, trigger}) => {
     return (
         <Box
             sx={{
@@ -19,14 +20,14 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ control, errors }) =>
                 backgroundColor: '#fff',
             }}
         >
-            <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+            <Typography variant="h6" sx={{fontWeight: 'bold', mb: 2}}>
                 Shipping Address
             </Typography>
-            <Box sx={{ mt: 4 }}>
+            <Box sx={{mt: 4}}>
                 <Controller
                     name="streetAddress"
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                         <TextField
                             {...field}
                             fullWidth
@@ -35,51 +36,54 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ control, errors }) =>
                             variant="outlined"
                             error={!!errors.streetAddress}
                             helperText={errors.streetAddress?.message}
+                            onBlur={() => trigger("streetAddress")}
                         />
                     )}
                 />
                 <Controller
                     name="country"
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                         <TextField
                             {...field}
                             fullWidth
                             id="country"
                             label="Country"
                             variant="outlined"
-                            sx={{ mt: 2 }}
+                            sx={{mt: 2}}
                             error={!!errors.country}
                             helperText={errors.country?.message}
+                            onBlur={() => trigger("country")}
                         />
                     )}
                 />
                 <Controller
                     name="city"
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                         <TextField
                             {...field}
                             fullWidth
                             id="city"
                             label="Town / City"
                             variant="outlined"
-                            sx={{ mt: 2 }}
+                            sx={{mt: 2}}
                             error={!!errors.city}
                             helperText={errors.city?.message}
+                            onBlur={() => trigger("city")}
                         />
                     )}
                 />
                 <Box
                     display="flex"
-                    flexDirection={{ xs: 'column', sm: 'row' }}
+                    flexDirection={{xs: 'column', sm: 'row'}}
                     gap={2}
                     mt={2}
                 >
                     <Controller
                         name="state"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <TextField
                                 {...field}
                                 fullWidth
@@ -88,13 +92,14 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ control, errors }) =>
                                 variant="outlined"
                                 error={!!errors.state}
                                 helperText={errors.state?.message}
+                                onBlur={() => trigger("state")}
                             />
                         )}
                     />
                     <Controller
                         name="zipCode"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <TextField
                                 {...field}
                                 fullWidth
@@ -103,13 +108,14 @@ const ShippingAddress: React.FC<ShippingAddressProps> = ({ control, errors }) =>
                                 variant="outlined"
                                 error={!!errors.zipCode}
                                 helperText={errors.zipCode?.message}
+                                onBlur={() => trigger("zipCode")}
                             />
                         )}
                     />
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
-                    <Checkbox />
-                    <Typography component="label" sx={{ ml: 1 }}>
+                <Box sx={{display: 'flex', alignItems: 'center', mt: 2}}>
+                    <Checkbox/>
+                    <Typography component="label" sx={{ml: 1}}>
                         Use a different billing address (optional)
                     </Typography>
                 </Box>

@@ -69,7 +69,6 @@ const ViewCart = () => {
                         selectedShipping={selectedShipping}
                         setSelectedShipping={setSelectedShipping}
                         deleteItem={deleteItem}
-                        toggleFavorite={toggleFavorite}
                         decrementFromCart={decrementFromCart}
                         addToCart={addToCart}
                         loading={loading}
@@ -80,7 +79,13 @@ const ViewCart = () => {
                     <Step2
                         cartItems={cartItems}
                         handleCheckout={handleCheckout}
-                        selectedShipping={selectedShipping}/>
+                        selectedShipping={selectedShipping}
+                        setSelectedShipping={setSelectedShipping}
+                        deleteItem={deleteItem}
+                        decrementFromCart={decrementFromCart}
+                        addToCart={addToCart}
+                        loading={loading}
+                    />
                 );
             case 2:
                 return (

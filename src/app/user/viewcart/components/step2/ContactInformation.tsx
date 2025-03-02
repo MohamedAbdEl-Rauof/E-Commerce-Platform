@@ -1,14 +1,15 @@
 import React from 'react';
 import {Box, TextField, Typography} from '@mui/material';
-import {Control, Controller, FieldErrors} from 'react-hook-form';
+import {Control, Controller, FieldErrors, UseFormTrigger} from 'react-hook-form';
 import {UserData} from '../../types/type';
 
 interface ContactInformationProps {
     control: Control<UserData>;
     errors: FieldErrors<UserData>;
+    trigger: UseFormTrigger<UserData>;
 }
 
-const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}) => {
+const ContactInformation: React.FC<ContactInformationProps> = ({control, errors, trigger}) => {
     return (
         <Box
             sx={{
@@ -42,6 +43,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}
                                 error={!!errors.firstName}
                                 helperText={errors.firstName?.message}
                                 sx={{color: "var(--text)"}}
+                                onBlur={() => trigger("firstName")}
                             />
                         )}
                     />
@@ -58,6 +60,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}
                                 error={!!errors.lastName}
                                 helperText={errors.lastName?.message}
                                 sx={{color: "var(--text)"}}
+                                onBlur={() => trigger("lastName")}
                             />
                         )}
                     />
@@ -76,6 +79,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}
                                 error={!!errors.phoneNumber}
                                 helperText={errors.phoneNumber?.message}
                                 sx={{color: "var(--text)"}}
+                                onBlur={() => trigger("phoneNumber")}
                             />
                         )}
                     />
@@ -92,6 +96,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}
                                 error={!!errors.emailAddress}
                                 helperText={errors.emailAddress?.message}
                                 sx={{color: "var(--text)"}}
+                                onBlur={() => trigger("emailAddress")}
                             />
                         )}
                     />
@@ -99,6 +104,6 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors}
             </Box>
         </Box>
     );
-};
+}
 
 export default ContactInformation;

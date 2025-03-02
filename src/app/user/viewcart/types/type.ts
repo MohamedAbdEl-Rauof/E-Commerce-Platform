@@ -15,14 +15,6 @@ export interface Product {
     price: number;
     image: string;
     rating: number;
-    // ... other properties
-}
-
-export interface StepProps {
-    cartItems: CartItem[];
-    setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
-    selectedShipping: number;
-    handleCheckout: () => void;
 }
 
 export interface UserData {
@@ -39,4 +31,5 @@ export interface UserData {
     password: string;
     expirationDate: string;
     cvc: string;
+    paymentMethod: 'credit-card' | 'paypal';
 }

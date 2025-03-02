@@ -10,7 +10,6 @@ interface StepProps {
     selectedShipping: number;
     setSelectedShipping: Dispatch<SetStateAction<number>>;
     deleteItem: (productId: string) => Promise<void>;
-    toggleFavorite: (userId: string, productId: string) => Promise<void>;
     decrementFromCart: (userId: string, productId: string) => Promise<void>;
     addToCart: (userId: string, productId: string) => Promise<void>;
     loading: boolean;
