@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, TextField, Typography} from '@mui/material';
+import {Box, TextField, Typography, useMediaQuery, useTheme} from '@mui/material';
 import {Control, Controller, FieldErrors, UseFormTrigger} from 'react-hook-form';
 import {UserData} from '../../types/type';
 
@@ -10,20 +10,47 @@ interface ContactInformationProps {
 }
 
 const ContactInformation: React.FC<ContactInformationProps> = ({control, errors, trigger}) => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    const inputStyle = {
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'var(--border)',
+            },
+            '&:hover fieldset': {
+                borderColor: 'var(--hover)',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'var(--focus)',
+            },
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--muted)',
+        },
+        '& .MuiInputBase-input': {
+            color: 'var(--foreground)',
+        },
+    };
+
     return (
         <Box
             sx={{
-                padding: 3,
+                padding: {xs: 2, sm: 3},
                 border: `1px solid var(--border)`,
                 borderRadius: 2,
-                boxShadow: 3,
+                boxShadow: '0 4px 6px var(--shadow)',
                 backgroundColor: "var(--background)",
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                    boxShadow: '0 6px 8px var(--shadow)',
+                },
             }}
         >
-            <Typography variant="h6" sx={{fontWeight: "bold", mb: 2, color: "var(--text)"}}>
+            <Typography variant="h6" sx={{fontWeight: "bold", mb: 3, color: "var(--foreground)"}}>
                 Contact Information
             </Typography>
-            <Box sx={{mt: 4}}>
+            <Box sx={{mt: 2}}>
                 <Box
                     display="flex"
                     flexDirection={{xs: "column", sm: "row"}}
@@ -42,7 +69,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors,
                                 variant="outlined"
                                 error={!!errors.firstName}
                                 helperText={errors.firstName?.message}
-                                sx={{color: "var(--text)"}}
+                                sx={inputStyle}
                                 onBlur={() => trigger("firstName")}
                             />
                         )}
@@ -59,7 +86,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors,
                                 variant="outlined"
                                 error={!!errors.lastName}
                                 helperText={errors.lastName?.message}
-                                sx={{color: "var(--text)"}}
+                                sx={inputStyle}
                                 onBlur={() => trigger("lastName")}
                             />
                         )}
@@ -78,7 +105,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors,
                                 variant="outlined"
                                 error={!!errors.phoneNumber}
                                 helperText={errors.phoneNumber?.message}
-                                sx={{color: "var(--text)"}}
+                                sx={inputStyle}
                                 onBlur={() => trigger("phoneNumber")}
                             />
                         )}
@@ -95,7 +122,7 @@ const ContactInformation: React.FC<ContactInformationProps> = ({control, errors,
                                 variant="outlined"
                                 error={!!errors.emailAddress}
                                 helperText={errors.emailAddress?.message}
-                                sx={{color: "var(--text)"}}
+                                sx={inputStyle}
                                 onBlur={() => trigger("emailAddress")}
                             />
                         )}

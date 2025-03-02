@@ -1,8 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {Box, Checkbox, ListItemButton, ListItemText, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Checkbox,
+    ListItemButton,
+    ListItemText,
+    TextField,
+    Typography,
+    useMediaQuery,
+    useTheme
+} from "@mui/material";
 import {Control, Controller, FieldErrors, UseFormSetValue, UseFormTrigger} from "react-hook-form";
 import {UserData} from "../../types/type";
-import {CheckCircle, CreditCard, RadioButtonUnchecked} from "@mui/icons-material";
+import {CheckCircle, CreditCard, PaymentOutlined, RadioButtonUnchecked} from "@mui/icons-material";
 
 interface PaymentMethodProps {
     control: Control<UserData>;
@@ -10,7 +19,6 @@ interface PaymentMethodProps {
     trigger: UseFormTrigger<UserData>;
     handleSelect: (method: 'credit-card' | 'paypal') => void;
     setValue: UseFormSetValue<UserData>;
-    paymentMethod: string;
 }
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({
@@ -19,9 +27,10 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                                          trigger,
                                                          handleSelect,
                                                          setValue,
-                                                         paymentMethod
                                                      }) => {
     const [selectedMethod, setSelectedMethod] = useState<'credit-card' | 'paypal' | null>(null);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const handleMethodSelect = (method: 'credit-card' | 'paypal') => {
         setSelectedMethod(method);
@@ -29,13 +38,11 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
         setValue('paymentMethod', method);
 
         if (method === 'paypal') {
-            // Clear credit card fields if PayPal is selected
             setValue('cardNumber', '', {shouldValidate: false});
             setValue('expirationDate', '', {shouldValidate: false});
             setValue('cvc', '', {shouldValidate: false});
         }
 
-        // Trigger validation after setting the payment method
         trigger('paymentMethod');
     };
 
@@ -43,7 +50,6 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
         if (selectedMethod) {
             trigger("paymentMethod");
             if (selectedMethod === 'paypal') {
-                // Clear any existing errors for credit card fields
                 setValue('cardNumber', '', {shouldValidate: false});
                 setValue('expirationDate', '', {shouldValidate: false});
                 setValue('cvc', '', {shouldValidate: false});
@@ -51,31 +57,69 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
         }
     }, [selectedMethod, trigger, setValue]);
 
+    const inputStyle = {
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'var(--border)',
+            },
+            '&:hover fieldset': {
+                borderColor: 'var(--hover)',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'var(--focus)',
+            },
+        },
+        '& .MuiInputLabel-root': {
+            color: 'var(--muted)',
+        },
+        '& .MuiInputBase-input': {
+            color: 'var(--foreground)',
+        },
+    };
+
     return (
-        <Box sx={{padding: 3, border: "1px solid #e0e0e0", borderRadius: 2, boxShadow: 3, backgroundColor: "#fff"}}>
-            <Typography variant="h6" sx={{fontWeight: "bold", mb: 2}}>
+        <Box sx={{
+            padding: {xs: 2, sm: 3},
+            border: '1px solid var(--border)',
+            borderRadius: 2,
+            boxShadow: '0 4px 6px var(--shadow)',
+            backgroundColor: 'var(--background)',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+                boxShadow: '0 6px 8px var(--shadow)',
+            },
+        }}>
+            <Typography variant="h6" sx={{fontWeight: "bold", mb: 2, color: 'var(--foreground)'}}>
                 Payment Method
             </Typography>
-            <Box sx={{mt: 4, borderBottom: "1px solid #e0e0e0", pb: 1}}>
+            <Box sx={{mt: 4, borderBottom: "1px solid var(--border)", pb: 1}}>
                 <Controller
                     name="paymentMethod"
                     control={control}
                     rules={{required: "Please select a payment method"}}
                     render={({field}) => (
                         <>
-                            {/* Credit Card Option */}
                             <ListItemButton
-                                sx={{border: "1px solid #e0e0e0", borderRadius: "8px", padding: "8px", mb: 2}}
+                                sx={{
+                                    border: "1px solid var(--border)",
+                                    borderRadius: "8px",
+                                    padding: "8px",
+                                    mb: 2,
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover)',
+                                    },
+                                }}
                                 onClick={() => handleMethodSelect("credit-card")}
                             >
                                 <Checkbox
                                     icon={<RadioButtonUnchecked/>}
                                     checkedIcon={<CheckCircle/>}
                                     checked={field.value === "credit-card"}
+                                    sx={{color: 'var(--primary)'}}
                                 />
                                 <Box sx={{display: "flex", justifyContent: "space-between", width: "100%"}}>
-                                    <ListItemText primary="Pay By Credit Card"/>
-                                    <CreditCard style={{fontSize: 24}}/>
+                                    <ListItemText primary="Pay By Credit Card" sx={{color: 'var(--foreground)'}}/>
+                                    <CreditCard sx={{fontSize: 24, color: 'var(--primary)'}}/>
                                 </Box>
                             </ListItemButton>
 
@@ -93,10 +137,12 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                                 margin="normal"
                                                 error={!!errors.cardNumber}
                                                 helperText={errors.cardNumber?.message}
+                                                onBlur={() => trigger("cardNumber")}
+                                                sx={inputStyle}
                                             />
                                         )}
                                     />
-                                    <Box sx={{display: 'flex', gap: 2}}>
+                                    <Box sx={{display: 'flex', gap: 2, flexDirection: isMobile ? 'column' : 'row'}}>
                                         <Controller
                                             name="expirationDate"
                                             control={control}
@@ -108,6 +154,9 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                                     margin="normal"
                                                     error={!!errors.expirationDate}
                                                     helperText={errors.expirationDate?.message}
+                                                    onBlur={() => trigger("expirationDate")}
+                                                    sx={inputStyle}
+                                                    fullWidth={isMobile}
                                                 />
                                             )}
                                         />
@@ -122,6 +171,9 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                                     margin="normal"
                                                     error={!!errors.cvc}
                                                     helperText={errors.cvc?.message}
+                                                    onBlur={() => trigger("cvc")}
+                                                    sx={inputStyle}
+                                                    fullWidth={isMobile}
                                                 />
                                             )}
                                         />
@@ -129,17 +181,27 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                 </Box>
                             )}
 
-                            {/* PayPal Option */}
                             <ListItemButton
-                                sx={{border: "1px solid #e0e0e0", borderRadius: "8px", padding: "8px"}}
+                                sx={{
+                                    border: "1px solid var(--border)",
+                                    borderRadius: "8px",
+                                    padding: "8px",
+                                    '&:hover': {
+                                        backgroundColor: 'var(--hover)',
+                                    },
+                                }}
                                 onClick={() => handleMethodSelect("paypal")}
                             >
                                 <Checkbox
                                     icon={<RadioButtonUnchecked/>}
                                     checkedIcon={<CheckCircle/>}
                                     checked={field.value === "paypal"}
+                                    sx={{color: 'var(--primary)'}}
                                 />
-                                <ListItemText primary="PayPal"/>
+                                <Box sx={{display: "flex", justifyContent: "space-between", width: "100%"}}>
+                                    <ListItemText primary="PayPal" sx={{color: 'var(--foreground)'}}/>
+                                    <PaymentOutlined sx={{fontSize: 24, color: 'var(--primary)'}}/>
+                                </Box>
                             </ListItemButton>
                         </>
                     )}
