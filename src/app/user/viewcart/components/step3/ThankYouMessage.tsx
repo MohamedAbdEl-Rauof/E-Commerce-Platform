@@ -1,12 +1,15 @@
 import React from 'react';
+import {Box, Typography} from '@mui/material';
 
 const ThankYouMessage: React.FC = () => (
-    <div className="mb-8">
-        <p className="text-gray-500 text-xl">Thank You! 🎉</p>
-        <h1 className="text-3xl font-bold text-gray-800">
+    <Box sx={{mb: 4, textAlign: 'center'}}>
+        <Typography variant="h6" color="text.secondary" gutterBottom>
+            Thank You! 🎉
+        </Typography>
+        <Typography variant="h4" fontWeight="bold" color="text.primary">
             Your order has been received
-        </h1>
-    </div>
+        </Typography>
+    </Box>
 );
 
 export default ThankYouMessage;

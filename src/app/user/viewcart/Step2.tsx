@@ -47,6 +47,9 @@ const Step2: React.FC<StepProps> = ({
                                         cartItems,
                                         selectedShipping,
                                         handleCheckout,
+                                        decrementFromCart,
+                                        addToCart,
+                                        loading,
                                     }) => {
     const [total, setTotal] = useState<number>(0);
     const {data: session} = useSession();
@@ -240,6 +243,8 @@ const Step2: React.FC<StepProps> = ({
                                     cartItems={cartItems}
                                     selectedShipping={selectedShipping}
                                     total={total}
+                                    decrementFromCart={decrementFromCart}
+                                    addToCart={addToCart}
                                 />
                             </StyledPaper>
                         </Grid>

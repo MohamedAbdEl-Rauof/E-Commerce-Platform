@@ -1,4 +1,5 @@
 import React from 'react';
+import {Box, Grid, Skeleton, Typography} from '@mui/material';
 
 interface OrderDetailsProps {
     order: {
@@ -10,32 +11,42 @@ interface OrderDetailsProps {
         paymentMethod: {
             method: string;
         };
-    };
+    } | null;
 }
 
-const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => (
-    <div className="mt-10 mb-10 justify-center flex space-x-24">
-        <div className="text-left font-bold">
-            <h1 className="text-gray-500 text-xl">Order Code:</h1>
-            <h1 className="text-gray-500 text-xl">Date:</h1>
-            <h1 className="text-gray-500 text-xl">Total:</h1>
-            <h1 className="text-gray-500 text-xl">Payment Method:</h1>
-        </div>
-        <div className="text-left">
-            <h1 className="text-xl font-semibold text-gray-800">
-                {order.orderCode}
-            </h1>
-            <h1 className="text-xl font-semibold text-gray-800">
-                {new Date(order.createdAt).toLocaleDateString()}
-            </h1>
-            <h1 className="text-xl font-semibold text-gray-800">
-                {order.shoppingandTotal.Total}
-            </h1>
-            <h1 className="text-xl font-semibold text-gray-800">
-                {order.paymentMethod.method}
-            </h1>
-        </div>
-    </div>
-);
+const OrderDetails: React.FC<OrderDetailsProps> = ({order}) => {
+    console.log("ordeeeeeeeeeeeeeer", order);
+    const details = [
+        {label: 'Order Code:', value: order?.orderCode ?? 'Loading...'},
+        {label: 'Date:', value: order?.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Loading...'},
+        {label: 'Total:', value: order?.shoppingandTotal?.Total ?? 'Loading...'},
+        {label: 'Payment Method:', value: order?.paymentMethod?.method ?? 'Loading...'},
+    ];
+
+    return (
+        <Box sx={{mt: 4, mb: 4}}>
+            <Grid container spacing={2}>
+                {details.map((detail, index) => (
+                    <React.Fragment key={index}>
+                        <Grid item xs={6} sm={3}>
+                            <Typography variant="subtitle1" fontWeight="bold" color="text.secondary" textAlign="right">
+                                {detail.label}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={6} sm={3}>
+                            {order ? (
+                                <Typography variant="subtitle1" color="text.primary" textAlign="left">
+                                    {detail.value}
+                                </Typography>
+                            ) : (
+                                <Skeleton variant="text" width={100}/>
+                            )}
+                        </Grid>
+                    </React.Fragment>
+                ))}
+            </Grid>
+        </Box>
+    );
+};
 
 export default OrderDetails;
