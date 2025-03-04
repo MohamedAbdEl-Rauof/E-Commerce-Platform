@@ -16,7 +16,6 @@ interface CartItem {
 
 interface StepProps {
     cartItems: CartItem[];
-    setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
 }
 
 type Order = {

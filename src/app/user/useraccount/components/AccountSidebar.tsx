@@ -69,7 +69,7 @@ export default function AccountSidebar() {
             if (!userId) return;
 
             try {
-                const response = await fetch(`/api/users?id=${userId}`);
+                const response = await fetch(`/api/user?id=${userId}`);
                 const data = await response.json();
                 setUserData(data);
             } catch (error) {

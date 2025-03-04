@@ -1,27 +1,17 @@
 import React, {useState} from 'react';
-import {Grid, Box, Button} from '@mui/material';
+import {Box, Button, Grid} from '@mui/material';
 import ProductCard from './ProductCard';
-
-interface Product {
-    _id: string;
-    name: string;
-    image: string;
-    price: number;
-    categoryId: string;
-    PriceBeforeDiscount?: string;
-    rating?: number;
-    isNew?: boolean;
-    discount?: number;
-}
+import {Product} from "@/context/ProductContext";
 
 interface ProductGridProps {
     products: Product[];
     view: string;
     favorites: Set<string>;
     toggleFavorite: (productId: string) => void;
+    categoryId: string;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({products, view, favorites, toggleFavorite}) => {
+const ProductGrid: React.FC<ProductGridProps> = ({products, view, toggleFavorite, categoryId, favorites}) => {
     const [visibleProducts, setVisibleProducts] = useState(9);
 
     const getGridProps = () => {
@@ -50,6 +40,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, view, favorites, tog
                             product={product}
                             isList={view === "list"}
                             onFavorite={toggleFavorite}
+                            categoryId={categoryId}
                             isFavorite={favorites.has(product._id)}
                         />
                     </Grid>

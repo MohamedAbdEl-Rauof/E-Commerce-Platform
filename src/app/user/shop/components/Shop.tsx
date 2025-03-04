@@ -1,15 +1,26 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
-import { FilterList } from "@mui/icons-material";
+import React, {useEffect, useMemo, useState} from "react";
+import {FilterList} from "@mui/icons-material";
 import {
-    Box, Button, Container, Drawer, FormControl, Grid, IconButton, MenuItem, Select, Typography, useMediaQuery, useTheme
+    Box,
+    Button,
+    Container,
+    Drawer,
+    FormControl,
+    Grid,
+    IconButton,
+    MenuItem,
+    Select,
+    Typography,
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import Banner from "./Banner";
 import SearchBar from "./SearchBar";
 import FiltersSidebar from "./FiltersSidebar";
 import ProductGrid from "./ProductGrid";
-import { Category, Product, FilterState, PRICE_RANGES, SORT_OPTIONS, VIEW_OPTIONS } from './types/shopTypes';
-
+import {Category, FilterState, PRICE_RANGES, SORT_OPTIONS, VIEW_OPTIONS} from './types/shopTypes';
+import {Product} from "@/context/ProductContext";
 
 const Shop: React.FC = () => {
     const theme = useTheme();
@@ -33,7 +44,7 @@ const Shop: React.FC = () => {
                 ]);
                 const categoriesData = await categoriesRes.json();
                 const productsData = await productsRes.json();
-                setCategories([{ _id: "all", name: "All Rooms" }, ...categoriesData]);
+                setCategories([{_id: "all", name: "All Rooms"}, ...categoriesData]);
                 setProducts(productsData);
             } catch (error) {
                 console.error("Error fetching initial data:", error);
@@ -63,10 +74,18 @@ const Shop: React.FC = () => {
             }
         }
         switch (filters.sortBy) {
-            case "price-asc": result.sort((a, b) => a.price - b.price); break;
-            case "price-desc": result.sort((a, b) => b.price - a.price); break;
-            case "name-asc": result.sort((a, b) => a.name.localeCompare(b.name)); break;
-            case "name-desc": result.sort((a, b) => b.name.localeCompare(a.name)); break;
+            case "price-asc":
+                result.sort((a, b) => a.price - b.price);
+                break;
+            case "price-desc":
+                result.sort((a, b) => b.price - a.price);
+                break;
+            case "name-asc":
+                result.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case "name-desc":
+                result.sort((a, b) => b.name.localeCompare(a.name));
+                break;
         }
         return result;
     }, [products, filters]);
@@ -84,40 +103,59 @@ const Shop: React.FC = () => {
     };
 
     const handleFilterChange = (key: string, value: string) => {
-        setFilters((prev) => ({ ...prev, [key]: value }));
+        setFilters((prev) => ({...prev, [key]: value}));
     };
 
     return (
-        <Container maxWidth={false} sx={{ maxWidth: '2000px', backgroundColor: 'var(--background)', color: 'var(--foreground)', px: { xs: 2, sm: 3, md: 4 } }}>
-            <Container maxWidth={false} sx={{ maxWidth: '1750px' }}>
+        <Container maxWidth={false} sx={{
+            maxWidth: '2000px',
+            backgroundColor: 'var(--background)',
+            color: 'var(--foreground)',
+            px: {xs: 2, sm: 3, md: 4}
+        }}>
+            <Container maxWidth={false} sx={{maxWidth: '1750px'}}>
                 <Box sx={{width: '100%', pt: 5}}>
-                    <Banner />
+                    <Banner/>
                 </Box>
-                <Box sx={{ mt: 4 }}>
+                <Box sx={{mt: 4}}>
                     <Grid container spacing={2} alignItems="flex-start">
                         {!isMobile && (
                             <Grid item xs={12} md={3} lg={3}>
-                                <Box sx={{ position: 'sticky', top: 16, maxHeight: 'calc(100vh - 32px)', overflowY: 'auto' }}>
+                                <Box sx={{
+                                    position: 'sticky',
+                                    top: 16,
+                                    maxHeight: 'calc(100vh - 32px)',
+                                    overflowY: 'auto'
+                                }}>
                                     <FiltersSidebar
                                         categories={categories}
                                         priceRanges={PRICE_RANGES}
                                         filters={filters}
                                         onFilterChange={handleFilterChange}
-                                        onClose={() => {}}
+                                        onClose={() => {
+                                        }}
                                     />
                                 </Box>
                             </Grid>
                         )}
                         <Grid item xs={12} md={isMobile ? 12 : 9} lg={isMobile ? 12 : 9}>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: 3 }}>
-                                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'stretch', sm: 'center' }, gap: 2 }}>
+                            <Box sx={{display: 'flex', flexDirection: 'column', gap: 2, mb: 3}}>
+                                <Box sx={{
+                                    display: 'flex',
+                                    flexDirection: {xs: 'column', sm: 'row'},
+                                    justifyContent: 'space-between',
+                                    alignItems: {xs: 'stretch', sm: 'center'},
+                                    gap: 2
+                                }}>
                                     {isMobile && (
-                                        <Button startIcon={<FilterList />} onClick={() => setIsMobileFiltersOpen(true)} variant="outlined" fullWidth sx={{ mb: { xs: 1, sm: 0 } }}>
+                                        <Button startIcon={<FilterList/>} onClick={() => setIsMobileFiltersOpen(true)}
+                                                variant="outlined" fullWidth sx={{mb: {xs: 1, sm: 0}}}>
                                             Filters
                                         </Button>
                                     )}
-                                    <Box sx={{ flexGrow: 1, width: '100%' }}>
-                                        <SearchBar value={filters.search} onChange={(value) => handleFilterChange("search", value)} />
+                                    <Box sx={{flexGrow: 1, width: '100%'}}>
+                                        <SearchBar value={filters.search}
+                                                   onChange={(value) => handleFilterChange("search", value)}/>
                                     </Box>
                                 </Box>
                                 <Box sx={{
@@ -159,11 +197,12 @@ const Shop: React.FC = () => {
                                             }}
                                         >
                                             {SORT_OPTIONS.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+                                                <MenuItem key={option.value}
+                                                          value={option.value}>{option.label}</MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
-                                    <Box sx={{ display: 'flex', gap: 1 }}>
+                                    <Box sx={{display: 'flex', gap: 1}}>
                                         {VIEW_OPTIONS.map((option) => (
                                             <IconButton
                                                 key={option.value}
@@ -178,7 +217,7 @@ const Shop: React.FC = () => {
                                                     },
                                                 }}
                                             >
-                                                <option.icon />
+                                                <option.icon/>
                                             </IconButton>
                                         ))}
                                     </Box>
@@ -199,8 +238,8 @@ const Shop: React.FC = () => {
                 </Box>
             </Container>
             <Drawer anchor="left" open={isMobileFiltersOpen} onClose={() => setIsMobileFiltersOpen(false)}>
-                <Box sx={{ width: 250, p: 2 }}>
-                    <Button onClick={() => setIsMobileFiltersOpen(false)} sx={{ mb: 2 }}>Close Filters</Button>
+                <Box sx={{width: 250, p: 2}}>
+                    <Button onClick={() => setIsMobileFiltersOpen(false)} sx={{mb: 2}}>Close Filters</Button>
                     <FiltersSidebar
                         categories={categories}
                         priceRanges={PRICE_RANGES}

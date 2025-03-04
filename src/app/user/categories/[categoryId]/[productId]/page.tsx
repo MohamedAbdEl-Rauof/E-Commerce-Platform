@@ -13,6 +13,9 @@ const ProductPage = ({params}: { params: { categoryId: string; productId: string
 
     const product = products.find(p => p._id === productId);
 
+    if (!product) {
+        return <div>Product not found</div>;
+    }
 
     return (
         <Container maxWidth="lg">

@@ -1,32 +1,32 @@
 import React, {useCallback, useMemo} from 'react';
-import { Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography } from '@mui/material';
+import {Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography} from '@mui/material';
 import Rating from "@mui/material/Rating";
-import { useSession } from "next-auth/react";
-import { useCart } from "@/context/AddToCartContext";
+import {useSession} from "next-auth/react";
+import {useCart} from "@/context/AddToCartContext";
 import Image from "next/image";
 import {FaHeart, FaRegHeart} from "react-icons/fa";
+import {Product} from "@/context/ProductContext";
 
 interface ProductCardProps {
-    product: {
-        _id: string;
-        name: string;
-        image: string;
-        price: number;
-        PriceBeforeDiscount?: string;
-        rating?: number;
-        isNew?: boolean;
-        discount?: number;
-    };
+    product: Product;
     isList: boolean;
-    isFavorite: boolean;
     onFavorite: (productId: string) => void;
+    isFavorite?: boolean;
+    categoryId?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, onFavorite }) => {
-    const { data: session } = useSession();
+const ProductCard: React.FC<ProductCardProps> = ({
+                                                     product,
+                                                     isList,
+                                                     onFavorite,
+                                                     isFavorite = false,
+                                                     categoryId
+                                                 }) => {
+    const {data: session} = useSession();
     const userId = session?.user?.id;
-    const { addToCart, toggleFavorite, updateRating, cart, checkUserSignin } = useCart();
+    const {addToCart, toggleFavorite, updateRating, cart, checkUserSignin} = useCart();
 
+    console.log("categoryId", categoryId)
     const handleAddToCart = useCallback(() => {
         if (userId) {
             addToCart(userId, product._id);
@@ -46,7 +46,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
 
     const cartItem = useMemo(() => cart.find(item => item.productId === product._id), [cart, product._id]);
 
-    const handleRatingChange = useCallback((event: React.ChangeEvent<{}>, newValue: number | null) => {
+    const handleRatingChange = useCallback((event: React.SyntheticEvent<Element, Event>, newValue: number | null) => {
         if (newValue !== null && userId) {
             updateRating(userId, product._id, newValue);
         } else {
@@ -76,7 +76,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                 },
             },
         }}>
-            <Box sx={{ position: 'relative', width: isList ? '33%' : '100%', overflow: 'hidden' }}>
+            <Box sx={{position: 'relative', width: isList ? '33%' : '100%', overflow: 'hidden'}}>
                 <CardMedia
                     component="div"
                     sx={{
@@ -92,6 +92,27 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                         objectFit="cover"
                     />
                 </CardMedia>
+                {/*<IconButton*/}
+                {/*    onClick={handleFavoriteToggle}*/}
+                {/*    sx={{*/}
+                {/*        position: 'absolute',*/}
+                {/*        top: 8,*/}
+                {/*        right: 8,*/}
+                {/*        bgcolor: 'white',*/}
+                {/*        transition: 'all 0.2s ease-in-  out',*/}
+                {/*        '&:hover': {*/}
+                {/*            bgcolor: 'var(--hover)',*/}
+                {/*            transform: 'scale(1.1)',*/}
+                {/*        },*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    {cartItem?.isFavourite ? (*/}
+                {/*        <FaHeart className="text-red-500"/>*/}
+                {/*    ) : (*/}
+                {/*        <FaRegHeart/>*/}
+                {/*    )}*/}
+                {/*</IconButton>*/}
+
                 <IconButton
                     onClick={handleFavoriteToggle}
                     sx={{
@@ -106,7 +127,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                         },
                     }}
                 >
-                    {cartItem?.isFavourite ? (
+                    {isFavorite || cartItem?.isFavourite ? (
                         <FaHeart className="text-red-500"/>
                     ) : (
                         <FaRegHeart/>
@@ -140,8 +161,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                     />
                 )}
             </Box>
-            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', p: 2 }}>
-                <Typography variant="h6" component="h3" gutterBottom noWrap sx={{ fontWeight: 'bold' }}>
+            <CardContent sx={{flexGrow: 1, display: 'flex', flexDirection: 'column', p: 2}}>
+                <Typography variant="h6" component="h3" gutterBottom noWrap sx={{fontWeight: 'bold'}}>
                     {product.name}
                 </Typography>
                 <Rating
@@ -158,12 +179,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, isList, isFavorite, 
                     }}
                     onChange={handleRatingChange}
                 />
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-                    <Typography variant="h6" component="span" sx={{ fontWeight: 'bold', color: 'var(--foreground)' }}>
+                <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mt: 1}}>
+                    <Typography variant="h6" component="span" sx={{fontWeight: 'bold', color: 'var(--foreground)'}}>
                         ${product.price.toFixed(2)}
                     </Typography>
                     {product.PriceBeforeDiscount && (
-                        <Typography variant="body2" sx={{ textDecoration: 'line-through', color: 'var(--muted)' }}>
+                        <Typography variant="body2" sx={{textDecoration: 'line-through', color: 'var(--muted)'}}>
                             ${product.PriceBeforeDiscount}
                         </Typography>
                     )}

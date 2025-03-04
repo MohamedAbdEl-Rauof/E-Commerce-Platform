@@ -37,6 +37,8 @@ export default function AccountDetails() {
     const {data: session} = useSession();
     const userId = session?.user?.id || "";
     const [userData, setUserData] = useState<UserData | null>(null);
+    console.log("user data:", userData);
+    console.log("user ID:", userId);
 
     // Initialize formData with empty strings
     const [formData, setFormData] = useState({
@@ -49,8 +51,9 @@ export default function AccountDetails() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`/api/users?id=${userId}`);
+                const response = await fetch(`/api/user?id=${userId}`);
                 const data = await response.json();
+                console.log("Fetched user data:", data);
                 setUserData(data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -79,14 +82,13 @@ export default function AccountDetails() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault(); // Prevent the default form submission behavior
-        window.location.reload(); // Reload the page to reflect changes
 
         // Log the data to be sent
         console.log("Form submitted:", formData);
 
         try {
-                // Send the PUT request to the backend with the form data in the body, NOT in the URL
-            const response = await fetch("/api/users", {
+            // Send the PUT request to the backend with the form data in the body, NOT in the URL
+            const response = await fetch("/api/user", {
                 method: "PUT", // Method should be PUT for updating
                 headers: {
                     "Content-Type": "application/json", // Specify JSON content type
