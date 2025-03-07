@@ -1,27 +1,51 @@
 import React from "react";
-import {useSlider} from "@/context/SliderContext";
-import {useCategories} from "@/context/CategoriesContext";
+import { useSlider } from "@/context/SliderContext";
+import { useCategories } from "@/context/CategoriesContext";
 import TextSectionLoading from "@/components/userUiLoading/Home/TextSectionLoading";
-
+import { Box, Typography, useTheme } from "@mui/material";
 
 const TextSection = () => {
-    const {loading: sliderLoading} = useSlider();
-    const {loading: categoriesLoading} = useCategories();
+    const { loading: sliderLoading } = useSlider();
+    const { loading: categoriesLoading } = useCategories();
+    const theme = useTheme();
 
     return (
-        <div className="flex md:flex-row justify-between">
+        <Box sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            justifyContent: 'space-between',
+            color: 'var(--text)',
+        }}>
             {(sliderLoading && categoriesLoading) ? (
-                <TextSectionLoading/>
+                <TextSectionLoading />
             ) : (
-                <div className="md:w-1/2">
-                    <h1 className="font-bold text-3xl">Simply Unique / Simply Better</h1>
-                    <p className="pt-5">
+                <Box sx={{ width: { md: '50%' } }}>
+                    <Typography
+                        variant="h4"
+                        component="h1"
+                        sx={{
+                            fontWeight: 'bold',
+                            color: 'var(--text)',
+                            mb: 2,
+                        }}
+                    >
+                        Simply Unique / Simply Better
+                    </Typography>
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            color: 'var(--text)',
+                            '& strong': {
+                                color: 'var(--focus)',
+                            }
+                        }}
+                    >
                         <strong>3legant</strong> is a gift & decorations store based in HCMC,
                         Vietnam. Established since 2019.
-                    </p>
-                </div>
+                    </Typography>
+                </Box>
             )}
-        </div>
+        </Box>
     );
 };
 

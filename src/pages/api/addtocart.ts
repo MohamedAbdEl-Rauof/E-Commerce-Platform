@@ -55,6 +55,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     (item: CartItem) => item.productId.toString() === productId
                 );
 
+                // ... (previous code remains unchanged)
+
                 if (existingProductIndex !== -1) {
                     const updates: Partial<CartItem> = {};
                     if (quantity !== undefined) {
@@ -78,6 +80,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             },
                         }
                     );
+
+                    let message = "Product updated in cart successfully";
+                    if (isFavourite !== undefined) {
+                        message = isFavourite
+                            ? "Your Favourite Product Added to Cart Successfully"
+                            : "Your Favourite Product Removed from Cart Successfully";
+                    } else if (rating !== undefined) {
+                        message = "Your Rating Record Successfully";
+                    }
+
+                    return res.status(200).json({ message });
                 } else {
                     await cartCollection.updateOne(
                         {_id: cart._id},
@@ -92,10 +105,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             },
                         }
                     );
+
+                    return res.status(200).json({ message: "Product Added to Cart Successfully" });
                 }
+
             }
 
-            res.status(200).json({message: "Product added to cart successfully"});
         } catch (error) {
             console.error("Error adding to cart:", error);
             res.status(500).json({message: "An error occurred while adding to cart"});

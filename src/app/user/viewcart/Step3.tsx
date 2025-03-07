@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from "react";
-import Button from "@mui/material/Button";
-import Badge from "@mui/material/Badge";
+import {Box, Button, CircularProgress, Paper, Typography} from "@mui/material";
 import {useSession} from "next-auth/react";
+import ThankYouMessage from "./components/step3/ThankYouMessage";
+import OrderBadges from "./components/step3/OrderBadges";
+import OrderDetails from "./components/step3/OrderDetails";
 
 interface CartItem {
     id: string;
@@ -14,7 +16,6 @@ interface CartItem {
 
 interface StepProps {
     cartItems: CartItem[];
-    setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
 }
 
 type Order = {
@@ -32,110 +33,96 @@ const Step3: React.FC<StepProps> = ({cartItems}) => {
     const {data: session} = useSession();
     const userId = session?.user?.id || "";
     const [order, setOrder] = useState<Order[] | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    console.log("cart ya raouuuuuuuuuuuuf", cartItems);
-
-    useEffect(() => {
+    const fetchOrder = async () => {
         if (!userId) {
             console.warn("User ID is not available. Skipping order fetch.");
+            setIsLoading(false);
             return;
         }
 
-        const fetchOrder = async () => {
-            try {
-                const response = await fetch(`/api/orders?userId=${userId}`, {
-                    method: "GET",
-                });
+        try {
+            setIsLoading(true);
+            const response = await fetch(`/api/orders?userId=${userId}`, {
+                method: "GET",
+            });
 
-                if (!response.ok) {
-                    const errorDetails = await response.text();
-                    throw new Error(`Failed to fetch order data: ${errorDetails}`);
-                }
-
-                const data = await response.json();
-                setOrder(data);
-                console.log("Order data:", data);
-            } catch (error) {
-                console.error("Error fetching order:", error);
+            if (!response.ok) {
+                const errorDetails = await response.text();
+                throw new Error(`Failed to fetch order data: ${errorDetails}`);
             }
-        };
 
+            const data = await response.json();
+            setOrder(data);
+            console.log("Order data:", data);
+        } catch (error) {
+            console.error("Error fetching order:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchOrder();
     }, [userId]);
 
-    if (!order) {
-        return <div>Loading...</div>;
+    const handleRefresh = () => {
+        fetchOrder();
+    };
+
+    if (isLoading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <CircularProgress/>
+            </Box>
+        );
     }
 
-    const firstOrder = order[0]; // Safely access the first order
+    if (!order || order.length === 0) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <Typography variant="h6" color="text.secondary">No order found.</Typography>
+            </Box>
+        );
+    }
+
+    const firstOrder = order[0];
 
     return (
-        <div className="mx-auto mt-24 mb-14 text-center max-w-7xl px-4">
-            {/* Container for the thank you message and order info */}
-            <div className="border border-gray-200 rounded-lg shadow-lg p-7">
-                {/* Thank You message */}
-                <div className="mb-8">
-                    <p className="text-gray-500 text-xl">Thank You! 🎉</p>
-                    <h1 className="text-3xl font-bold text-gray-800">
-                        Your order has been received
-                    </h1>
-                </div>
-
-                {/* Order Badge (with image) */}
-                <div className="pt-5 flex justify-center gap-4">
-                    {cartItems.map((item) => (
-                        <Badge
-                            key={item.id}
-                            badgeContent={item.quantity}
-                            color="primary"
-                            overlap="circular"
-                        >
-                            <img
-                                src={item.image}
-                                alt={item.name}
-                                className="rounded-2xl"
-                                width={80}
-                                height={80}
-                            />
-                        </Badge>
-                    ))}
-                </div>
-
-                <div className="mt-10 mb-10 justify-center flex space-x-24">
-                    <div className="text-left font-bold">
-                        <h1 className="text-gray-500 text-xl">Order Code:</h1>
-                        <h1 className="text-gray-500 text-xl">Date:</h1>
-                        <h1 className="text-gray-500 text-xl">Total:</h1>
-                        <h1 className="text-gray-500 text-xl">Payment Method:</h1>
-                    </div>
-                    <div className="text-left">
-                        <h1 className="text-xl font-semibold text-gray-800">
-                            {firstOrder.orderCode}
-                        </h1>
-                        <h1 className="text-xl font-semibold text-gray-800">
-                            {new Date(firstOrder.createdAt).toLocaleDateString()}
-                        </h1>
-                        <h1 className="text-xl font-semibold text-gray-800">
-                            {firstOrder.shoppingandTotal.Total}
-                        </h1>
-                        <h1 className="text-xl font-semibold text-gray-800">
-                            {firstOrder.paymentMethod.method}
-                        </h1>
-                    </div>
-                </div>
-
-                {/* Optional button for going back to shopping or viewing more details */}
-                <div className="mt-8">
+        <Box sx={{maxWidth: 'lg', mx: 'auto', mt: 6, mb: 4, px: 2}}>
+            <Paper elevation={3} sx={{p: 4, borderRadius: 2, bgcolor: 'var(--light)'}}>
+                <ThankYouMessage/>
+                <OrderBadges cartItems={cartItems}/>
+                <OrderDetails order={firstOrder}/>
+                <Box sx={{mt: 4, display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap'}}>
                     <Button
                         variant="contained"
                         color="primary"
-                        className="w-full sm:w-auto rounded-xl"
+                        sx={{
+                            borderRadius: 2,
+                            bgcolor: 'var(--primary)',
+                            '&:hover': {bgcolor: 'var(--hover)'}
+                        }}
                     >
                         Purchase History
                     </Button>
-                </div>
-            </div>
-        </div>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleRefresh}
+                        sx={{
+                            borderRadius: 2,
+                            borderColor: 'var(--primary)',
+                            color: 'var(--primary)',
+                            '&:hover': {borderColor: 'var(--hover)', color: 'var(--hover)'}
+                        }}
+                    >
+                        Refresh Order
+                    </Button>
+                </Box>
+            </Paper>
+        </Box>
     );
 };
 

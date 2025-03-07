@@ -84,27 +84,35 @@
 > email : 123456789
 > password : 123456789
 >
+>
 > email : HIHICaptain@gmail.com
 > password : HIHICaptain@gmail.com
 >
 >
-> handle the ui & material ui and light and dark mood
-> handle the functionality
-> loading for each page
-> enhance the performance and seo and asscecaplity and best practice
->
-
-
-
-
 > this is two page the first when user select on categories , send to the product page as context api , to open it ,
-> changethis struttre , when the user select on category , send the nameof this caegory in url , then open the info of
-> this product in another page , take care , make the struture withe material ui and handle the light ad dark page using
-> next theme , and sepraete it as many comp not all code , in same page , and handle ">  are you have any suggestion for
-> enhance the performance and seo or asscecaplity and best practice anduse materui ,,, handle this page firstly ""
+> change this structure , when the user select on category , send the nameof this category in url , then open the info
+> of
+> this product in another page , take care , make the structure withe material ui and handle the light ad dark page
+> using
+> next theme , and separate it as many comp not all code , in same page , and handle ">  are you have any suggestion for
+> enhance the performance and seo or applicability and best practice and use mater ,,, handle this page firstly ""
 
 
-> handle the light and dark mode as varible based on the globale.css, use it as variable not static color code
-> anmation
+> handle the light and dark mode as variable based on the global.css, use it as variable not static color code
+> animation
 > loading
 > any
+>
+
+> handle the ui & material ui and responsive and light and dark mood  
+> handle the functionality
+> loading for each page
+> enhance the performance and seo and applicability and best practice
+> handle the animation
+>
+> remove console.log
+> improve the api, and disappear the critical variables
+
+> Responsive
+>
+> Home , Shop , Categories , Contact Us , Cart , View Cart , My Account , Login , Register , Header , footer

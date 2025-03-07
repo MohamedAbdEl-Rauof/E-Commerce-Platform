@@ -28,11 +28,14 @@ const StyledListItem = styled(ListItem, {
     shouldForwardProp: (prop) => prop !== "active",
 })<{ active?: boolean }>(({theme, active}) => ({
     borderRadius: theme.shape.borderRadius,
-    marginBottom: theme.spacing(0.5),
-    backgroundColor: active ? "white" : "transparent",
-    boxShadow: active ? theme.shadows[1] : "none",
+    marginBottom: theme.spacing(1),
+    backgroundColor: active ? "var(--primary)" : "transparent",
+    color: active ? "var(--light)" : "var(--foreground)",
+    boxShadow: active ? "var(--shadow)" : "none",
+    transition: "background-color 0.3s, color 0.3s, box-shadow 0.3s",
     "&:hover": {
-        backgroundColor: active ? "white" : "rgba(255, 255, 255, 0.5)",
+        backgroundColor: active ? "var(--primary)" : "var(--hover)",
+        boxShadow: "var(--shadow)",
     },
 }));
 
@@ -66,7 +69,7 @@ export default function AccountSidebar() {
             if (!userId) return;
 
             try {
-                const response = await fetch(`/api/users?id=${userId}`);
+                const response = await fetch(`/api/user?id=${userId}`);
                 const data = await response.json();
                 setUserData(data);
             } catch (error) {
@@ -103,11 +106,16 @@ export default function AccountSidebar() {
             showConfirmButton: false,
             timer: 1500,
         });
-        router.push("/pages/Home");
+        router.push("/user/home");
     };
 
     return (
-        <Card sx={{p: 3, bgcolor: "grey.50", border: 0}}>
+        <Card sx={{
+            p: 3,
+            bgcolor: "var(--background)",
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow)'
+        }}>
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -122,9 +130,12 @@ export default function AccountSidebar() {
                             position: "absolute",
                             bottom: 0,
                             right: 0,
-                            bgcolor: "white",
-                            boxShadow: 2,
-                            "&:hover": {bgcolor: "white"},
+                            bgcolor: "var(--primary)",
+                            color: "var(--light)",
+                            boxShadow: "var(--shadow)",
+                            '&:hover': {
+                                bgcolor: "var(--accent)",
+                            },
                         }}
                         onClick={handleIconClick}
                     >
@@ -138,7 +149,7 @@ export default function AccountSidebar() {
                         onChange={handleFileChange}
                     />
                 </Box>
-                <Typography variant="h6" sx={{mt: 2}}>
+                <Typography variant="h6" sx={{mt: 2, color: "var(--foreground)"}}>
                     {userData ? userData.name : "Loading..."}
                 </Typography>
             </Box>
@@ -151,7 +162,7 @@ export default function AccountSidebar() {
                         style={{textDecoration: "none", color: "inherit"}}
                     >
                         <StyledListItem active={pathname === item.href}>
-                            <ListItemIcon sx={{minWidth: 40}}>
+                            <ListItemIcon style={{minWidth: 40, color: "inherit"}}>
                                 <item.icon size={20}/>
                             </ListItemIcon>
                             <ListItemText
@@ -174,6 +185,12 @@ export default function AccountSidebar() {
                         borderRadius: 2,
                         textTransform: "none",
                         fontWeight: 500,
+                        bgcolor: "var(--danger)",
+                        color: "var(--light)",
+                        '&:hover': {
+                            bgcolor: "var(--danger)",
+                            opacity: 0.9,
+                        },
                     }}
                 >
                     Log Out

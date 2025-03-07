@@ -1,4 +1,3 @@
-// /pages/UserAccount/layout.tsx
 "use client";
 
 import {Box, Container, Grid, Typography} from "@mui/material";
@@ -11,7 +10,7 @@ export default function AccountLayout({
 }) {
     return (
         <div>
-            <Box sx={{minHeight: "100vh", bgcolor: "grey.50"}}>
+            <Box >
                 <Container maxWidth="lg" sx={{py: 8}}>
                     <Typography variant="h2" align="center" gutterBottom sx={{mb: 6}}>
                         My Account

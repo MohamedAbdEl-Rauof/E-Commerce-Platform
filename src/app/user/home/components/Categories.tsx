@@ -1,67 +1,113 @@
 import React from "react";
-import {motion} from "framer-motion";
-import {useCategories} from "@/context/CategoriesContext";
+import { motion } from "framer-motion";
+import { useCategories } from "@/context/CategoriesContext";
 import Image from "next/image";
 import Link from "next/link";
 import CategoriesLoading from "@/components/userUiLoading/Home/CategoriesLoading";
+import { Box, Typography, Grid, Card, CardContent, CardMedia, Button } from "@mui/material";
+import { styled } from "@mui/system";
 
+const StyledCard = styled(Card)(({ theme }) => ({
+    overflow: "hidden",
+    transition: "all 0.3s",
+    "&:hover": {
+        boxShadow: 10,
+        "& .MuiCardMedia-root": {
+            transform: "scale(1.1)",
+        },
+        "& .overlay": {
+            opacity: 1,
+        },
+    },
+}));
+
+const StyledCardMedia = styled(CardMedia)({
+    height: 240,
+    transition: "transform 0.3s",
+});
+
+const Overlay = styled(Box)({
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    opacity: 0,
+    transition: "opacity 0.3s",
+});
 
 const Categories = () => {
-    const {categories, loading, error} = useCategories();
+    const { categories, loading, error } = useCategories();
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return <Typography color="error">Error: {error}</Typography>;
     }
 
     const fadeInUp = {
-        initial: {opacity: 0, y: 20},
-        animate: {opacity: 1, y: 0},
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
     };
 
     return (
-        <div
-            className={`mt-14 mb-10 grid gap-4 ${
-                categories.length <= 3
-                    ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-                    : "grid-cols-1 md:grid-cols-3 lg:grid-cols-4"
-            }`}
-        >
-            {loading ? (
-                <CategoriesLoading/>
-            ) : (
-                categories.map((category, index) => (
-                    <motion.div
-                        key={category._id || index}
-                        initial="initial"
-                        animate="animate"
-                        variants={fadeInUp}
-                        transition={{duration: 0.3}}
-                        className="bg-white rounded-lg shadow-sm overflow-hidden group transform transition-all duration-300 hover:shadow-xl"
-                    >
-                        <div className="relative w-full">
-                            <div className="aspect-w-1 aspect-h-1 overflow-hidden">
-                                <Image
-                                    width={400}
-                                    height={400}
-                                    priority
-                                    src={category.image}
-                                    alt={category.name}
-                                    className="w-full h-60 object-cover transition-transform duration-300 group-hover:scale-110"
-                                />
-                            </div>
-                            <div
-                                className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <div className="absolute bottom-0 left-0 p-4">
-                                <h1 className="text-lg font-bold text-white">{category.name}</h1>
-                                <u className="flex items-center mt-1 text-black font-bold cursor-pointer">
-                                    <Link href="/pages/Shop">Shop Now</Link>
-                                </u>
-                            </div>
-                        </div>
-                    </motion.div>
-                ))
-            )}
-        </div>
+        <Box sx={{ }}>
+            <Grid container spacing={2}>
+                {loading ? (
+                    <CategoriesLoading />
+                ) : (
+                    categories.map((category, index) => (
+                        <Grid item xs={12} md={categories.length <= 3 ? 4 : 3} key={category._id || index}>
+                            <motion.div
+                                initial="initial"
+                                animate="animate"
+                                variants={fadeInUp}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <StyledCard>
+                                    <Box sx={{ position: "relative" }}>
+                                        <StyledCardMedia
+                                            sx={{
+                                                position: "relative",
+                                                height: 240,
+                                                backgroundSize: "cover",
+                                                backgroundPosition: "center",
+                                                backgroundImage: `url(${category.image})`,
+                                            }}
+                                        />
+                                        <Overlay className="overlay" />
+                                        <CardContent
+                                            sx={{
+                                                position: "absolute",
+                                                bottom: 0,
+                                                left: 0,
+                                                color: "white",
+                                            }}
+                                        >
+                                            <Typography variant="h6" component="h2" gutterBottom fontWeight="bold">
+                                                {category.name}
+                                            </Typography>
+                                            <Button
+                                                component={Link}
+                                                href="/user/shop"
+                                                sx={{
+                                                    color: "var(--foreground)",
+                                                    fontWeight: "bold",
+                                                    "&:hover": {
+                                                        textDecoration: "underline",
+                                                    },
+                                                }}
+                                            >
+                                                Shop Now
+                                            </Button>
+                                        </CardContent>
+                                    </Box>
+                                </StyledCard>
+                            </motion.div>
+                        </Grid>
+                    ))
+                )}
+            </Grid>
+        </Box>
     );
 };
 

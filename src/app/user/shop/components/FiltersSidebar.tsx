@@ -1,8 +1,6 @@
 import React from 'react';
-import {Box, Button, FormControlLabel, IconButton, Radio, RadioGroup, Typography} from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import CloseIcon from '@mui/icons-material/Close';
-import {AnimatePresence, motion} from 'framer-motion';
+import {Box} from '@mui/material';
+import FilterSection from "./FilterSection";
 
 interface Category {
     _id: string;
@@ -27,6 +25,7 @@ interface FiltersSidebarProps {
     onClose: () => void;
 }
 
+
 const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                                                            categories,
                                                            priceRanges,
@@ -42,92 +41,35 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
                 top: 4,
                 p: 3,
                 borderRadius: 2,
-                boxShadow: 1,
+                boxShadow: 'var(--shadow)',
                 transition: 'background-color 0.3s, color 0.3s',
-                bgcolor: 'background.paper',
-                color: 'text.primary',
+                bgcolor: 'var(--background)',
+                color: 'var(--foreground)',
+                width: '100%',
+                maxWidth: '300px',
+                border: '1px solid var(--muted)',
             }}
             aria-label="Filters"
         >
-            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3}}>
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                    <FilterListIcon fontSize="medium"/>
-                    <Typography variant="h6" component="h2">Filters</Typography>
-                </Box>
-                <IconButton
-                    onClick={onClose}
-                    sx={{display: {xs: 'block', lg: 'none'}}}
-                    aria-label="Close filters"
-                >
-                    <CloseIcon/>
-                </IconButton>
-            </Box>
-            <Box component="section" sx={{mb: 4}}>
-                <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 2}}>Categories</Typography>
-                <AnimatePresence>
-                    <motion.div
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        exit={{opacity: 0}}
-                    >
-                        {categories.map((category) => (
-                            <motion.div key={category._id} whileHover={{scale: 1.05}} whileTap={{scale: 0.95}}>
-                                <Button
-                                    fullWidth
-                                    onClick={() => onFilterChange("categoryId", category._id)}
-                                    sx={{
-                                        justifyContent: 'flex-start',
-                                        px: 1,
-                                        py: 0.75,
-                                        mb: 1,
-                                        bgcolor: filters.categoryId === category._id ? 'primary.main' : 'transparent',
-                                        color: filters.categoryId === category._id ? 'primary.contrastText' : 'text.primary',
-                                        '&:hover': {
-                                            bgcolor: filters.categoryId === category._id ? 'primary.dark' : 'action.hover',
-                                        },
-                                    }}
-                                >
-                                    {category.name}
-                                </Button>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </AnimatePresence>
-            </Box>
-            <Box component="section" sx={{mb: 4}}>
-                <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 2}}>Price Range</Typography>
-                <AnimatePresence>
-                    <motion.div
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        exit={{opacity: 0}}
-                    >
-                        <RadioGroup
-                            value={filters.priceRange}
-                            onChange={(e) => onFilterChange("priceRange", e.target.value)}
-                        >
-                            {priceRanges.map((range) => (
-                                <motion.div key={range.range} whileHover={{scale: 1.05}} whileTap={{scale: 0.95}}>
-                                    <FormControlLabel
-                                        value={range.range}
-                                        control={<Radio color="primary"/>}
-                                        label={range.label}
-                                        sx={{
-                                            p: 1,
-                                            borderRadius: 1,
-                                            bgcolor: filters.priceRange === range.range ? 'secondary.main' : 'transparent',
-                                            color: filters.priceRange === range.range ? 'secondary.contrastText' : 'text.primary',
-                                            '&:hover': {
-                                                bgcolor: filters.priceRange === range.range ? 'secondary.dark' : 'action.hover',
-                                            },
-                                        }}
-                                    />
-                                </motion.div>
-                            ))}
-                        </RadioGroup>
-                    </motion.div>
-                </AnimatePresence>
-            </Box>
+            <FilterSection
+                title="Categories"
+                value={filters.categoryId}
+                onChange={(value) => onFilterChange("categoryId", value)}
+                options={categories.map((category) => ({
+                    id: category._id,
+                    label: category.name,
+                }))}
+            />
+
+            <FilterSection
+                title="Price Range"
+                value={filters.priceRange}
+                onChange={(value) => onFilterChange("priceRange", value)}
+                options={priceRanges.map((range) => ({
+                    id: range.range,
+                    label: range.label,
+                }))}
+            />
         </Box>
     );
 };

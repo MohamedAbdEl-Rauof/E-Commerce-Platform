@@ -2,7 +2,38 @@ import React, {useEffect, useState} from "react";
 import {useSlider} from "@/context/SliderContext";
 import Image from "next/image";
 import SliderImageLoading from "@/components/userUiLoading/Home/SliderImageLoading";
+import {Box, IconButton, Typography} from "@mui/material";
+import {styled} from "@mui/material/styles";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+const SliderContainer = styled(Box)(({theme}) => ({
+    position: 'relative',
+    overflow: 'hidden',
+    height: 350,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        height: 450,
+    },
+    [theme.breakpoints.up('lg')]: {
+        height: 550,
+    },
+}));
+
+const StyledImage = styled(Image)({
+    borderRadius: '8px',
+});
+
+const NavigationButton = styled(IconButton)(({theme}) => ({
+    position: 'absolute',
+    top: '50%',
+    transform: 'translateY(-50%)',
+    backgroundColor: 'var(--background)',
+    color: 'var(--text)',
+    '&:hover': {
+        backgroundColor: 'var(--background-light)',
+    },
+}));
 
 const SliderImage = React.memo(() => {
     const {images, loading, error} = useSlider();
@@ -26,46 +57,52 @@ const SliderImage = React.memo(() => {
     };
 
     if (error) {
-        return <div>{error}</div>;
+        return <Typography color="error">{error}</Typography>;
     }
 
     return (
-        <div className="">
+        <Box sx={{
+            width: "100%",
+            margin: "0 auto",
+            display: "flex",
+            justifyContent: "center",
+            paddingTop: "20px",
+            aignItems: "center",
+        }}>
             {loading ? (
                 <SliderImageLoading/>
             ) : (
-                <div className="relative overflow-hidden h-[350px] sm:h-[450px] lg:h-[550px]" style={{width: "100%"}}>
+                <SliderContainer>
                     {images.length > 0 && (
-                        <Image
+                        <StyledImage
                             src={images[currentIndex].url}
                             alt={images[currentIndex].alt || `Image ${currentIndex + 1}`}
                             layout="fill"
                             objectFit="cover"
-                            className="rounded-lg"
                             priority
                             sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             quality={100}
                         />
                     )}
 
-                    <button
+                    <NavigationButton
                         onClick={prevImage}
-                        className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white text-black rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-gray-200 transition duration-300"
+                        sx={{left: 16}}
                         aria-label="Previous Image"
                     >
-                        &#10094;
-                    </button>
+                        <ArrowBackIosNewIcon/>
+                    </NavigationButton>
 
-                    <button
+                    <NavigationButton
                         onClick={nextImage}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white text-black rounded-full w-10 h-10 flex items-center justify-center shadow-lg hover:bg-gray-200 transition duration-300"
+                        sx={{right: 16}}
                         aria-label="Next Image"
                     >
-                        &#10095;
-                    </button>
-                </div>
+                        <ArrowForwardIosIcon/>
+                    </NavigationButton>
+                </SliderContainer>
             )}
-        </div>
+        </Box>
     );
 });
 

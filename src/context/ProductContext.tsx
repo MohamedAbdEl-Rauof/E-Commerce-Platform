@@ -3,11 +3,16 @@ import React, {createContext, useContext, useEffect, useState} from "react";
 
 export interface Product {
     _id: string;
-    image: string;
-    categoryId: string;
     name: string;
+    description: string;
     price: number;
-    PriceBeforeDiscount: string;
+    PriceBeforeDiscount?: string;
+    image: string;
+    rating?: number;
+    category: string;
+    categoryId: string;
+    isNew: boolean;
+    discount: number;
     createdAt: Date;
 }
 

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import {Button, Typography} from "@mui/material";
+import {Box, Button, Typography, useMediaQuery} from "@mui/material";
 import Link from "next/link";
 
 interface CartItem {
@@ -23,50 +23,64 @@ const calculateSubtotal = (cartItems: CartItem[]) => {
 
 const CartSummary: React.FC<CartSummaryProps> = ({handleCheckout, cartItems}) => {
     const subtotal = calculateSubtotal(cartItems);
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
 
     return (
-        <div className="mt-auto p-3 sm:p-4">
-            <div className="p-2 sm:p-3 flex justify-between">
-                <Typography component="div" className="text-sm sm:text-base">
+        <Box sx={{mt: 'auto', p: {xs: 2, sm: 3}}}>
+            <Box sx={{display: 'flex', justifyContent: 'space-between', p: {xs: 1, sm: 2}}}>
+                <Typography variant="body2" sx={{fontSize: {xs: '0.875rem', sm: '1rem'}, color: 'var(--foreground)'}}>
                     Subtotal
                 </Typography>
-                <Typography component="div" className="text-sm sm:text-base">
+                <Typography variant="body2" sx={{fontSize: {xs: '0.875rem', sm: '1rem'}, color: 'var(--foreground)'}}>
                     $ {subtotal.toFixed(2)}
                 </Typography>
-            </div>
-            <div className="p-2 sm:p-3 flex justify-between">
-                <Typography component="div" className="font-bold text-sm sm:text-base">
+            </Box>
+            <Box sx={{display: 'flex', justifyContent: 'space-between', p: {xs: 1, sm: 2}}}>
+                <Typography variant="body2" sx={{
+                    fontWeight: 'bold',
+                    fontSize: {xs: '0.875rem', sm: '1rem'},
+                    color: 'var(--foreground)'
+                }}>
                     Total
                 </Typography>
-                <Typography component="div" className="text-sm sm:text-base">
+                <Typography variant="body2" sx={{fontSize: {xs: '0.875rem', sm: '1rem'}, color: 'var(--foreground)'}}>
                     $ {subtotal.toFixed(2)}
                 </Typography>
-            </div>
+            </Box>
             <Button
+                variant="contained"
+                onClick={handleCheckout}
                 sx={{
-                    width: "90%",
-                    mx: "5%",
-                    fontSize: {
-                        xs: "0.875rem",
-                        sm: "1rem",
+                    width: isSmallScreen ? '100%' : '90%',
+                    mx: isSmallScreen ? '0%' : '5%',
+                    fontSize: {xs: '0.875rem', sm: '1rem'},
+                    bgcolor: 'var(--focus)',
+                    color: 'var(--foreground)',
+                    '&:hover': {
+                        bgcolor: 'var(--primary)',
                     },
                 }}
-                variant="contained"
-                className="bg-black hover:bg-gray-800"
-                onClick={handleCheckout}
             >
                 Checkout
             </Button>
-            <div className="text-center mt-3">
-                <Link href="/user/viewcart">
-                    <button className="text-black text-xs sm:text-sm font-semibold">
-                        <u className="text-black text-xs sm:text-sm font-semibold text-center">
-                            View Cart
-                        </u>
-                    </button>
+            <Box sx={{textAlign: 'center', mt: 2}}>
+                <Link href="/user/viewcart" passHref>
+                    <Typography
+                        component="a"
+                        variant="body2"
+                        sx={{
+                            color: 'var(--foreground)',
+                            fontSize: {xs: '0.75rem', sm: '0.875rem'},
+                            fontWeight: 'bold',
+                            textDecoration: 'underline',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        View Cart
+                    </Typography>
                 </Link>
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 };
 

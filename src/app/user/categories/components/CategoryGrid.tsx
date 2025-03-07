@@ -45,7 +45,7 @@ const CategoryGrid: React.FC<CategoryGridProps> = ({categories, loading}) => {
                             className="group relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl cursor-pointer"
                             style={{background: 'var(--background)'}}
                         >
-                            <Link href={`/user/categories/${(category.name)}`} passHref>
+                            <Link href={`/user/categories/${(category._id)}`} passHref>
                                 <Box className="aspect-w-16 aspect-h-9 relative h-64">
                                     <Image
                                         src={category.image}
