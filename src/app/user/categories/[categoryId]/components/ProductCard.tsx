@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography} from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import Rating from "@mui/material/Rating";
@@ -26,10 +26,12 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, isFavorite, onFavorite}) => {
-    const { data: session } = useSession();
+    const {data: session} = useSession();
     const userId = session?.user?.id;
-    const { addToCart, toggleFavorite, updateRating, cart, checkUserSignin } = useCart();
+    const {addToCart, toggleFavorite, updateRating, cart, checkUserSignin} = useCart();
 
+    console.log("isFavorite: ", isFavorite);
+    
     const handleAddToCart = useCallback(() => {
         if (userId) {
             addToCart(userId, product._id);

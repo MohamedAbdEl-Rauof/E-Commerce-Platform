@@ -13,6 +13,7 @@ export interface Product {
     categoryId: string;
     isNew: boolean;
     discount: number;
+    createdAt: Date;
 }
 
 interface ProductContextType {

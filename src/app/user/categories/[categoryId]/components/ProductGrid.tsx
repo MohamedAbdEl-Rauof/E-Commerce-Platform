@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Grid} from '@mui/material';
 import ProductCard from './ProductCard';
 
@@ -21,6 +21,8 @@ interface ProductGridProps {
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({products, view, categoryId}) => {
+    const [favorites, setFavorites] = useState<Set<string>>(new Set());
+
     const getGridProps = () => {
         switch (view) {
             case "large":
@@ -34,6 +36,18 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, view, categoryId}) =
         }
     };
 
+    const handleFavoriteToggle = (productId: string) => {
+        setFavorites(prevFavorites => {
+            const newFavorites = new Set(prevFavorites);
+            if (newFavorites.has(productId)) {
+                newFavorites.delete(productId);
+            } else {
+                newFavorites.add(productId);
+            }
+            return newFavorites;
+        });
+    };
+
     const gridProps = getGridProps();
 
     return (
@@ -44,6 +58,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, view, categoryId}) =
                         product={product}
                         isList={view === "list"}
                         categoryId={categoryId}
+                        isFavorite={favorites.has(product._id)}
+                        onFavorite={handleFavoriteToggle}
                     />
                 </Grid>
             ))}

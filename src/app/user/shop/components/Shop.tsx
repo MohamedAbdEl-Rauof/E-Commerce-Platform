@@ -231,6 +231,7 @@ const Shop: React.FC = () => {
                                     view={filters.view}
                                     favorites={favorites}
                                     toggleFavorite={toggleFavorite}
+                                    categoryId={filters.categoryId}
                                 />
                             )}
                         </Grid>

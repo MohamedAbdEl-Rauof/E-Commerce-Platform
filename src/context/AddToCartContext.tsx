@@ -191,9 +191,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({children}
                     updatedCart[existingItemIndex].rating = rating;
                     return updatedCart;
                 } else {
-                    return [...prevCart, {productId, quantity: 1, isFavourite: false, rating}];
+                    // If the item doesn't exist in the cart, we shouldn't add it here.
+                    // Instead, we should fetch the updated cart from the server.
+                    return prevCart;
                 }
             });
+
+            // Fetch the updated cart from the server
+            await getCart(userId);
         } catch (error) {
             toast.error("An error occurred while updating rating");
             console.error("Error updating rating:", error);
