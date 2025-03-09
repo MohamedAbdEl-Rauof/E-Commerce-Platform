@@ -1,6 +1,11 @@
-const page = () => {
+import AdminLayout from './layout';
+
+const AdminPage = () => {
     return (
-        <div>Hi Admin</div>
+        <AdminLayout>
+            <div>Hi Admin</div>
+        </AdminLayout>
     );
 }
-export default page;
+
+export default AdminPage;
