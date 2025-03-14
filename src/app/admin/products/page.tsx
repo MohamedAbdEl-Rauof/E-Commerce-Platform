@@ -8,7 +8,7 @@ export const metadata = {
 const Produts = () => {
     return (
         <div>
-            <ProductContent productId="" editOrView="false"/>
+            <ProductContent productId="" editOrView={null}/>
         </div>
     );
 }

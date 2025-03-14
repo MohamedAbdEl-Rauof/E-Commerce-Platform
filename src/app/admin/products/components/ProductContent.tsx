@@ -12,11 +12,9 @@ import ProductList from "./ProductList";
 import CreateProduct from "./CreateProduct";
 import EditProduct from "./EditProduct";
 import {useRouter} from "next/navigation";
-// Import Tabler icons
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewProduct from "@/app/admin/products/components/ViewProduct";
 
-// Add this after your imports
 const fakeProducts = [
     {
         id: '1',
@@ -65,17 +63,21 @@ const fakeProducts = [
     },
 ];
 
-const ProductContent = ({productId: initialProductId, editOrView}) => {
+const ProductContent = ({
+                            productId: initialProductId,
+                            editOrView
+                        }: {
+    productId?: string | null;
+    editOrView?: 'edit' | 'view' | null;
+}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const router = useRouter();
 
-    // Add state for active tab
     const [activeTab, setActiveTab] = useState('myProducts');
     const [isEditMode, setIsEditMode] = useState(false);
     const [isViewMode, setIsViewMode] = useState(false);
-    // Add state for product ID
     const [selectedProductId, setSelectedProductId] = useState<string | null>(initialProductId || null);
 
     useEffect(() => {
@@ -98,7 +100,6 @@ const ProductContent = ({productId: initialProductId, editOrView}) => {
         setActiveTab(newValue);
     };
 
-    // Fix the tabs definition with proper syntax
     const tabs = useMemo(() => [
         {label: "My Products", icon: <TbShoppingCart/>, value: 'myProducts'},
         {
@@ -118,7 +119,7 @@ const ProductContent = ({productId: initialProductId, editOrView}) => {
 
     const HandleEdit = (id: string) => {
         console.log("Edit Product", id);
-        setSelectedProductId(id); // Use the renamed state setter
+        setSelectedProductId(id);
         setIsEditMode(true);
         setActiveTab('editProduct');
         router.push(`/admin/products/edit/${id}`);
@@ -126,7 +127,7 @@ const ProductContent = ({productId: initialProductId, editOrView}) => {
 
     const HandleView = (id: string) => {
         console.log("view Product", id);
-        setSelectedProductId(id); // Use the renamed state setter
+        setSelectedProductId(id);
         setIsViewMode(true);
         setActiveTab('viewProduct');
         router.push(`/admin/products/view/${id}`);
@@ -139,12 +140,11 @@ const ProductContent = ({productId: initialProductId, editOrView}) => {
         router.push('/admin/products');
     }
 
-    // Define tab content with conditional rendering based on isEditMode and isViewMode
     const tabContentList: { [key: string]: ReactElement } = {
         myProducts: <div><ProductList products={fakeProducts} onEdit={HandleEdit} onView={HandleView}/></div>,
         createNewProduct: <div><CreateProduct/></div>,
         editProduct: <div><EditProduct productId={selectedProductId} onBack={HandleBack}/></div>,
-        viewProduct: <div><ViewProduct productId={selectedProductId} isViewOnly={true} onBack={HandleBack}/></div>,
+        viewProduct: <div><ViewProduct productId={selectedProductId} onBack={HandleBack}/></div>,
     };
 
     return (

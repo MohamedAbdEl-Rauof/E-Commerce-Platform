@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 
 interface ViewProductProps {
-    productId: string;
+    productId: string | null;
     onBack: () => void;
 }
 
@@ -23,7 +23,7 @@ const ViewCategory: React.FC<ViewProductProps> = ({productId, onBack}) => {
 }
 
 
-ViewCategory.displayName = 'ViewProduct';
+ViewCategory.displayName = 'ViewCategory';
 export default ViewCategory;
 
 

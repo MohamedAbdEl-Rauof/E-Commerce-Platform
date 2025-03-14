@@ -1,7 +1,7 @@
 import {useEffect} from "react";
 
 interface ViewProductProps {
-    productId: string;
+    productId: string | null
     onBack: () => void;
 }
 

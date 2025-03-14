@@ -12,11 +12,9 @@ import CategoryList from "./CategorytList";
 import CreateCateory from "./CreateCateory";
 import EditCategory from "./EditCategory";
 import {useRouter} from "next/navigation";
-// Import Tabler icons
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewCategory from "./ViewCategory";
 
-// Add this after your imports
 const fakeProducts = [
     {
         id: '1',
@@ -65,52 +63,55 @@ const fakeProducts = [
     },
 ];
 
-const CategoriesContent = ({productId: initialProductId, editOrView}) => {
+const CategoriesContent = ({
+                               productId: initialProductId,
+                               editOrView
+                           }: {
+    productId?: string | null;
+    editOrView?: 'edit' | 'view' | null;
+}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const router = useRouter();
 
-    // Add state for active tab
-    const [activeTab, setActiveTab] = useState('myProducts');
+    const [activeTab, setActiveTab] = useState('myCategory');
     const [isEditMode, setIsEditMode] = useState(false);
     const [isViewMode, setIsViewMode] = useState(false);
-    // Add state for product ID
     const [selectedProductId, setSelectedProductId] = useState<string | null>(initialProductId || null);
 
     useEffect(() => {
         if (editOrView === "edit") {
             setIsEditMode(true);
             setIsViewMode(false);
-            setActiveTab('editProduct');
+            setActiveTab('editCategory');
         } else if (editOrView === "view") {
             setIsEditMode(false);
             setIsViewMode(true);
-            setActiveTab('viewProduct');
+            setActiveTab('viewCategory');
         }
     }, [editOrView]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        if (newValue === 'myProducts') {
+        if (newValue === 'myCategory') {
             setIsEditMode(false);
             setIsViewMode(false);
         }
         setActiveTab(newValue);
     };
 
-    // Fix the tabs definition with proper syntax
     const tabs = useMemo(() => [
-        {label: "My Products", icon: <TbShoppingCart/>, value: 'myProducts'},
+        {label: "My Category", icon: <TbShoppingCart/>, value: 'myCategory'},
         {
             label: (() => {
-                if (editOrView === "edit") return "Edit Product";
-                else if (editOrView === "view") return "View Product";
-                else return "Create New Product";
+                if (editOrView === "edit") return "Edit Category";
+                else if (editOrView === "view") return "View Category";
+                else return "Create New Category";
             })(),
             icon: <TbPlus/>,
             value: (() => {
-                if (isEditMode) return 'editProduct';
-                else if (isViewMode) return 'viewProduct';
+                if (isEditMode) return 'editCategory';
+                else if (isViewMode) return 'viewCategory';
                 else return 'createNewProduct';
             })()
         },
@@ -118,33 +119,32 @@ const CategoriesContent = ({productId: initialProductId, editOrView}) => {
 
     const HandleEdit = (id: string) => {
         console.log("Edit Product", id);
-        setSelectedProductId(id); // Use the renamed state setter
+        setSelectedProductId(id);
         setIsEditMode(true);
-        setActiveTab('editProduct');
-        router.push(`/admin/products/edit/${id}`);
+        setActiveTab('editCategory');
+        router.push(`/admin/categories/edit/${id}`);
     }
 
     const HandleView = (id: string) => {
         console.log("view Product", id);
-        setSelectedProductId(id); // Use the renamed state setter
+        setSelectedProductId(id);
         setIsViewMode(true);
-        setActiveTab('viewProduct');
-        router.push(`/admin/products/view/${id}`);
+        setActiveTab('viewCategory');
+        router.push(`/admin/categories/view/${id}`);
     }
 
     const HandleBack = () => {
         setIsEditMode(false);
         setIsViewMode(false);
-        setActiveTab('myProducts');
-        router.push('/admin/products');
+        setActiveTab('myCategory');
+        router.push('/admin/categories');
     }
 
-    // Define tab content with conditional rendering based on isEditMode and isViewMode
     const tabContentList: { [key: string]: ReactElement } = {
-        myProducts: <div><CategoryList products={fakeProducts} onEdit={HandleEdit} onView={HandleView}/></div>,
+        myCategory: <div><CategoryList products={fakeProducts} onEdit={HandleEdit} onView={HandleView}/></div>,
         createNewProduct: <div><CreateCateory/></div>,
-        editProduct: <div><EditCategory productId={selectedProductId} onBack={HandleBack}/></div>,
-        viewProduct: <div><ViewCategory productId={selectedProductId} isViewOnly={true} onBack={HandleBack}/></div>,
+        editCategory: <div><EditCategory productId={selectedProductId} onBack={HandleBack}/></div>,
+        viewCategory: <div><ViewCategory productId={selectedProductId} onBack={HandleBack}/></div>,
     };
 
     return (

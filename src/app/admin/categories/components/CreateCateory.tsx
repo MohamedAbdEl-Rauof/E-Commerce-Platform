@@ -2,7 +2,7 @@ const CreateCateory = () => {
 
     return (
         <div>
-            Create Productttttt
+            Create Category
         </div>
     );
 }

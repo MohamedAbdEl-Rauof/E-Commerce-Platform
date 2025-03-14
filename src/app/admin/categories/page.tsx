@@ -10,7 +10,7 @@ export const metadata = {
 const CategoriesPage = () => {
     return (
         <div>
-            <CategoriesContent productId="" editOrView="false"/>
+            <CategoriesContent productId="" editOrView={null}/>
         </div>
     );
 }

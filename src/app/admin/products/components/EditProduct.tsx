@@ -2,7 +2,7 @@ import {useEffect} from "react";
 
 interface EditProductProps {
     onBack: () => void
-    productId: string
+    productId: string | null;
 }
 
 const EditProduct: React.FC<EditProductProps> = ({productId, onBack}) => {

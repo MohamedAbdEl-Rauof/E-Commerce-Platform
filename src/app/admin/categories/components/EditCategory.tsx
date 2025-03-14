@@ -2,7 +2,7 @@ import {useEffect} from "react";
 
 interface EditCategoryProps {
     onBack: () => void
-    productId: string
+    productId: string | null;
 }
 
 const EditCategory: React.FC<EditCategoryProps> = ({productId, onBack}) => {
@@ -21,6 +21,6 @@ const EditCategory: React.FC<EditCategoryProps> = ({productId, onBack}) => {
     );
 }
 
-EditProduct.displayName = 'EditProduct';
+EditCategory.displayName = 'EditCategory';
 
 export default EditCategory;

@@ -1,21 +1,17 @@
 'use client'
 import React from 'react';
-import {useParams, useRouter} from 'next/navigation';
+import {useParams} from 'next/navigation';
 import {Box} from '@mui/material';
-import ProductContent from "../../components/ProductCntent"
+import CategoriesContent from '../../components/CategoriesContent';
 
 const EditCategoryPage = () => {
     const params = useParams();
-    const router = useRouter();
-    const productId = params.id as string;
-
-    // const handleBack = () => {
-    //     router.push('/admin/products');
-    // };
+    // Check if params exists and has an id property
+    const productId = params ? params.id as string : '';
 
     return (
         <Box sx={{p: 3}}>
-            <ProductContent productId={productId} editOrView="edit"/>
+            <CategoriesContent productId={productId} editOrView="edit"/>
         </Box>
     );
 };
