@@ -5,6 +5,9 @@ interface Category {
     _id: string;
     image: string;
     name: string;
+    createdAt: string;
+    updatedAt: string;
+    productCount: number;
 }
 
 interface CategoriesContextType {

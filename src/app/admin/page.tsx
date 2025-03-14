@@ -10,5 +10,5 @@ export default function AdminPage() {
         router.push('/admin/home');
     }, [router]);
 
-    return <div>Redirecting to dashboard...</div>;
+    return <div>Loading Dashboard Details...</div>;
 }
