@@ -24,8 +24,10 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import PeopleIcon from '@mui/icons-material/People';
-import {usePathname} from "next/navigation";
+import {usePathname, useRouter} from "next/navigation";
 import Link from "next/link";
+import AdminDropdown from "@/components/common/admin/AdminDropdown";
+import {useSession} from "next-auth/react";
 
 const drawerWidth = 240;
 
@@ -89,14 +91,32 @@ const menuItems = [
 
 export default function AdminDashboardLayout({children}: { children: React.ReactNode }) {
     const theme = useTheme();
-    const [open, setOpen] = useState(true);
     const pathname = usePathname();
+    const router = useRouter();
+    const {data: session} = useSession();
 
-    // Use useEffect to set the initial state of the drawer
+    const [open, setOpen] = useState(true);
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+
+    const settings = {
+        skin: 'default' as 'default' | 'bordered'
+    };
+
     useEffect(() => {
         const drawerState = localStorage.getItem('drawerOpen');
         setOpen(drawerState === null ? true : JSON.parse(drawerState));
     }, []);
+
+    useEffect(() => {
+        if (!session) {
+            router.push('/signin');
+        }
+    }, [session, router]);
+
+    if (!session) {
+        return null;
+    }
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -108,23 +128,51 @@ export default function AdminDashboardLayout({children}: { children: React.React
         localStorage.setItem('drawerOpen', JSON.stringify(false));
     };
 
+    const handleDropdownOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+        setDropdownOpen(true);
+    };
+
+    const handleDropdownClose = () => {
+        setAnchorEl(null);
+        setDropdownOpen(false);
+    };
+
     return (
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
             <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{mr: 2, ...(open && {display: 'none'})}}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Admin Dashboard
-                    </Typography>
+                <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Box sx={{display: 'flex', alignItems: 'center'}}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{mr: 2, ...(open && {display: 'none'})}}
+                        >
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div">
+                            Admin Dashboard
+                        </Typography>
+                    </Box>
+                    <Box sx={{position: 'relative'}}>
+                        <IconButton
+                            color="inherit"
+                            onClick={handleDropdownOpen}
+                            size="small"
+                            sx={{ml: 2}}
+                        >
+                            <Typography variant="body2">Admin</Typography>
+                        </IconButton>
+                        <AdminDropdown
+                            anchorEl={anchorEl}
+                            open={dropdownOpen}
+                            handleDropdownClose={handleDropdownClose}
+                            settings={settings}
+                        />
+                    </Box>
                 </Toolbar>
             </AppBar>
             <Drawer
