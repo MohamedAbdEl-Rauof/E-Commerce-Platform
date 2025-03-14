@@ -1,11 +1,14 @@
-import AdminLayout from './layout';
+'use client';
 
-const AdminPage = () => {
-    return (
-        <AdminLayout>
-            <div>Hi Admin</div>
-        </AdminLayout>
-    );
+import React, {useEffect} from 'react';
+import {useRouter} from 'next/navigation';
+
+export default function AdminPage() {
+    const router = useRouter();
+
+    useEffect(() => {
+        router.push('/admin/home');
+    }, [router]);
+
+    return <div>Redirecting to dashboard...</div>;
 }
-
-export default AdminPage;

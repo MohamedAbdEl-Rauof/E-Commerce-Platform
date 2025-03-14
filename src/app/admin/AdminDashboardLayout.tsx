@@ -1,10 +1,8 @@
 "use client";
-
 import React, {useEffect, useState} from 'react';
 import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar, {AppBarProps as MuiAppBarProps} from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -24,18 +22,21 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import PeopleIcon from '@mui/icons-material/People';
-import {usePathname, useRouter} from "next/navigation";
-import Link from "next/link";
-import AdminDropdown from "@/components/common/admin/AdminDropdown";
-import {useSession} from "next-auth/react";
+import Link from 'next/link';
+import {usePathname, useRouter} from 'next/navigation';
+import {useSession} from 'next-auth/react';
+import AdminDropdown from '@/components/common/admin/AdminDropdown';
+import CircularProgress from "@mui/material/CircularProgress";
+import {Avatar} from "@mui/material";
+import DarkMoodSwitch from "@/components/common/user/DarkMoodSwitch";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
     open?: boolean;
 }>(({theme, open}) => ({
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(4),
     transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -48,6 +49,11 @@ const Main = styled('main', {shouldForwardProp: (prop) => prop !== 'open'})<{
         }),
         marginLeft: 0,
     }),
+    backgroundColor: 'var(--background)',
+    minHeight: '100vh',
+    border: '1px solid var(--border)',
+    borderRadius: '8px',
+    margin: '8px',
 }));
 
 interface AppBarProps extends MuiAppBarProps {
@@ -61,8 +67,12 @@ const AppBar = styled(MuiAppBar, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    border: '1px solid var(--border)',
+    borderRadius: '8px',
+    margin: '8px',
     ...(open && {
-        width: `calc(100% - ${drawerWidth}px)`,
+        width: `calc(100% - ${drawerWidth}px - 16px)`,
         marginLeft: `${drawerWidth}px`,
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
@@ -74,17 +84,37 @@ const AppBar = styled(MuiAppBar, {
 const DrawerHeader = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
+    padding: theme.spacing(0, 2),
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
+    backgroundColor: 'var(--primary)',
+    color: 'var(--light)',
+    borderTopRightRadius: '8px',
+}));
+
+const StyledListItemButton = styled(ListItemButton)(({}) => ({
+    borderRadius: '8px',
+    margin: '4px 8px',
+    '&.Mui-selected': {
+        backgroundColor: 'var(--primary)',
+        color: 'var(--light)',
+        '& .MuiListItemIcon-root': {
+            color: 'var(--light)',
+        },
+    },
+    '&:hover': {
+        backgroundColor: 'var(--hover)',
+    },
+    '& .MuiListItemIcon-root': {
+        color: 'var(--foreground)',
+    },
 }));
 
 const menuItems = [
     {text: 'Dashboard', icon: <DashboardIcon/>, path: '/admin/home'},
     {text: 'Categories', icon: <CategoryIcon/>, path: '/admin/categories'},
-    {text: 'Orders', icon: <ShoppingCartIcon/>, path: '/admin/orders'},
     {text: 'Products', icon: <InventoryIcon/>, path: '/admin/products'},
+    {text: 'Orders', icon: <ShoppingCartIcon/>, path: '/admin/orders'},
     {text: 'Slider Section', icon: <ViewCarouselIcon/>, path: '/admin/slider-section'},
     {text: 'Users', icon: <PeopleIcon/>, path: '/admin/users'},
 ];
@@ -109,15 +139,32 @@ export default function AdminDashboardLayout({children}: { children: React.React
     }, []);
 
     useEffect(() => {
-        if (!session) {
-            router.push('/signin');
-        }
+        const timer = setTimeout(() => {
+            if (!session) {
+                router.push('/signin');
+            }
+        }, 5000);
+
+        return () => clearTimeout(timer);
     }, [session, router]);
 
     if (!session) {
-        return null;
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                    flexDirection: 'column',
+                    gap: 2
+                }}
+            >
+                <Typography variant="h6">Loading Admin Dashboard...</Typography>
+                <CircularProgress/>
+            </Box>
+        );
     }
-
     const handleDrawerOpen = () => {
         setOpen(true);
         localStorage.setItem('drawerOpen', JSON.stringify(true));
@@ -140,38 +187,47 @@ export default function AdminDashboardLayout({children}: { children: React.React
 
     return (
         <Box sx={{display: 'flex'}}>
-            <CssBaseline/>
-            <AppBar position="fixed" open={open}>
+            <AppBar position="fixed" open={open}
+                    sx={{backgroundColor: 'var(--background)', color: 'var(--foreground)'}}>
                 <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
                     <Box sx={{display: 'flex', alignItems: 'center'}}>
                         <IconButton
-                            color="inherit"
+                            sx={{
+                                mr: 2,
+                                ...(open && {display: 'none'}),
+                                color: 'var(--foreground)'
+                            }}
                             aria-label="open drawer"
                             onClick={handleDrawerOpen}
                             edge="start"
-                            sx={{mr: 2, ...(open && {display: 'none'})}}
                         >
                             <MenuIcon/>
                         </IconButton>
-                        <Typography variant="h6" noWrap component="div">
+                        <Typography variant="h6" noWrap component="div" fontWeight="bold" color="var(--foreground)">
                             Admin Dashboard
                         </Typography>
                     </Box>
                     <Box sx={{position: 'relative'}}>
-                        <IconButton
-                            color="inherit"
-                            onClick={handleDropdownOpen}
-                            size="small"
-                            sx={{ml: 2}}
-                        >
-                            <Typography variant="body2">Admin</Typography>
-                        </IconButton>
-                        <AdminDropdown
-                            anchorEl={anchorEl}
-                            open={dropdownOpen}
-                            handleDropdownClose={handleDropdownClose}
-                            settings={settings}
-                        />
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
+                            <Box>
+                                <DarkMoodSwitch/>
+                            </Box>
+                            <Box>
+                                <IconButton
+                                    onClick={handleDropdownOpen}
+                                    size="small"
+                                    sx={{color: 'var(--foreground)'}}
+                                >
+                                    <Avatar src="/broken-image.jpg"/>
+                                </IconButton>
+                                <AdminDropdown
+                                    anchorEl={anchorEl}
+                                    open={dropdownOpen}
+                                    handleDropdownClose={handleDropdownClose}
+                                    settings={settings}
+                                />
+                            </Box>
+                        </Box>
                     </Box>
                 </Toolbar>
             </AppBar>
@@ -182,6 +238,13 @@ export default function AdminDashboardLayout({children}: { children: React.React
                     '& .MuiDrawer-paper': {
                         width: drawerWidth,
                         boxSizing: 'border-box',
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        border: '1px solid var(--border)',
+                        borderRadius: '0 8px 8px 0',
+                        backgroundColor: 'var(--background)',
+                        color: 'var(--foreground)',
+                        margin: '8px 0 8px 8px',
+                        height: 'calc(100% - 16px)',
                     },
                 }}
                 variant="persistent"
@@ -189,30 +252,34 @@ export default function AdminDashboardLayout({children}: { children: React.React
                 open={open}
             >
                 <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
+                    <Typography variant="h6" fontWeight="bold">E-Commerce</Typography>
+                    <IconButton onClick={handleDrawerClose} sx={{color: 'inherit'}}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
                     </IconButton>
                 </DrawerHeader>
                 <Divider/>
-                <List>
-                    {menuItems.map((item) => (
-                        <ListItem key={item.text} disablePadding>
-                            <Link href={item.path} passHref
-                                  style={{textDecoration: 'none', color: 'inherit', width: '100%'}}>
-                                <ListItemButton selected={pathname === item.path}>
-                                    <ListItemIcon>
-                                        {item.icon}
-                                    </ListItemIcon>
-                                    <ListItemText primary={item.text}/>
-                                </ListItemButton>
-                            </Link>
-                        </ListItem>
-                    ))}
-                </List>
+                <Box sx={{p: 2}}>
+                    <List>
+                        {menuItems.map((item) => (
+                            <ListItem key={item.text} disablePadding sx={{mb: 1}}>
+                                <Link href={item.path} passHref
+                                      style={{textDecoration: 'none', color: 'inherit', width: '100%'}}>
+                                    <StyledListItemButton selected={pathname === item.path}>
+                                        <ListItemIcon sx={{minWidth: '40px'}}>
+                                            {item.icon}
+                                        </ListItemIcon>
+                                        <ListItemText primary={item.text}/>
+                                    </StyledListItemButton>
+                                </Link>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
             </Drawer>
             <Main open={open}>
-                <DrawerHeader/>
-                {children}
+                <Box sx={{pt: 5}}>
+                    {children}
+                </Box>
             </Main>
         </Box>
     );

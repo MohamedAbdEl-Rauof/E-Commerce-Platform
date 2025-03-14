@@ -1,7 +1,18 @@
 import React, {MouseEvent, TouchEvent} from 'react';
 import {useRouter} from 'next/navigation';
 import {signOut, useSession} from 'next-auth/react';
-import {Avatar, Button, ClickAwayListener, Divider, MenuItem, MenuList, Paper, Popper, Typography} from '@mui/material';
+import {
+    Avatar,
+    Box,
+    Button,
+    ClickAwayListener,
+    Divider,
+    MenuItem,
+    MenuList,
+    Paper,
+    Popper,
+    Typography
+} from '@mui/material';
 
 export interface AdminDropdownProps {
     anchorEl: HTMLElement | null;
@@ -43,15 +54,17 @@ const AdminDropdown = ({anchorEl, open, handleDropdownClose, settings}: AdminDro
                 <ClickAwayListener onClickAway={handleDropdownClose}>
                     <MenuList sx={{width: '100%'}}>
                         <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
-                            <Avatar alt={session?.user?.name || ''} src={session?.user?.image || ''}/>
+                            <Box sx={{pl: 2}}>
+                                <Avatar alt={session?.user?.name || ''} src={session?.user?.image || ''}/>
+                            </Box>
                             <div className='flex items-start flex-col'>
                                 <Typography className='font-medium' color='text.primary'>
-                                    {session?.user?.name || ''}
+                                    Admin
                                 </Typography>
                                 <Typography variant='caption'>{session?.user?.email || ''}</Typography>
                             </div>
                         </div>
-                        <Divider className='mlb-1'/>
+                        <Divider className='m-3'/>
                         <MenuItem className='mli-2 gap-3' onClick={e => handleMenuItemClick(e, '/pages/user-profile')}>
                             <i className='tabler-user'/>
                             <Typography color='text.primary'>My Profile</Typography>
