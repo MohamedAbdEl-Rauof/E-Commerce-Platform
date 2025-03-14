@@ -8,13 +8,13 @@ import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import {useTheme} from '@mui/material/styles'
-import CategoryList from "./CategorytList";
-import CreateCateory from "./CreateCateory";
-import EditCategory from "./EditCategory";
+import ProductList from "./ProductList";
+import CreateProduct from "./CreateProduct";
+import EditProduct from "./EditProduct";
 import {useRouter} from "next/navigation";
 // Import Tabler icons
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
-import ViewCategory from "./ViewCategory";
+import ViewProduct from "@/app/admin/products/components/ViewProduct";
 
 // Add this after your imports
 const fakeProducts = [
@@ -65,7 +65,7 @@ const fakeProducts = [
     },
 ];
 
-const CategoriesContent = ({productId: initialProductId, editOrView}) => {
+const ProductContent = ({productId: initialProductId, editOrView}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
@@ -141,10 +141,10 @@ const CategoriesContent = ({productId: initialProductId, editOrView}) => {
 
     // Define tab content with conditional rendering based on isEditMode and isViewMode
     const tabContentList: { [key: string]: ReactElement } = {
-        myProducts: <div><CategoryList products={fakeProducts} onEdit={HandleEdit} onView={HandleView}/></div>,
-        createNewProduct: <div><CreateCateory/></div>,
-        editProduct: <div><EditCategory productId={selectedProductId} onBack={HandleBack}/></div>,
-        viewProduct: <div><ViewCategory productId={selectedProductId} isViewOnly={true} onBack={HandleBack}/></div>,
+        myProducts: <div><ProductList products={fakeProducts} onEdit={HandleEdit} onView={HandleView}/></div>,
+        createNewProduct: <div><CreateProduct/></div>,
+        editProduct: <div><EditProduct productId={selectedProductId} onBack={HandleBack}/></div>,
+        viewProduct: <div><ViewProduct productId={selectedProductId} isViewOnly={true} onBack={HandleBack}/></div>,
     };
 
     return (
@@ -224,4 +224,4 @@ const CategoriesContent = ({productId: initialProductId, editOrView}) => {
     )
 }
 
-export default CategoriesContent
+export default ProductContent

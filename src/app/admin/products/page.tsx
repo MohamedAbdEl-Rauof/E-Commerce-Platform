@@ -1,7 +1,14 @@
+import ProductContent from "./components/ProductContent";
+
+export const metadata = {
+    title: 'Products Management',
+    description: 'Manage product categories',
+};
+
 const Produts = () => {
     return (
         <div>
-            <h1>Products</h1>
+            <ProductContent productId="" editOrView="false"/>
         </div>
     );
 }

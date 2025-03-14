@@ -1,20 +1,23 @@
+'use client'
 import React from 'react';
-import CategoriesContent from '../../components/CategoriesContent';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import {useParams, useRouter} from 'next/navigation';
+import {Box} from '@mui/material';
+import ProductContent from "../../components/ProductCntent"
 
-export const metadata = {
-    title: 'Edit Category',
-    description: 'Edit product category',
-};
+const EditCategoryPage = () => {
+    const params = useParams();
+    const router = useRouter();
+    const productId = params.id as string;
 
-export default function EditCategoryPage({params}: { params: { id: string } }) {
+    // const handleBack = () => {
+    //     router.push('/admin/products');
+    // };
+
     return (
         <Box sx={{p: 3}}>
-            <Typography variant="h4" gutterBottom>
-                Edit Category
-            </Typography>
-            <CategoriesContent mode="edit" categoryId={params.id}/>
+            <ProductContent productId={productId} editOrView="edit"/>
         </Box>
     );
-}
+};
+
+export default EditCategoryPage;

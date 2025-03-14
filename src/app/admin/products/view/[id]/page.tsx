@@ -4,7 +4,7 @@ import {useParams, useRouter} from 'next/navigation';
 import {Box} from '@mui/material';
 import ProductContent from "@/app/admin/products/components/ProductContent";
 
-const ViewCategoryPage = () => {
+const ViewProductPage = () => {
     const params = useParams();
     const router = useRouter();
     const productId = params.id as string;
@@ -20,4 +20,4 @@ const ViewCategoryPage = () => {
     );
 };
 
-export default ViewCategoryPage;
+export default ViewProductPage;

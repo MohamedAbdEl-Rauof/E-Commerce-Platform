@@ -1,24 +1,17 @@
 import React from 'react';
-import CategoriesContent from './components/CategoriesContent';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import {CategoriesProvider} from '@/context/CategoriesContext';
+import CategoriesContent from "./components/CategoriesContent";
+
 
 export const metadata = {
     title: 'Categories Management',
     description: 'Manage product categories',
 };
 
-export default function CategoriesPage() {
+const CategoriesPage = () => {
     return (
-        <CategoriesProvider>
-            <Box sx={{p: 3}}>
-                <Typography variant="h4" gutterBottom>
-                    Categories Management
-                </Typography>
-                <CategoriesContent mode="list"/>
-            </Box>
-        </CategoriesProvider>
-
+        <div>
+            <CategoriesContent productId="" editOrView="false"/>
+        </div>
     );
 }
+export default CategoriesPage;
