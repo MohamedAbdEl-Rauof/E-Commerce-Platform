@@ -14,54 +14,8 @@ import EditCategory from "./EditCategory";
 import {useRouter} from "next/navigation";
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewCategory from "./ViewCategory";
+import {useCategories} from '@/context/CategoriesContext';
 
-const fakeProducts = [
-    {
-        id: '1',
-        name: 'Product 1',
-        price: 99.99,
-        description: 'Description for product 1',
-        category: 'Electronics',
-        stock: 10,
-        image: '/broken-image.jpg'
-    },
-    {
-        id: '2',
-        name: 'Product 2',
-        price: 49.99,
-        description: 'Description for product 2',
-        category: 'Clothing',
-        stock: 20,
-        image: '/broken-image.jpg'
-    },
-    {
-        id: '3',
-        name: 'Product 3',
-        price: 29.99,
-        description: 'Description for product 3',
-        category: 'Home',
-        stock: 15,
-        image: '/broken-image.jpg'
-    },
-    {
-        id: '4',
-        name: 'Product 4',
-        price: 199.99,
-        description: 'Description for product 4',
-        category: 'Electronics',
-        stock: 5,
-        image: '/broken-image.jpg'
-    },
-    {
-        id: '5',
-        name: 'Product 5',
-        price: 9.99,
-        description: 'Description for product 5',
-        category: 'Books',
-        stock: 50,
-        image: '/broken-image.jpg'
-    },
-];
 
 const CategoriesContent = ({
                                productId: initialProductId,
@@ -74,11 +28,12 @@ const CategoriesContent = ({
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const router = useRouter();
+    const {categories} = useCategories();
 
     const [activeTab, setActiveTab] = useState('myCategory');
     const [isEditMode, setIsEditMode] = useState(false);
     const [isViewMode, setIsViewMode] = useState(false);
-    const [selectedProductId, setSelectedProductId] = useState<string | null>(initialProductId || null);
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(initialProductId || null);
 
     useEffect(() => {
         if (editOrView === "edit") {
@@ -119,7 +74,7 @@ const CategoriesContent = ({
 
     const HandleEdit = (id: string) => {
         console.log("Edit Product", id);
-        setSelectedProductId(id);
+        setSelectedCategoryId(id);
         setIsEditMode(true);
         setActiveTab('editCategory');
         router.push(`/admin/categories/edit/${id}`);
@@ -127,7 +82,7 @@ const CategoriesContent = ({
 
     const HandleView = (id: string) => {
         console.log("view Product", id);
-        setSelectedProductId(id);
+        setSelectedCategoryId(id);
         setIsViewMode(true);
         setActiveTab('viewCategory');
         router.push(`/admin/categories/view/${id}`);
@@ -141,10 +96,12 @@ const CategoriesContent = ({
     }
 
     const tabContentList: { [key: string]: ReactElement } = {
-        myCategory: <div><CategoryList products={fakeProducts} onEdit={HandleEdit} onView={HandleView}/></div>,
+        myCategory: <div><CategoryList categories={categories} onEdit={HandleEdit} onView={HandleView}/></div>,
         createNewProduct: <div><CreateCateory/></div>,
-        editCategory: <div><EditCategory productId={selectedProductId} onBack={HandleBack}/></div>,
-        viewCategory: <div><ViewCategory productId={selectedProductId} onBack={HandleBack}/></div>,
+        editCategory: <div><EditCategory categoryId={selectedCategoryId} onBack={HandleBack} categories={categories}/>
+        </div>,
+        viewCategory: <div><ViewCategory categoryId={selectedCategoryId} onBack={HandleBack} categories={categories}/>
+        </div>,
     };
 
     return (

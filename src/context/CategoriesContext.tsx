@@ -1,7 +1,7 @@
 "use client";
 import React, {createContext, useContext, useEffect, useState} from "react";
 
-interface Category {
+export interface Category {
     _id: string;
     image: string;
     name: string;
