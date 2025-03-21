@@ -79,6 +79,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     } else if (req.method === 'PUT') {
         try {
+            if (!id || Array.isArray(id)) {
+                return res.status(400).json({error: 'Invalid category ID'});
+            }
+
             const {name, image, createdAt} = req.body;
 
             if (!name || !image) {
@@ -111,29 +115,51 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     } else if (req.method === 'DELETE') {
         try {
-            // Check if category has products
-            const productCount = await db.collection('products').countDocuments({
-                categoryId: id
-            });
+            // Start a session for the transaction
+            const session = client.startSession();
 
-            if (productCount > 0) {
-                return res.status(400).json({
-                    error: `Cannot delete category with ${productCount} products. Remove or reassign products first.`
+            try {
+                // Start a transaction
+                await session.withTransaction(async () => {
+                    // Delete all products associated with this category
+                    const deleteProductsResult = await db.collection('products').deleteMany(
+                        {categoryId: new ObjectId(id as string)},
+                        {session}
+                    );
+
+                    console.log(`Deleted ${deleteProductsResult.deletedCount} products`);
+
+                    // Delete the category
+                    const deleteCategoryResult = await db.collection('categories').deleteOne(
+                        {_id: new ObjectId(id as string)},
+                        {session}
+                    );
+
+                    if (deleteCategoryResult.deletedCount === 0) {
+                        throw new Error('Category not found');
+                    }
+
+                    console.log('Category deleted successfully');
                 });
+
+                // If we reach here, the transaction was successful
+                res.status(200).json({
+                    message: 'Category and associated products deleted successfully'
+                });
+            } catch (error) {
+                console.error('Transaction error:', error);
+                if (error instanceof Error && error.message === 'Category not found') {
+                    res.status(404).json({error: 'Category not found'});
+                } else {
+                    res.status(500).json({error: 'Error deleting category and products'});
+                }
+            } finally {
+                // End the session
+                await session.endSession();
             }
-
-            const result = await db.collection('categories').deleteOne({
-                _id: new ObjectId(id)
-            });
-
-            if (result.deletedCount === 0) {
-                return res.status(404).json({error: 'Category not found'});
-            }
-
-            res.status(200).json({message: 'Category deleted successfully'});
         } catch (err) {
-            console.error(err);
-            res.status(500).json({error: 'Error deleting category'});
+            console.error('Outer error:', err);
+            res.status(500).json({error: 'Error initiating delete operation'});
         }
     } else {
         res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);

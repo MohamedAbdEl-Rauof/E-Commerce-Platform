@@ -21,6 +21,16 @@ import {
 import {TbEdit, TbEye, TbSearch, TbTrash} from "react-icons/tb";
 import {Category} from '@/context/CategoriesContext';
 
+type UpdatedCategory = {
+    _id: string;
+    name: string;
+    image: string;
+    createdAt: string;
+    updatedAt: string;
+    productCount: number;
+    error: string | null;
+};
+
 interface ProductListProps {
     categories: Category[];
     onEdit: (id: string) => void;
@@ -32,6 +42,17 @@ const CategorytList: React.FC<ProductListProps> = ({categories, onEdit, onView, 
     const [searchTerm, setSearchTerm] = React.useState('');
 
     const filteredCategories = categories.filter(category => category.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
 
     return (
         <Box sx={{
@@ -136,10 +157,12 @@ const CategorytList: React.FC<ProductListProps> = ({categories, onEdit, onView, 
                                         sx={{width: 50, height: 50}}
                                     />
                                 </TableCell>
-                                <TableCell
-                                    sx={{color: 'var(--foreground)'}}>{new Date().toLocaleDateString()}</TableCell>
-                                <TableCell
-                                    sx={{color: 'var(--foreground)'}}>{new Date().toLocaleDateString()}</TableCell>
+                                <TableCell sx={{color: 'var(--foreground)'}}>
+                                    {formatDate(category.createdAt)}
+                                </TableCell>
+                                <TableCell sx={{color: 'var(--foreground)'}}>
+                                    {formatDate(category.updatedAt)}
+                                </TableCell>
                                 <TableCell align="center">
                                     <Chip
                                         label={category.productCount || 0}

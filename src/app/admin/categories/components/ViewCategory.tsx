@@ -6,7 +6,7 @@ import {TbArrowLeft} from 'react-icons/tb';
 import {Category} from '@/context/CategoriesContext';
 
 interface ViewCategoryProps {
-    categoryId: string | null;
+    categoryId: string | undefined;
     categories?: Category[];
     onBack: () => void;
 }

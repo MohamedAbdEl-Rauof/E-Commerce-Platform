@@ -14,8 +14,17 @@ import EditCategory from "./EditCategory";
 import {useRouter} from "next/navigation";
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewCategory from "./ViewCategory";
-import {useCategories} from '@/context/CategoriesContext';
+import {Category, useCategories} from '@/context/CategoriesContext';
 
+type UpdatedCategory = {
+    _id: string;
+    name: string;
+    image: string;
+    createdAt: string;
+    updatedAt: string;
+    productCount: number;
+    error: string | null;
+};
 
 const CategoriesContent = ({
                                productId: initialProductId,
@@ -28,13 +37,12 @@ const CategoriesContent = ({
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const router = useRouter();
-    const {categories} = useCategories();
+    const {categories, updateCategory} = useCategories();
 
     const [activeTab, setActiveTab] = useState('myCategory');
     const [isEditMode, setIsEditMode] = useState(false);
     const [isViewMode, setIsViewMode] = useState(false);
-    const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(initialProductId || null);
-
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string | undefined>(initialProductId || undefined);
     useEffect(() => {
         if (editOrView === "edit") {
             setIsEditMode(true);
@@ -73,7 +81,6 @@ const CategoriesContent = ({
     ], [isEditMode, isViewMode, editOrView]);
 
     const HandleEdit = (id: string) => {
-        console.log("Edit Product", id);
         setSelectedCategoryId(id);
         setIsEditMode(true);
         setActiveTab('editCategory');
@@ -81,7 +88,6 @@ const CategoriesContent = ({
     }
 
     const HandleView = (id: string) => {
-        console.log("view Product", id);
         setSelectedCategoryId(id);
         setIsViewMode(true);
         setActiveTab('viewCategory');
@@ -95,13 +101,35 @@ const CategoriesContent = ({
         router.push('/admin/categories');
     }
 
+    const handleUpdateCategory = (updatedCategory: UpdatedCategory) => {
+        const categoryToUpdate: Category = {
+            _id: updatedCategory._id,
+            name: updatedCategory.name,
+            image: updatedCategory.image,
+            createdAt: updatedCategory.createdAt,
+            updatedAt: updatedCategory.updatedAt,
+            productCount: updatedCategory.productCount
+        };
+
+        updateCategory(categoryToUpdate);
+        HandleBack();
+    };
+
     const tabContentList: { [key: string]: ReactElement } = {
-        myCategory: <div><CategoryList categories={categories} onEdit={HandleEdit} onView={HandleView}/></div>,
+        myCategory: <div><CategoryList categories={categories} onEdit={HandleEdit} onView={HandleView}
+        /></div>,
         createNewProduct: <div><CreateCateory/></div>,
-        editCategory: <div><EditCategory categoryId={selectedCategoryId} onBack={HandleBack} categories={categories}/>
-        </div>,
-        viewCategory: <div><ViewCategory categoryId={selectedCategoryId} onBack={HandleBack} categories={categories}/>
-        </div>,
+        editCategory: <div><EditCategory
+            categoryId={selectedCategoryId}
+            onBack={HandleBack}
+            categories={categories}
+            onUpdate={handleUpdateCategory}
+        /></div>,
+        viewCategory: <div><ViewCategory
+            categoryId={selectedCategoryId}
+            onBack={HandleBack}
+            categories={categories}
+        /></div>,
     };
 
     return (
