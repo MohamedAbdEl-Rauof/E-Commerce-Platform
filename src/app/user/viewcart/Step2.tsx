@@ -21,7 +21,6 @@ interface StepProps {
     deleteItem: (productId: string) => Promise<void>;
     decrementFromCart: (userId: string, productId: string) => Promise<void>;
     addToCart: (userId: string, productId: string) => Promise<void>;
-    loading: boolean;
 }
 
 const StyledPaper = styled(Paper)(({theme}) => ({
@@ -49,7 +48,6 @@ const Step2: React.FC<StepProps> = ({
                                         handleCheckout,
                                         decrementFromCart,
                                         addToCart,
-                                        loading,
                                     }) => {
     const [total, setTotal] = useState<number>(0);
     const {data: session} = useSession();
@@ -62,6 +60,7 @@ const Step2: React.FC<StepProps> = ({
     // Handle payment method selection
     const handleSelect = (method: string) => {
         setPaymentMethod(method);
+        setValue('paymentMethod', method); // Add this line
         console.log("Selected Payment Method:", method);
     };
 
@@ -107,7 +106,7 @@ const Step2: React.FC<StepProps> = ({
             cardNumber: "",
             expirationDate: "",
             cvc: "",
-            paymentMethod: undefined,
+            paymentMethod: "",
         },
     });
 

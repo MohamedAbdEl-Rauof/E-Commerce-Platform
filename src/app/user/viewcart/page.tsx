@@ -84,7 +84,6 @@ const ViewCart = () => {
                         deleteItem={deleteItem}
                         decrementFromCart={decrementFromCart}
                         addToCart={addToCart}
-                        loading={loading}
                     />
                 );
             case 2:

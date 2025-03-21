@@ -1,13 +1,12 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { useCategories } from "@/context/CategoriesContext";
-import Image from "next/image";
+import {motion} from "framer-motion";
+import {useCategories} from "@/context/CategoriesContext";
 import Link from "next/link";
 import CategoriesLoading from "@/components/userUiLoading/Home/CategoriesLoading";
-import { Box, Typography, Grid, Card, CardContent, CardMedia, Button } from "@mui/material";
-import { styled } from "@mui/system";
+import {Box, Button, Card, CardContent, CardMedia, Grid, Typography} from "@mui/material";
+import {styled} from "@mui/system";
 
-const StyledCard = styled(Card)(({ theme }) => ({
+const StyledCard = styled(Card)(({theme}) => ({
     overflow: "hidden",
     transition: "all 0.3s",
     "&:hover": {
@@ -38,22 +37,22 @@ const Overlay = styled(Box)({
 });
 
 const Categories = () => {
-    const { categories, loading, error } = useCategories();
+    const {categories, loading, error} = useCategories();
 
     if (error) {
         return <Typography color="error">Error: {error}</Typography>;
     }
 
     const fadeInUp = {
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
+        initial: {opacity: 0, y: 20},
+        animate: {opacity: 1, y: 0},
     };
 
     return (
-        <Box sx={{ }}>
+        <Box sx={{}}>
             <Grid container spacing={2}>
                 {loading ? (
-                    <CategoriesLoading />
+                    <CategoriesLoading/>
                 ) : (
                     categories.map((category, index) => (
                         <Grid item xs={12} md={categories.length <= 3 ? 4 : 3} key={category._id || index}>
@@ -61,10 +60,10 @@ const Categories = () => {
                                 initial="initial"
                                 animate="animate"
                                 variants={fadeInUp}
-                                transition={{ duration: 0.3 }}
+                                transition={{duration: 0.3}}
                             >
                                 <StyledCard>
-                                    <Box sx={{ position: "relative" }}>
+                                    <Box sx={{position: "relative"}}>
                                         <StyledCardMedia
                                             sx={{
                                                 position: "relative",
@@ -74,7 +73,7 @@ const Categories = () => {
                                                 backgroundImage: `url(${category.image})`,
                                             }}
                                         />
-                                        <Overlay className="overlay" />
+                                        <Overlay className="overlay"/>
                                         <CardContent
                                             sx={{
                                                 position: "absolute",

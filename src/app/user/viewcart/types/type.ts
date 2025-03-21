@@ -28,8 +28,7 @@ export interface UserData {
     state: string;
     zipCode: string;
     cardNumber: string;
-    password: string;
     expirationDate: string;
     cvc: string;
-    paymentMethod: 'credit-card' | 'paypal';
+    paymentMethod: string;
 }

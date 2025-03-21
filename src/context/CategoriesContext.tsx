@@ -1,16 +1,20 @@
 "use client";
 import React, {createContext, useContext, useEffect, useState} from "react";
 
-interface Category {
+export interface Category {
     _id: string;
     image: string;
     name: string;
+    createdAt: string;
+    updatedAt: string;
+    productCount: number;
 }
 
 interface CategoriesContextType {
     categories: Category[];
     loading: boolean;
     error: string | null;
+    updateCategory: (updatedCategory: Category) => void;
 }
 
 const CategoriesContext = createContext<CategoriesContextType | undefined>(undefined);
@@ -47,8 +51,16 @@ export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({chi
         fetchCategories();
     }, []);
 
+    const updateCategory = (updatedCategory: Category) => {
+        setCategories(prevCategories =>
+            prevCategories.map(category =>
+                category._id === updatedCategory._id ? updatedCategory : category
+            )
+        );
+    };
+
     return (
-        <CategoriesContext.Provider value={{categories, loading, error}}>
+        <CategoriesContext.Provider value={{categories, loading, error, updateCategory}}>
             {children}
         </CategoriesContext.Provider>
     );
