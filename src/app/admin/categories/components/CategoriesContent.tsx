@@ -15,6 +15,7 @@ import {useRouter} from "next/navigation";
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewCategory from "./ViewCategory";
 import {Category, useCategories} from '@/context/CategoriesContext';
+import {toast} from 'react-toastify'
 
 type UpdatedCategory = {
     _id: string;
@@ -115,10 +116,35 @@ const CategoriesContent = ({
         HandleBack();
     };
 
+    const handleDelete = async (id: string) => {
+        try {
+            const response = await fetch(`/api/categories?id=${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                const deletedCategory = await response.json();
+                toast.success('Category deleted successfully');
+                updateCategory({
+                    ...deletedCategory,
+                    _id: id,
+                });
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete category');
+            }
+        } catch (error) {
+            console.error('Error deleting category:', error);
+            toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
+        }
+    };
+
     const tabContentList: { [key: string]: ReactElement } = {
         myCategory: <div><CategoryList categories={categories} onEdit={HandleEdit} onView={HandleView}
+                                       onDelete={handleDelete}
         /></div>,
-        createNewProduct: <div><CreateCateory/></div>,
+        createNewProduct: <div><CreateCateory categories={categories} onUpdate={updateCategory}
+        /></div>,
         editCategory: <div><EditCategory
             categoryId={selectedCategoryId}
             onBack={HandleBack}

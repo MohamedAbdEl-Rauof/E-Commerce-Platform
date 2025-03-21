@@ -32,32 +32,32 @@ export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({chi
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await fetch("/api/categories");
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                setCategories(data);
-            } catch (error) {
-                setError("Error fetching categories");
-                console.error("Error fetching categories:", error);
-            } finally {
-                setLoading(false);
+    const fetchCategories = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("/api/categories");
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-        };
+            const data = await response.json();
+            setCategories(data);
+            setError(null);
+        } catch (error) {
+            setError("Error fetching categories");
+            console.error("Error fetching categories:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchCategories();
     }, []);
 
     const updateCategory = (updatedCategory: Category) => {
-        setCategories(prevCategories =>
-            prevCategories.map(category =>
-                category._id === updatedCategory._id ? updatedCategory : category
-            )
-        );
+        fetchCategories();
     };
+
 
     return (
         <CategoriesContext.Provider value={{categories, loading, error, updateCategory}}>
