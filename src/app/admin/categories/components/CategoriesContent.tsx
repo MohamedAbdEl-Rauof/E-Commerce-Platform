@@ -14,7 +14,7 @@ import EditCategory from "./EditCategory";
 import {useRouter} from "next/navigation";
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewCategory from "./ViewCategory";
-import {Category, useCategories} from '@/context/CategoriesContext';
+import {useCategories} from '@/context/CategoriesContext';
 import {toast} from 'react-toastify'
 
 type UpdatedCategory = {
@@ -102,20 +102,6 @@ const CategoriesContent = ({
         router.push('/admin/categories');
     }
 
-    const handleUpdateCategory = (updatedCategory: UpdatedCategory) => {
-        const categoryToUpdate: Category = {
-            _id: updatedCategory._id,
-            name: updatedCategory.name,
-            image: updatedCategory.image,
-            createdAt: updatedCategory.createdAt,
-            updatedAt: updatedCategory.updatedAt,
-            productCount: updatedCategory.productCount
-        };
-
-        updateCategory(categoryToUpdate);
-        HandleBack();
-    };
-
     const handleDelete = async (id: string) => {
         try {
             const response = await fetch(`/api/categories?id=${id}`, {
@@ -149,7 +135,7 @@ const CategoriesContent = ({
             categoryId={selectedCategoryId}
             onBack={HandleBack}
             categories={categories}
-            onUpdate={handleUpdateCategory}
+            onUpdate={updateCategory}
         /></div>,
         viewCategory: <div><ViewCategory
             categoryId={selectedCategoryId}

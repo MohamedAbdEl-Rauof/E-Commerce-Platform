@@ -21,6 +21,7 @@ interface ProductContextType {
     setProducts?: React.Dispatch<React.SetStateAction<Product[]>>;
     loading: boolean;
     error: string | null;
+    updateProduct: (updatedProduct: Product) => void;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -38,28 +39,33 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({childr
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await fetch("/api/products");
-                if (!response.ok) {
-                    console.error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                console.log("Products fetched successfully:", data);
-                setProducts(data);
-            } catch (error) {
-                setError("Error fetching products");
-                console.error("Error fetching products:", error);
-            } finally {
-                setLoading(false);
+    const fetchProducts = async () => {
+        try {
+            const response = await fetch("/api/products");
+            if (!response.ok) {
+                console.error(`HTTP error! Status: ${response.status}`);
             }
-        };
+            const data = await response.json();
+            console.log("Products fetched successfully:", data);
+            setProducts(data);
+        } catch (error) {
+            setError("Error fetching products");
+            console.error("Error fetching products:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchProducts();
     }, []);
 
+    const updateProduct = () => {
+        fetchProducts();
+    };
+
     return (
-        <ProductContext.Provider value={{products, loading, error}}>
+        <ProductContext.Provider value={{products, loading, error, updateProduct}}>
             {children}
         </ProductContext.Provider>
     );

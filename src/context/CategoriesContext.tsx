@@ -54,7 +54,7 @@ export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({chi
         fetchCategories();
     }, []);
 
-    const updateCategory = (updatedCategory: Category) => {
+    const updateCategory = () => {
         fetchCategories();
     };
 
