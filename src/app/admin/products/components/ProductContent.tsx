@@ -14,7 +14,6 @@ import EditProduct from "./EditProduct";
 import {useRouter} from "next/navigation";
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewProduct from "@/app/admin/products/components/ViewProduct";
-import {toast} from "react-toastify";
 import {useProduct} from "@/context/ProductContext";
 import {useCategories} from '@/context/CategoriesContext';
 
@@ -31,7 +30,7 @@ const ProductContent = ({
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const router = useRouter();
 
-    const {products, updateProduct} = useProduct();
+    const {products, updateProduct, handleDelete} = useProduct();
     const [activeTab, setActiveTab] = useState('myProducts');
     const [isEditMode, setIsEditMode] = useState(false);
     const [isViewMode, setIsViewMode] = useState(false);
@@ -96,39 +95,16 @@ const ProductContent = ({
         router.push('/admin/products');
     }
 
-
-    const handleDelete = async (id: string) => {
-        try {
-            const response = await fetch(`/api/categories?id=${id}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                const deletedCategory = await response.json();
-                toast.success('Category deleted successfully');
-                updateProduct({
-                    ...deletedCategory,
-                    _id: id,
-                });
-            } else {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to delete category');
-            }
-        } catch (error) {
-            console.error('Error deleting category:', error);
-            toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
-        }
-    };
-
-
     const tabContentList: { [key: string]: ReactElement } = {
         myProducts: <div><ProductList products={products} onEdit={HandleEdit} onView={HandleView}
                                       onDelete={handleDelete} categories={categories}/></div>,
-        createNewProduct: <div><CreateProduct products={products} onUpdate={updateProduct} categories={categories}/>
+        createNewProduct: <div><CreateProduct onUpdate={updateProduct} categories={categories}/>
         </div>,
         editProduct: <div><EditProduct productId={selectedProductId} onBack={HandleBack} products={products}
                                        categories={categories} onUpdate={updateProduct}/></div>,
-        viewProduct: <div><ViewProduct productId={selectedProductId} onBack={HandleBack} products={products}/></div>,
+        viewProduct: <div><ViewProduct productId={selectedProductId} onBack={HandleBack} products={products}
+                                       categories={categories}
+        /></div>,
     };
 
     return (

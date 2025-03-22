@@ -6,6 +6,8 @@ import {Box, Button, Card, CardMedia, Grid, MenuItem, Paper, TextField, Typograp
 import SaveIcon from '@mui/icons-material/Save';
 import ImageIcon from '@mui/icons-material/Image';
 import {toast} from 'react-toastify';
+import {Category} from "@/context/CategoriesContext";
+import {Product} from "@/context/ProductContext";
 
 // Define the validation schema with Zod
 const ProductSchema = z.object({
@@ -22,11 +24,8 @@ const ProductSchema = z.object({
 type ProductFormData = z.infer<typeof ProductSchema>;
 
 interface CreateProductProps {
-    categories: Array<{
-        _id: string;
-        name: string;
-    }>;
-    onUpdate: (updatedProduct: ProductFormData & { _id: string }) => void;
+    categories: Category[];
+    onUpdate: (updatedProduct: Product) => void;
 }
 
 const CreateProduct: React.FC<CreateProductProps> = ({categories, onUpdate}) => {

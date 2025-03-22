@@ -37,7 +37,7 @@ interface EditProductProps {
     productId: string | null;
     onBack: () => void;
     categories: Array<{ _id: string; name: string; }>;
-    onUpdate: (updatedProduct: ProductFormData & { _id: string }) => void;
+    onUpdate: (updatedProduct: Product) => void;
 }
 
 const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, categories, onUpdate}) => {

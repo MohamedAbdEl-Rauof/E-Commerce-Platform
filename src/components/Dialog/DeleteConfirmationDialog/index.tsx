@@ -7,7 +7,7 @@ interface DeleteConfirmationDialogProps {
     onConfirm: () => void;
     isCategory: boolean;
     productCount: number;
-    categoryName: string;
+    categoryName: string | undefined;
 }
 
 const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
@@ -18,7 +18,6 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
                                                                                productCount,
                                                                                categoryName,
                                                                            }) => {
-    const itemType = isCategory ? 'category' : 'product';
 
     return (
         <Dialog
@@ -30,10 +29,13 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
             <DialogTitle id="delete-dialog-title">Confirm Deletion</DialogTitle>
             <DialogContent>
                 <DialogContentText id="delete-dialog-description">
-                    {`Are you sure you want to delete the "${categoryName}" Category?`}
+                    {`Are you sure you want to delete the "${categoryName}"`} {isCategory ? 'Category' : 'Product'}
                     <br/>
                     {isCategory && productCount > 0 && (
                         `This category contains ${productCount} product${productCount > 1 ? 's' : ''}.`
+                    )}
+                    {!isCategory && productCount < 0 && (
+                        `This Product contains ${productCount} product${productCount > 1 ? 's' : ''}.`
                     )}
                     <br/>
                     This action cannot be undone.

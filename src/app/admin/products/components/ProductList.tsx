@@ -21,6 +21,7 @@ import {TbEdit, TbEye, TbSearch, TbTrash} from "react-icons/tb";
 import {Product} from "@/context/ProductContext";
 import {Category} from '@/context/CategoriesContext';
 import {format} from 'date-fns';
+import DeleteConfirmationDialog from "@/components/Dialog/DeleteConfirmationDialog";
 
 interface ProductListProps {
     products: Product[];
@@ -32,6 +33,30 @@ interface ProductListProps {
 
 const ProductList: React.FC<ProductListProps> = ({products, onEdit, onView, onDelete, categories}) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [productToDeleteId, setProductToDeleteId] = useState<string | null>(null);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+
+    const handleDeleteClick = (product: Product) => {
+        setProductToDeleteId(product._id);
+        setSelectedProduct(product);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        if (productToDeleteId) {
+            onDelete(productToDeleteId);
+            setSelectedProduct(null);
+        }
+        setDeleteDialogOpen(false);
+        setProductToDeleteId(null);
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteDialogOpen(false);
+        setProductToDeleteId(null);
+        setSelectedProduct(null);
+    };
 
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -186,7 +211,7 @@ const ProductList: React.FC<ProductListProps> = ({products, onEdit, onView, onDe
                                         </Tooltip>
                                         <Tooltip title="Delete product">
                                             <IconButton
-                                                onClick={() => onDelete(product._id)}
+                                                onClick={() => handleDeleteClick(product)}
                                                 size="small"
                                                 sx={{
                                                     color: 'var(--danger)',
@@ -203,6 +228,14 @@ const ProductList: React.FC<ProductListProps> = ({products, onEdit, onView, onDe
                     </TableBody>
                 </Table>
             </TableContainer>
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onClose={handleDeleteCancel}
+                onConfirm={handleDeleteConfirm}
+                isCategory={false}
+                productCount={0}
+                categoryName={selectedProduct?.name}
+            />
         </Box>
     );
 };
