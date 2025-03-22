@@ -124,9 +124,10 @@ const ProductContent = ({
     const tabContentList: { [key: string]: ReactElement } = {
         myProducts: <div><ProductList products={products} onEdit={HandleEdit} onView={HandleView}
                                       onDelete={handleDelete} categories={categories}/></div>,
-        createNewProduct: <div><CreateProduct products={products} onUpdate={updateProduct}/></div>,
+        createNewProduct: <div><CreateProduct products={products} onUpdate={updateProduct} categories={categories}/>
+        </div>,
         editProduct: <div><EditProduct productId={selectedProductId} onBack={HandleBack} products={products}
-                                       onUpdate={updateProduct}/></div>,
+                                       categories={categories} onUpdate={updateProduct}/></div>,
         viewProduct: <div><ViewProduct productId={selectedProductId} onBack={HandleBack} products={products}/></div>,
     };
 

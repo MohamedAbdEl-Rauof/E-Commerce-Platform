@@ -15,17 +15,6 @@ import {useRouter} from "next/navigation";
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewCategory from "./ViewCategory";
 import {useCategories} from '@/context/CategoriesContext';
-import {toast} from 'react-toastify'
-
-type UpdatedCategory = {
-    _id: string;
-    name: string;
-    image: string;
-    createdAt: string;
-    updatedAt: string;
-    productCount: number;
-    error: string | null;
-};
 
 const CategoriesContent = ({
                                productId: initialProductId,
@@ -38,7 +27,7 @@ const CategoriesContent = ({
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const router = useRouter();
-    const {categories, updateCategory} = useCategories();
+    const {categories, updateCategory, handleDelete} = useCategories();
 
     const [activeTab, setActiveTab] = useState('myCategory');
     const [isEditMode, setIsEditMode] = useState(false);
@@ -102,28 +91,6 @@ const CategoriesContent = ({
         router.push('/admin/categories');
     }
 
-    const handleDelete = async (id: string) => {
-        try {
-            const response = await fetch(`/api/categories?id=${id}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                const deletedCategory = await response.json();
-                toast.success('Category deleted successfully');
-                updateCategory({
-                    ...deletedCategory,
-                    _id: id,
-                });
-            } else {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to delete category');
-            }
-        } catch (error) {
-            console.error('Error deleting category:', error);
-            toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
-        }
-    };
 
     const tabContentList: { [key: string]: ReactElement } = {
         myCategory: <div><CategoryList categories={categories} onEdit={HandleEdit} onView={HandleView}

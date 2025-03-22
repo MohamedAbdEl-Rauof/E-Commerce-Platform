@@ -1,5 +1,6 @@
 "use client";
 import React, {createContext, useContext, useEffect, useState} from "react";
+import {toast} from "react-toastify";
 
 export interface Category {
     _id: string;
@@ -15,6 +16,7 @@ interface CategoriesContextType {
     loading: boolean;
     error: string | null;
     updateCategory: (updatedCategory: Category) => void;
+    handleDelete: (categoryId: string) => void;
 }
 
 const CategoriesContext = createContext<CategoriesContextType | undefined>(undefined);
@@ -54,13 +56,35 @@ export const CategoriesProvider: React.FC<{ children: React.ReactNode }> = ({chi
         fetchCategories();
     }, []);
 
-    const updateCategory = () => {
-        fetchCategories();
+    const updateCategory = (updatedCategory: Category) => {
+        setCategories(prevCategories =>
+            prevCategories.map(category =>
+                category._id === updatedCategory._id ? updatedCategory : category
+            )
+        );
     };
 
+    const handleDelete = async (id: string) => {
+        try {
+            const response = await fetch(`/api/categories?id=${id}`, {
+                method: 'DELETE',
+            });
 
+            if (response.ok) {
+                toast.success('Category deleted successfully');
+                setCategories(prevCategories => prevCategories.filter(category => category._id !== id));
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete category');
+            }
+        } catch (error) {
+            console.error('Error deleting category:', error);
+            toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
+        }
+    };
+    
     return (
-        <CategoriesContext.Provider value={{categories, loading, error, updateCategory}}>
+        <CategoriesContext.Provider value={{categories, loading, error, updateCategory, handleDelete}}>
             {children}
         </CategoriesContext.Provider>
     );
