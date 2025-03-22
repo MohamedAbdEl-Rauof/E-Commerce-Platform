@@ -14,54 +14,9 @@ import EditProduct from "./EditProduct";
 import {useRouter} from "next/navigation";
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewProduct from "@/app/admin/products/components/ViewProduct";
+import {useProduct} from "@/context/ProductContext";
+import {useCategories} from '@/context/CategoriesContext';
 
-const fakeProducts = [
-    {
-        id: '1',
-        name: 'Product 1',
-        price: 99.99,
-        description: 'Description for product 1',
-        category: 'Electronics',
-        stock: 10,
-        image: '/broken-image.jpg'
-    },
-    {
-        id: '2',
-        name: 'Product 2',
-        price: 49.99,
-        description: 'Description for product 2',
-        category: 'Clothing',
-        stock: 20,
-        image: '/broken-image.jpg'
-    },
-    {
-        id: '3',
-        name: 'Product 3',
-        price: 29.99,
-        description: 'Description for product 3',
-        category: 'Home',
-        stock: 15,
-        image: '/broken-image.jpg'
-    },
-    {
-        id: '4',
-        name: 'Product 4',
-        price: 199.99,
-        description: 'Description for product 4',
-        category: 'Electronics',
-        stock: 5,
-        image: '/broken-image.jpg'
-    },
-    {
-        id: '5',
-        name: 'Product 5',
-        price: 9.99,
-        description: 'Description for product 5',
-        category: 'Books',
-        stock: 50,
-        image: '/broken-image.jpg'
-    },
-];
 
 const ProductContent = ({
                             productId: initialProductId,
@@ -75,10 +30,12 @@ const ProductContent = ({
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const router = useRouter();
 
+    const {products, updateProduct, handleDelete} = useProduct();
     const [activeTab, setActiveTab] = useState('myProducts');
     const [isEditMode, setIsEditMode] = useState(false);
     const [isViewMode, setIsViewMode] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState<string | null>(initialProductId || null);
+    const {categories} = useCategories();
 
     useEffect(() => {
         if (editOrView === "edit") {
@@ -118,7 +75,6 @@ const ProductContent = ({
     ], [isEditMode, isViewMode, editOrView]);
 
     const HandleEdit = (id: string) => {
-        console.log("Edit Product", id);
         setSelectedProductId(id);
         setIsEditMode(true);
         setActiveTab('editProduct');
@@ -126,7 +82,6 @@ const ProductContent = ({
     }
 
     const HandleView = (id: string) => {
-        console.log("view Product", id);
         setSelectedProductId(id);
         setIsViewMode(true);
         setActiveTab('viewProduct');
@@ -141,10 +96,15 @@ const ProductContent = ({
     }
 
     const tabContentList: { [key: string]: ReactElement } = {
-        myProducts: <div><ProductList products={fakeProducts} onEdit={HandleEdit} onView={HandleView}/></div>,
-        createNewProduct: <div><CreateProduct/></div>,
-        editProduct: <div><EditProduct productId={selectedProductId} onBack={HandleBack}/></div>,
-        viewProduct: <div><ViewProduct productId={selectedProductId} onBack={HandleBack}/></div>,
+        myProducts: <div><ProductList products={products} onEdit={HandleEdit} onView={HandleView}
+                                      onDelete={handleDelete} categories={categories}/></div>,
+        createNewProduct: <div><CreateProduct onUpdate={updateProduct} categories={categories}/>
+        </div>,
+        editProduct: <div><EditProduct productId={selectedProductId} onBack={HandleBack} products={products}
+                                       categories={categories} onUpdate={updateProduct}/></div>,
+        viewProduct: <div><ViewProduct productId={selectedProductId} onBack={HandleBack} products={products}
+                                       categories={categories}
+        /></div>,
     };
 
     return (

@@ -1,5 +1,6 @@
 "use client";
 import React, {createContext, useContext, useEffect, useState} from "react";
+import {toast} from "react-toastify";
 
 export interface Product {
     _id: string;
@@ -14,6 +15,7 @@ export interface Product {
     isNew: boolean;
     discount: number;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 interface ProductContextType {
@@ -21,6 +23,8 @@ interface ProductContextType {
     setProducts?: React.Dispatch<React.SetStateAction<Product[]>>;
     loading: boolean;
     error: string | null;
+    updateProduct: (updatedProduct: Product) => void;
+    handleDelete: (productId: string) => void;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -38,28 +42,56 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({childr
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const response = await fetch("/api/products");
-                if (!response.ok) {
-                    console.error(`HTTP error! Status: ${response.status}`);
-                }
-                const data = await response.json();
-                console.log("Products fetched successfully:", data);
-                setProducts(data);
-            } catch (error) {
-                setError("Error fetching products");
-                console.error("Error fetching products:", error);
-            } finally {
-                setLoading(false);
+    const fetchProducts = async () => {
+        try {
+            const response = await fetch("/api/products");
+            if (!response.ok) {
+                console.error(`HTTP error! Status: ${response.status}`);
             }
-        };
+            const data = await response.json();
+            console.log("Products fetched successfully:", data);
+            setProducts(data);
+        } catch (error) {
+            setError("Error fetching products");
+            console.error("Error fetching products:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
         fetchProducts();
     }, []);
 
+    const updateProduct = (updatedProduct: Product) => {
+        setProducts(prevProducts =>
+            prevProducts.map(product =>
+                product._id === updatedProduct._id ? updatedProduct : product
+            )
+        );
+    };
+
+    const handleDelete = async (id: string) => {
+        try {
+            const response = await fetch(`/api/products?id=${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                toast.success('Product deleted successfully');
+                setProducts(prevProducts => prevProducts.filter(product => product._id !== id));
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete category');
+            }
+        } catch (error) {
+            console.error('Error deleting category:', error);
+            toast.error(error instanceof Error ? error.message : 'An unexpected error occurred');
+        }
+    };
+
     return (
-        <ProductContext.Provider value={{products, loading, error}}>
+        <ProductContext.Provider value={{products, loading, error, updateProduct, handleDelete}}>
             {children}
         </ProductContext.Provider>
     );

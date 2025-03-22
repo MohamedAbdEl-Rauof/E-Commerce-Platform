@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, {useState} from 'react';
 import {
     Avatar,
     Box,
@@ -20,16 +20,7 @@ import {
 } from '@mui/material';
 import {TbEdit, TbEye, TbSearch, TbTrash} from "react-icons/tb";
 import {Category} from '@/context/CategoriesContext';
-
-type UpdatedCategory = {
-    _id: string;
-    name: string;
-    image: string;
-    createdAt: string;
-    updatedAt: string;
-    productCount: number;
-    error: string | null;
-};
+import DeleteConfirmationDialog from '@/components/Dialog/DeleteConfirmationDialog';
 
 interface ProductListProps {
     categories: Category[];
@@ -40,6 +31,28 @@ interface ProductListProps {
 
 const CategorytList: React.FC<ProductListProps> = ({categories, onEdit, onView, onDelete}) => {
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [categoryToDeleteId, setCategoryToDeleteId] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+
+    const handleDeleteClick = (category: Category) => {
+        setCategoryToDeleteId(category._id);
+        setSelectedCategory(category);
+        setDeleteDialogOpen(true);
+    };
+
+    const handleDeleteConfirm = () => {
+        if (categoryToDeleteId && onDelete) {
+            onDelete(categoryToDeleteId);
+        }
+        setDeleteDialogOpen(false);
+        setCategoryToDeleteId(null);
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteDialogOpen(false);
+        setCategoryToDeleteId(null);
+    };
 
     const filteredCategories = categories.filter(category => category.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
@@ -213,7 +226,7 @@ const CategorytList: React.FC<ProductListProps> = ({categories, onEdit, onView, 
                                         </Tooltip>
                                         <Tooltip title="Delete category">
                                             <IconButton
-                                                onClick={() => onDelete && onDelete(category._id)}
+                                                onClick={() => handleDeleteClick(category)}
                                                 aria-label="delete category"
                                                 size="small"
                                                 sx={{
@@ -235,6 +248,14 @@ const CategorytList: React.FC<ProductListProps> = ({categories, onEdit, onView, 
                     </TableBody>
                 </Table>
             </TableContainer>
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onClose={handleDeleteCancel}
+                onConfirm={handleDeleteConfirm}
+                isCategory={true}
+                productCount={selectedCategory?.productCount || 0}
+                categoryName={selectedCategory?.name || ''}
+            />
         </Box>
     );
 };

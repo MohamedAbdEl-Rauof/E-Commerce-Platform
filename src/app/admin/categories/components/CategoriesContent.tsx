@@ -14,17 +14,7 @@ import EditCategory from "./EditCategory";
 import {useRouter} from "next/navigation";
 import {TbPlus, TbShoppingCart} from "react-icons/tb";
 import ViewCategory from "./ViewCategory";
-import {Category, useCategories} from '@/context/CategoriesContext';
-
-type UpdatedCategory = {
-    _id: string;
-    name: string;
-    image: string;
-    createdAt: string;
-    updatedAt: string;
-    productCount: number;
-    error: string | null;
-};
+import {useCategories} from '@/context/CategoriesContext';
 
 const CategoriesContent = ({
                                productId: initialProductId,
@@ -37,7 +27,7 @@ const CategoriesContent = ({
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
     const router = useRouter();
-    const {categories, updateCategory} = useCategories();
+    const {categories, updateCategory, handleDelete} = useCategories();
 
     const [activeTab, setActiveTab] = useState('myCategory');
     const [isEditMode, setIsEditMode] = useState(false);
@@ -101,29 +91,18 @@ const CategoriesContent = ({
         router.push('/admin/categories');
     }
 
-    const handleUpdateCategory = (updatedCategory: UpdatedCategory) => {
-        const categoryToUpdate: Category = {
-            _id: updatedCategory._id,
-            name: updatedCategory.name,
-            image: updatedCategory.image,
-            createdAt: updatedCategory.createdAt,
-            updatedAt: updatedCategory.updatedAt,
-            productCount: updatedCategory.productCount
-        };
-
-        updateCategory(categoryToUpdate);
-        HandleBack();
-    };
 
     const tabContentList: { [key: string]: ReactElement } = {
         myCategory: <div><CategoryList categories={categories} onEdit={HandleEdit} onView={HandleView}
+                                       onDelete={handleDelete}
         /></div>,
-        createNewProduct: <div><CreateCateory/></div>,
+        createNewProduct: <div><CreateCateory categories={categories} onUpdate={updateCategory}
+        /></div>,
         editCategory: <div><EditCategory
             categoryId={selectedCategoryId}
             onBack={HandleBack}
             categories={categories}
-            onUpdate={handleUpdateCategory}
+            onUpdate={updateCategory}
         /></div>,
         viewCategory: <div><ViewCategory
             categoryId={selectedCategoryId}
