@@ -1,0 +1,162 @@
+"use client"
+import {
+    Chip,
+    IconButton,
+    Paper,
+    Stack,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Tooltip
+} from "@mui/material";
+import React, {useEffect} from "react";
+import {TbEdit, TbEye, TbTrash} from "react-icons/tb";
+
+interface OrderItem {
+    productId: string;
+    quantity: number;
+    total: number;
+    price: number;
+}
+
+interface ApiOrder {
+    _id: string;
+    orderCode: string;
+    contactInfo: {
+        firstName: string;
+        lastName: string;
+    };
+    shippingAddress: {
+        street: string;
+        city: string;
+    };
+    items: OrderItem[];
+    date: string;
+    status: string;
+}
+
+interface FormattedOrder {
+    orderCode: string;
+    customerName: string;
+    contact: string;
+    totalAmount: number;
+    date: string;
+    status: string;
+}
+
+const OrderList: React.FC = () => {
+    const [orders, setOrders] = React.useState<FormattedOrder[]>([]);
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const response = await fetch('/api/ordersAllAddress?userId=*');
+                const data: ApiOrder[] = await response.json();
+                const formattedOrders: FormattedOrder[] = data.map(order => ({
+                    orderCode: order.orderCode,
+                    customerName: `${order.contactInfo.firstName} ${order.contactInfo.lastName}`,
+                    contact: `${order.shippingAddress.street}, ${order.shippingAddress.city}`,
+                    totalAmount: order.items.reduce((sum, item) => sum + item.total, 0),
+                    date: new Date(order.date).toLocaleDateString(),
+                    status: order.status
+                }));
+                setOrders(formattedOrders);
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+            }
+        };
+
+        fetchOrders();
+    }, []);
+
+    const getStatusColor = (status: string): "success" | "warning" | "info" | "default" => {
+        switch (status.toLowerCase()) {
+            case 'completed':
+                return 'success';
+            case 'processing':
+                return 'info';
+            case 'pending':
+                return 'warning';
+            default:
+                return 'default';
+        }
+    };
+
+    return (
+        <TableContainer component={Paper}>
+            <Table sx={{minWidth: 650}} aria-label="orders table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell className="font-bold text-lg">Order Code</TableCell>
+                        <TableCell className="font-bold text-lg">Customer Name</TableCell>
+                        <TableCell className="font-bold text-lg">Contact</TableCell>
+                        <TableCell className="font-bold text-lg">Total Amount</TableCell>
+                        <TableCell className="font-bold text-lg">Date</TableCell>
+                        <TableCell className="font-bold text-lg">Status</TableCell>
+                        <TableCell className="font-bold text-lg">Action</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {orders.map((order) => (
+                        <TableRow key={order.orderCode}>
+                            <TableCell>{order.orderCode}</TableCell>
+                            <TableCell>{order.customerName}</TableCell>
+                            <TableCell>{order.contact}</TableCell>
+                            <TableCell>${order.totalAmount.toFixed(2)}</TableCell>
+                            <TableCell>{order.date}</TableCell>
+                            <TableCell>
+                                <Chip
+                                    label={order.status}
+                                    color={getStatusColor(order.status)}
+                                    size="small"
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <Stack direction="row" spacing={1}>
+                                    <Tooltip title="View details">
+                                        <IconButton
+                                            size="small"
+                                            sx={{
+                                                color: 'var(--info)',
+                                                '&:hover': {bgcolor: 'var(--info-light)'}
+                                            }}
+                                        >
+                                            <TbEye/>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Edit order">
+                                        <IconButton
+                                            size="small"
+                                            sx={{
+                                                color: 'var(--warning)',
+                                                '&:hover': {bgcolor: 'var(--warning-light)'}
+                                            }}
+                                        >
+                                            <TbEdit/>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Delete order">
+                                        <IconButton
+                                            size="small"
+                                            sx={{
+                                                color: 'var(--danger)',
+                                                '&:hover': {bgcolor: 'var(--danger-light)'}
+                                            }}
+                                        >
+                                            <TbTrash/>
+                                        </IconButton>
+                                    </Tooltip>
+                                </Stack>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    )
+}
+
+export default OrderList
