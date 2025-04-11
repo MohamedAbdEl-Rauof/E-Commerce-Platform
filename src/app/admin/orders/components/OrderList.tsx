@@ -12,6 +12,7 @@ import {
     TableRow,
     Tooltip
 } from "@mui/material";
+import {useRouter} from "next/navigation";
 import React, {useEffect} from "react";
 import {TbEdit, TbEye, TbTrash} from "react-icons/tb";
 
@@ -24,6 +25,7 @@ interface OrderItem {
 
 interface ApiOrder {
     _id: string;
+    userId: string;
     orderCode: string;
     contactInfo: {
         firstName: string;
@@ -40,6 +42,7 @@ interface ApiOrder {
 
 interface FormattedOrder {
     orderCode: string;
+    userId: string;
     customerName: string;
     contact: string;
     totalAmount: number;
@@ -49,6 +52,7 @@ interface FormattedOrder {
 
 const OrderList: React.FC = () => {
     const [orders, setOrders] = React.useState<FormattedOrder[]>([]);
+    const router = useRouter();
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -56,6 +60,7 @@ const OrderList: React.FC = () => {
                 const response = await fetch('/api/ordersAllAddress?userId=*');
                 const data: ApiOrder[] = await response.json();
                 const formattedOrders: FormattedOrder[] = data.map(order => ({
+                    userId: order.userId,
                     orderCode: order.orderCode,
                     customerName: `${order.contactInfo.firstName} ${order.contactInfo.lastName}`,
                     contact: `${order.shippingAddress.street}, ${order.shippingAddress.city}`,
@@ -84,6 +89,10 @@ const OrderList: React.FC = () => {
                 return 'default';
         }
     };
+
+    const handleView = (id: string) => {
+        router.push(`/admin/orders/view/${id}`);
+    }
 
     return (
         <TableContainer component={Paper}>
@@ -119,6 +128,7 @@ const OrderList: React.FC = () => {
                                     <Tooltip title="View details">
                                         <IconButton
                                             size="small"
+                                            onClick={() => handleView(order.userId)}
                                             sx={{
                                                 color: 'var(--info)',
                                                 '&:hover': {bgcolor: 'var(--info-light)'}
