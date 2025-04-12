@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import {useRouter} from "next/navigation";
 import React, {useEffect} from "react";
-import {TbEdit, TbEye, TbTrash} from "react-icons/tb";
+import {TbEdit, TbEye} from "react-icons/tb";
 import OrderAction from "./OrderAction";
 import {toast} from "react-toastify";
 
@@ -197,17 +197,6 @@ const OrderList: React.FC = () => {
                                                 }}
                                             >
                                                 <TbEdit/>
-                                            </IconButton>
-                                        </Tooltip>
-                                        <Tooltip title="Delete order">
-                                            <IconButton
-                                                size="small"
-                                                sx={{
-                                                    color: 'var(--danger)',
-                                                    '&:hover': {bgcolor: 'var(--danger-light)'}
-                                                }}
-                                            >
-                                                <TbTrash/>
                                             </IconButton>
                                         </Tooltip>
                                     </Stack>
