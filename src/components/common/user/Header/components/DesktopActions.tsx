@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { CiSearch } from 'react-icons/ci';
-import { FaRegCircleUser } from 'react-icons/fa6';
-import { IoCartOutline } from 'react-icons/io5';
-import { Badge, Button, Drawer, Menu, MenuItem, TextField, Box, IconButton } from '@mui/material';
-import { styled } from '@mui/system';
-import { signOut } from 'next-auth/react';
+import React, {useState} from 'react';
+import {useRouter} from 'next/navigation';
+import {CiSearch} from 'react-icons/ci';
+import {FaRegCircleUser} from 'react-icons/fa6';
+import {IoCartOutline} from 'react-icons/io5';
+import {Badge, Box, Drawer, IconButton, Menu, MenuItem, TextField} from '@mui/material';
+import {styled} from '@mui/system';
+import {signOut} from 'next-auth/react';
 import Swal from 'sweetalert2';
 import CartDrawer from './cart/page';
 import DarkMoodSwitch from "@/components/common/user/DarkMoodSwitch";
-import { Session } from 'next-auth';
-import { CartItem } from '@/context/AddToCartContext';
+import {Session} from 'next-auth';
+import {CartItem} from '@/context/AddToCartContext';
 
 interface DesktopActionsProps {
     session: Session | null;
@@ -22,7 +22,7 @@ interface DesktopActionsProps {
     closeCart: () => void;
 }
 
-const StyledBox = styled(Box)(({ theme }) => ({
+const StyledBox = styled(Box)(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing(3),
@@ -32,14 +32,14 @@ const StyledBox = styled(Box)(({ theme }) => ({
     },
 }));
 
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
+const StyledIconButton = styled(IconButton)(({theme}) => ({
     color: 'var(--foreground)',
     '&:hover': {
         color: 'var(--primary)',
     },
 }));
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
+const StyledBadge = styled(Badge)(({theme}) => ({
     '& .MuiBadge-badge': {
         backgroundColor: 'var(--primary)',
         color: 'var(--light)',
@@ -80,7 +80,7 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({session, cart, isOpen, o
             showConfirmButton: false,
             timer: 1500,
         });
-        router.push('/pages/Home');
+        router.push('/user');
         handleClose();
 
         setTimeout(() => {
@@ -110,11 +110,11 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({session, cart, isOpen, o
                     }}
                 />
                 <StyledIconButton onClick={toggleInputVisibility}>
-                    <CiSearch />
+                    <CiSearch/>
                 </StyledIconButton>
             </Box>
 
-            <DarkMoodSwitch />
+            <DarkMoodSwitch/>
 
             <StyledIconButton
                 id="basic-button"
@@ -123,7 +123,7 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({session, cart, isOpen, o
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
             >
-                <FaRegCircleUser />
+                <FaRegCircleUser/>
             </StyledIconButton>
             <Menu
                 id="basic-menu"
@@ -144,11 +144,11 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({session, cart, isOpen, o
 
             <StyledIconButton onClick={openCart}>
                 <StyledBadge badgeContent={totalItems}>
-                    <IoCartOutline />
+                    <IoCartOutline/>
                 </StyledBadge>
             </StyledIconButton>
             <Drawer anchor="right" open={isOpen} onClose={closeCart}>
-                <CartDrawer />
+                <CartDrawer/>
             </Drawer>
         </StyledBox>
     );
