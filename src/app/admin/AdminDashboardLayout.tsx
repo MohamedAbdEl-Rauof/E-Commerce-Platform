@@ -21,7 +21,6 @@ import CategoryIcon from '@mui/icons-material/Category';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
-import PeopleIcon from '@mui/icons-material/People';
 import Link from 'next/link';
 import {usePathname, useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
@@ -116,7 +115,6 @@ const menuItems = [
     {text: 'Products', icon: <InventoryIcon/>, path: '/admin/products'},
     {text: 'Orders', icon: <ShoppingCartIcon/>, path: '/admin/orders'},
     {text: 'Slider Section', icon: <ViewCarouselIcon/>, path: '/admin/slider-section'},
-    {text: 'Users', icon: <PeopleIcon/>, path: '/admin/users'},
 ];
 
 export default function AdminDashboardLayout({children}: { children: React.ReactNode }) {
