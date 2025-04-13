@@ -17,6 +17,7 @@ const Home = () => {
 
     useEffect(() => {
         setIsClient(true);
+
     }, []);
 
     return (
