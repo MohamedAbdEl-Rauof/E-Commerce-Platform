@@ -50,6 +50,26 @@ const schema = object({
     ),
 });
 
+const inputStyle = {
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: 'var(--border)',
+        },
+        '&:hover fieldset': {
+            borderColor: 'var(--hover)',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'var(--focus)',
+        },
+    },
+    '& .MuiInputLabel-root': {
+        color: 'var(--muted)',
+    },
+    '& .MuiInputBase-input': {
+        color: 'var(--foreground)',
+    },
+};
+
 const SignUp = () => {
     const {
         control,
@@ -130,6 +150,7 @@ const SignUp = () => {
                                     label="Your name"
                                     variant="standard"
                                     className="mt-4"
+                                    sx={inputStyle}
                                     error={!!errors.name}
                                     helperText={errors.name?.message}
                                 />
@@ -145,6 +166,7 @@ const SignUp = () => {
                                     label="Username"
                                     variant="standard"
                                     className="mt-4"
+                                    sx={inputStyle}
                                     error={!!errors.username}
                                     helperText={errors.username?.message}
                                 />
@@ -160,6 +182,7 @@ const SignUp = () => {
                                     label="Email"
                                     variant="standard"
                                     className="mt-4"
+                                    sx={inputStyle}
                                     error={!!errors.email}
                                     helperText={errors.email?.message}
                                 />
@@ -175,6 +198,7 @@ const SignUp = () => {
                                     label="Your Phone"
                                     variant="standard"
                                     className="mt-4"
+                                    sx={inputStyle}
                                     error={!!errors.phone}
                                     helperText={errors.phone?.message}
                                 />
@@ -191,6 +215,7 @@ const SignUp = () => {
                                     variant="standard"
                                     type="password"
                                     className="mt-4"
+                                    sx={inputStyle}
                                     error={!!errors.password}
                                     helperText={errors.password?.message}
                                 />
@@ -207,6 +232,7 @@ const SignUp = () => {
                                     variant="standard"
                                     type="password"
                                     className="mt-4"
+                                    sx={inputStyle}
                                     error={!!errors.confirmPassword}
                                     helperText={errors.confirmPassword?.message}
                                 />

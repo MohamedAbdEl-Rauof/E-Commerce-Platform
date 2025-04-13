@@ -116,7 +116,6 @@ const menuItems = [
     {text: 'Products', icon: <InventoryIcon/>, path: '/admin/products'},
     {text: 'Orders', icon: <ShoppingCartIcon/>, path: '/admin/orders'},
     {text: 'Slider Section', icon: <ViewCarouselIcon/>, path: '/admin/slider-section'},
-    {text: 'Users', icon: <PeopleIcon/>, path: '/admin/users'},
 ];
 
 export default function AdminDashboardLayout({children}: { children: React.ReactNode }) {

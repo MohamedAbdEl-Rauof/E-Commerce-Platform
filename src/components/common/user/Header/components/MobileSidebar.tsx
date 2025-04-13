@@ -45,7 +45,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
             showConfirmButton: false,
             timer: 1500,
         });
-        router.push('/pages/Home');
+        router.push('/user');
 
         setTimeout(() => {
             window.location.reload();

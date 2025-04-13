@@ -80,7 +80,7 @@ const DesktopActions: React.FC<DesktopActionsProps> = ({session, cart, isOpen, o
             showConfirmButton: false,
             timer: 1500,
         });
-        router.push('/pages/Home');
+        router.push('/user');
         handleClose();
 
         setTimeout(() => {
