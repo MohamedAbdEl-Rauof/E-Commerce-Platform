@@ -10,13 +10,16 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const SliderContainer = styled(Box)(({theme}) => ({
     position: 'relative',
     overflow: 'hidden',
-    height: 350,
     width: '100%',
+    height: '40vh', // Set a default height
     [theme.breakpoints.up('sm')]: {
-        height: 450,
+        height: '50vh',
+    },
+    [theme.breakpoints.up('md')]: {
+        height: '60vh',
     },
     [theme.breakpoints.up('lg')]: {
-        height: 550,
+        height: '70vh',
     },
 }));
 
@@ -33,6 +36,7 @@ const NavigationButton = styled(IconButton)(({theme}) => ({
     '&:hover': {
         backgroundColor: 'var(--background-light)',
     },
+    zIndex: 1, // Ensure buttons are above the image
 }));
 
 const SliderImage = React.memo(() => {
@@ -67,7 +71,7 @@ const SliderImage = React.memo(() => {
             display: "flex",
             justifyContent: "center",
             paddingTop: "20px",
-            aignItems: "center",
+            alignItems: "center",
         }}>
             {loading ? (
                 <SliderImageLoading/>
@@ -80,7 +84,7 @@ const SliderImage = React.memo(() => {
                             layout="fill"
                             objectFit="cover"
                             priority
-                            sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            sizes="100vw"
                             quality={100}
                         />
                     )}

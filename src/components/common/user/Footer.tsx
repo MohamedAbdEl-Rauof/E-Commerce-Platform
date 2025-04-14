@@ -1,18 +1,17 @@
 "use client";
 import React from "react";
-import { Typography, Grid, Box, Link as MuiLink, Divider, IconButton, Container } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { GitHub, LinkedIn, Facebook } from "@mui/icons-material";
+import {Box, Container, Divider, Grid, IconButton, Link as MuiLink, Typography} from "@mui/material";
+import {styled} from "@mui/material/styles";
+import {Facebook, GitHub, LinkedIn} from "@mui/icons-material";
 import Link from "next/link";
 
-const StyledFooter = styled('footer')(({ theme }) => ({
+const StyledFooter = styled('footer')(({theme}) => ({
     width: '100%',
     padding: 0,
-    backgroundColor: 'var(--dark)',
-    color: 'var(--light)',
+    backgroundColor: 'black',
 }));
 
-const FooterContent = styled(Container)(({ theme }) => ({
+const FooterContent = styled(Container)(({theme}) => ({
     width: '100vw',
     maxWidth: 'none',
     padding: theme.spacing(10, 3, 8),
@@ -24,8 +23,8 @@ const FooterContent = styled(Container)(({ theme }) => ({
     },
 }));
 
-const FooterLink = styled(MuiLink)(({ theme }) => ({
-    color: 'var(--light)',
+const FooterLink = styled(MuiLink)(({theme}) => ({
+    color: 'white',
     cursor: 'pointer',
     textDecoration: 'none',
     '&:hover': {
@@ -39,13 +38,15 @@ const Footer = () => {
             <FooterContent>
                 <Grid container spacing={4}>
                     <Grid item xs={12} sm={6} md={4}>
-                        <Box display="flex" flexDirection="column" alignItems={{ xs: 'center', sm: 'flex-start' }}>
-                            <Typography variant="h4" component="h1" sx={{ color: 'var(--light)' }}>3𝓵𝓮𝓰𝓪𝓷𝓽</Typography>
-                            <Typography variant="body1" sx={{ mt: 1, color: 'var(--muted)' }}>Gift & Decoration Store</Typography>
+                        <Box display="flex" flexDirection="column" alignItems={{xs: 'center', sm: 'flex-start'}}>
+                            <Typography variant="h4" component="h1"
+                                        sx={{color: 'white'}}>3𝓵𝓮𝓰𝓪𝓷𝓽</Typography>
+                            <Typography variant="body1" sx={{mt: 1, color: 'var(--muted)'}}>Gift & Decoration
+                                Store</Typography>
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={6} md={8}>
-                        <Box display="flex" justifyContent={{ xs: 'center', sm: 'flex-end' }} gap={4}>
+                        <Box display="flex" justifyContent={{xs: 'center', sm: 'flex-end'}} gap={4}>
                             <Link href="/user" passHref legacyBehavior>
                                 <FooterLink>Home</FooterLink>
                             </Link>
@@ -62,16 +63,17 @@ const Footer = () => {
                     </Grid>
                 </Grid>
 
-                <Divider sx={{ my: 4, borderColor: 'var(--border)' }} />
+                <Divider sx={{my: 4, borderColor: 'var(--border)'}}/>
 
                 <Grid container spacing={2} alignItems="center">
                     <Grid item xs={12} sm={6}>
-                        <Typography variant="body2" align="center" sx={{ textAlign: { sm: 'left' }, color: 'var(--muted)' }}>
+                        <Typography variant="body2" align="center"
+                                    sx={{textAlign: {sm: 'left'}, color: 'var(--muted)'}}>
                             Copyright © 2025 3legant. All rights reserved
                         </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <Box display="flex" justifyContent={{ xs: 'center', sm: 'flex-end' }} gap={2}>
+                        <Box display="flex" justifyContent={{xs: 'center', sm: 'flex-end'}} gap={2}>
                             <FooterLink href="#">Privacy Policy</FooterLink>
                             <FooterLink href="#">Terms of Use</FooterLink>
                         </Box>
@@ -79,14 +81,17 @@ const Footer = () => {
                 </Grid>
 
                 <Box display="flex" justifyContent="center" mt={4}>
-                    <IconButton href="https://github.com/MohamedAbdEl-Rauof" target="_blank" sx={{ color: 'var(--light)' }}>
-                        <GitHub />
+                    <IconButton href="https://github.com/MohamedAbdEl-Rauof" target="_blank"
+                                sx={{color: 'white'}}>
+                        <GitHub/>
                     </IconButton>
-                    <IconButton href="https://linkedin.com/in/mohamed-abd-el-raouf-6b5b3b235" target="_blank" sx={{ color: 'var(--light)' }}>
-                        <LinkedIn />
+                    <IconButton href="https://linkedin.com/in/mohamed-abd-el-raouf-6b5b3b235" target="_blank"
+                                sx={{color: 'white'}}>
+                        <LinkedIn/>
                     </IconButton>
-                    <IconButton href="https://www.facebook.com/p/mohamed-abd-el-raouf-100040578035349/" target="_blank" sx={{ color: 'var(--light)' }}>
-                        <Facebook />
+                    <IconButton href="https://www.facebook.com/p/mohamed-abd-el-raouf-100040578035349/" target="_blank"
+                                sx={{color: 'white'}}>
+                        <Facebook/>
                     </IconButton>
                 </Box>
             </FooterContent>
