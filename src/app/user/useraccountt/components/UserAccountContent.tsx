@@ -23,11 +23,25 @@ import AddressDetails from './AddressDetails';
 import OrderDetails from './OrderDetails';
 
 type UserData = {
+    _id: string;
     name: string;
+    username: string;
+    email: string;
+    phone: string;
+    password: string;
+
+};
+
+type ComponentProps = {
+    userData: UserData | null;
 };
 
 const menuItems = [
-    {label: 'Account', icon: FaUser, component: AccountDetails},
+    {
+        label: 'Account',
+        icon: FaUser,
+        component: (props: ComponentProps) => <AccountDetails userData={props.userData} file={props.file}/>
+    },
     {label: 'Address', icon: FaMapMarkerAlt, component: AddressDetails},
     {label: 'Orders', icon: FaShoppingBag, component: OrderDetails},
 ];
@@ -40,6 +54,23 @@ function UserAccountContent() {
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [activeTab, setActiveTab] = useState('Account');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch(`/api/user?id=${userId}`);
+                const data = await response.json();
+                setUserData(data);
+            } catch (error) {
+                console.error("Error fetching user data:", error);
+            }
+        };
+
+        if (userId) {
+            fetchData();
+        }
+    }, [userId]);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -57,6 +88,7 @@ function UserAccountContent() {
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
+            setSelectedFile(file);
             const fileReader = new FileReader();
             fileReader.onload = () => {
                 const base64Image = fileReader.result as string;
@@ -183,7 +215,23 @@ function UserAccountContent() {
                         </Card>
                     </Grid>
                     <Grid item xs={12} md={8}>
-                        {ActiveComponent && <ActiveComponent/>}
+                        <Card sx={{
+                            p: 3,
+                            bgcolor: "var(--background)",
+                            border: '1px solid var(--border)',
+                            boxShadow: 'var(--shadow)'
+                        }}>
+                            {ActiveComponent &&
+                                <ActiveComponent
+                                    userData={userData}
+                                    selectedFile={selectedFile}
+                                    onFileUpload={(newAvatarUrl: string) => {
+                                        setAvatarSrc(newAvatarUrl);
+                                        setSelectedFile(null);
+                                    }}
+                                />
+                            }
+                        </Card>
                     </Grid>
                 </Grid>
             </Container>
