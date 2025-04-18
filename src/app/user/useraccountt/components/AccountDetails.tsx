@@ -1,16 +1,27 @@
 "use client";
-import {useEffect, useState} from "react";
-import {Box, Button, Card, TextField, Typography} from "@mui/material";
-import {styled} from "@mui/material/styles";
-import {storage} from '@/utils/firebase';
-import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {toast} from "react-toastify";
+import { useEffect, useState } from "react";
+import { Box, Button, Card, CircularProgress, TextField, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { toast } from "react-toastify";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// Define validation schema with Zod
+const accountSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits").regex(/^\d+$/, "Phone must contain only numbers")
+});
+
+type AccountFormValues = z.infer<typeof accountSchema>;
 
 type UserData = {
     _id: string;
     name: string;
     username: string;
-    image: string;
+    image?: string;
     email: string;
     phone: string;
     password: string;
@@ -22,185 +33,252 @@ interface AccountDetailsProps {
     onFileUpload: (newAvatarUrl: string) => void;
 }
 
-const StyledTextField = styled(TextField)({
-    "& .MuiOutlinedInput-root": {
-        backgroundColor: "var(--search-bar-bg)",
-        color: "var(--search-bar-text)",
-        "& fieldset": {
-            borderColor: "var(--border)",
+const inputStyle = {
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: 'var(--border)',
         },
-        "&:hover fieldset": {
-            borderColor: "var(--primary)",
+        '&:hover fieldset': {
+            borderColor: 'var(--hover)',
         },
-        "&.Mui-focused fieldset": {
-            borderColor: "var(--focus)",
+        '&.Mui-focused fieldset': {
+            borderColor: 'var(--focus)',
         },
     },
-    "& .MuiInputLabel-root": {
-        color: "var(--muted)",
+    '& .MuiInputLabel-root': {
+        color: 'var(--muted)',
     },
-});
+    '& .MuiInputBase-input': {
+        color: 'var(--foreground)',
+    },
+    '& .MuiFormHelperText-root': {
+        color: 'var(--error,#d32f2f)',
+    },
+}; 
 
-export default function AccountDetails({userData, selectedFile, onFileUpload}: AccountDetailsProps) {
-    const [formData, setFormData] = useState({
-        name: userData?.name || "",
-        username: userData?.username || "",
-        email: userData?.email || "",
-        phone: userData?.phone || "",
+export default function AccountDetails({ userData, selectedFile, onFileUpload }: AccountDetailsProps) {
+    const { control, handleSubmit, formState: { errors }, reset, trigger } = useForm<AccountFormValues>({
+        resolver: zodResolver(accountSchema),
+        defaultValues: {
+            name: userData?.name || "",
+            username: userData?.username || "",
+            email: userData?.email || "",
+            phone: userData?.phone || "",
+        }
     });
 
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    // Update form data when userData changes
     useEffect(() => {
         if (userData) {
-            setFormData({
-                name: userData.name,
-                username: userData.username,
-                email: userData.email,
-                phone: userData.phone,
+            reset({
+                name: userData.name || "",
+                username: userData.username || "",
+                email: userData.email || "",
+                phone: userData.phone || "",
             });
-        }
-    }, [userData]);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({...formData, [e.target.name]: e.target.value});
-    };
-
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        let avatarUrl = userData?.image || '';
-
-        if (selectedFile) {
-            const storageRef = ref(storage, `avatars/${userData?._id}_${selectedFile.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, selectedFile);
-
-            try {
-                await new Promise<void>((resolve, reject) => {
-                    uploadTask.on(
-                        "state_changed",
-                        (snapshot) => {
-                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            console.log("Upload is " + progress + "% done");
-                        },
-                        (error) => {
-                            console.error("Error uploading file:", error);
-                            reject(error);
-                        },
-                        async () => {
-                            try {
-                                avatarUrl = await getDownloadURL(uploadTask.snapshot.ref);
-                                console.log("File available at", avatarUrl);
-                                onFileUpload(avatarUrl); // Update the avatar in the parent component
-                                resolve();
-                            } catch (error) {
-                                console.error("Error getting download URL:", error);
-                                reject(error);
-                            }
-                        }
-                    );
-                });
-            } catch (error) {
-                console.error("Error uploading file:", error);
-                toast.error("Error uploading file. Please try again.");
-                return;
+            
+            if (userData.image) {
+                setImageUrl(userData.image);
             }
         }
+    }, [userData , reset]);
 
+    // Handle the selectedFile prop when it changes
+    useEffect(() => {
+        if (selectedFile) {
+            console.log("File selected for upload:", selectedFile.name);
+        }
+    }, [selectedFile]);
+
+    const convertToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result as string);
+            reader.onerror = (error) => reject(error);
+        });
+    };
+
+    // Function to upload image to Cloudinary
+    const uploadImageToCloudinary = async (base64Image: string): Promise<string> => {
         try {
+            const uploadRes = await fetch('/api/uploadImage', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ imageBase64: base64Image }),
+            });
+
+            if (!uploadRes.ok) {
+                throw new Error('Failed to upload image');
+            }
+
+            const uploadData = await uploadRes.json();
+            return uploadData.url;
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            throw error;
+        }
+    };
+
+    const onSubmit = async (data: AccountFormValues) => {
+        setLoading(true);
+    
+        try {
+            let finalImageUrl: string | null = imageUrl;
+            
+            if (!finalImageUrl && userData?.image) {
+                finalImageUrl = userData.image;
+            }
+    
+            // If there's a selected file, upload it first
+            if (selectedFile) {
+                const base64Image = await convertToBase64(selectedFile);
+                const uploadedUrl = await uploadImageToCloudinary(base64Image);
+                
+                // Set the final image URL to the uploaded one
+                finalImageUrl = uploadedUrl;
+                
+                // Update parent component with new image URL
+                onFileUpload(uploadedUrl);
+            }
+    
+            const imageUrlForApi = finalImageUrl || null;
+            
             const response = await fetch(`/api/user?userId=${userData?._id}`, {
-                method: "PUT",
+                method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     id: userData?._id,
-                    name: formData.name,
-                    username: formData.username,
-                    email: formData.email,
-                    phone: formData.phone,
-                    image: avatarUrl,
+                    name: data.name,
+                    username: data.username,
+                    email: data.email,
+                    phone: data.phone,
+                    image: imageUrlForApi,
                 }),
             });
-
+    
             if (response.ok) {
-                const data = await response.json();
-                console.log("User updated:", data);
-                toast.success("User information updated successfully!");
-                // Optionally update the local state or context with the new user data
-                // updateUserData(data.user);
+                const responseData = await response.json();
+                console.log('User updated:', responseData);
+                toast.success('User information updated successfully!');
+                
+                if (finalImageUrl) {
+                    setImageUrl(finalImageUrl);
+                }
             } else {
                 const errorData = await response.json();
-                console.error("Error updating user:", errorData.error);
+                console.error('Error updating user:', errorData.error);
                 toast.error(`Error updating user: ${errorData.error}`);
             }
         } catch (error) {
-            console.error("Error submitting form:", error);
-            toast.error("An unexpected error occurred. Please try again.");
+            console.error('Error submitting form:', error);
+            toast.error('An unexpected error occurred. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <Card sx={{p: 4}}>
-            <form onSubmit={handleSubmit}>
-                <Box sx={{display: "flex", flexDirection: "column", gap: 4}}>
-                    <Box>
-                        <Typography variant="h5" sx={{mb: 3, color: "var(--foreground)"}}>
-                            Account Details
-                        </Typography>
-                        <Box sx={{display: "flex", flexDirection: "column", gap: 2}}>
-                            <StyledTextField
-                                label="Name"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                fullWidth
-                            />
-
-                            <StyledTextField
-                                label="UserName"
-                                name="username"
-                                value={formData.username}
-                                onChange={handleChange}
-                                fullWidth
-                            />
-
-                            <Box>
-                                <StyledTextField
-                                    label="EMAIL"
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
+        <Card sx={{ p: 4, backgroundColor: "var(--background)", border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
+            
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <Box>
+                    <Typography variant="h5" sx={{ mb: 3, color: "var(--foreground)" }}>
+                        Account Details
+                    </Typography>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                        <Controller
+                            name="name"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="Name"
                                     fullWidth
+                                    error={!!errors.name}
+                                    helperText={errors.name?.message}
+                                    sx={inputStyle}
+                                    onBlur={() => trigger("name")}
                                 />
-                            </Box>
-                            <StyledTextField
-                                label="Phone"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                fullWidth
-                            />
-                        </Box>
-                    </Box>
+                            )}
+                        />
 
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        sx={{
-                            width: {xs: "100%", md: "auto"},
-                            alignSelf: {md: "flex-start"},
-                            bgcolor: "var(--primary)",
-                            color: "var(--light)",
-                            '&:hover': {
-                                bgcolor: "var(--accent)",
-                            },
-                        }}
-                    >
-                        Save changes
-                    </Button>
+                        <Controller
+                            name="username"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="Username"
+                                    fullWidth
+                                    error={!!errors.username}
+                                    helperText={errors.username?.message}
+                                    sx={inputStyle}
+                                    onBlur={() => trigger("username")}
+                                />
+                            )}
+                        />
+
+                        <Controller
+                            name="email"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="Email Address"
+                                    type="email"
+                                    fullWidth
+                                    error={!!errors.email}
+                                    helperText={errors.email?.message}
+                                    sx={inputStyle}
+                                    onBlur={() => trigger("email")}
+                                />
+                            )}
+                        />
+                        
+                        <Controller
+                            name="phone"
+                            control={control}
+                            render={({ field }) => (
+                                <TextField
+                                    {...field}
+                                    label="Phone Number"
+                                    fullWidth
+                                    error={!!errors.phone}
+                                    helperText={errors.phone?.message}
+                                    sx={inputStyle}
+                                    onBlur={() => trigger("phone")}
+                                />
+                            )}
+                        />
+                    </Box>
                 </Box>
-            </form>
-        </Card>
+
+                <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={loading}
+                    startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
+                    sx={{
+                        width: { xs: "100%", md: "auto" },
+                        alignSelf: { md: "flex-start" },
+                        bgcolor: "var(--primary)",
+                        color: "var(--light)",
+                        '&:hover': {
+                            bgcolor: "var(--accent)",
+                        },
+                    }}
+                >
+                    {loading ? 'Saving...' : 'Save changes'}
+                </Button>
+            </Box>
+        </form>
+    </Card>
     );
 }

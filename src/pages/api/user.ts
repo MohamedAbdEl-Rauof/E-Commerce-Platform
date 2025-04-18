@@ -45,6 +45,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 email,
                 phone,
                 password: hashedPassword,
+                image: null,
             };
 
             const result = await db.collection("users").insertOne(newUser);
@@ -131,11 +132,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 if (!user) {
                     return res.status(404).json({error: "User not found"});
                 }
-                return res.status(200).json(user);
+                
+                const userWithImage = {
+                    ...user,
+                    image: user.image || null
+                };
+                
+                return res.status(200).json(userWithImage);
             }
 
             const users = await db.collection("users").find({}).toArray();
-            res.status(200).json(users);
+
+            const usersWithImage = users.map(user => ({
+                ...user,
+                image: user.image || null
+            }));
+            
+            res.status(200).json(usersWithImage);
         } catch (e) {
             console.error(e);
             res.status(500).json({error: "Error fetching users"});
