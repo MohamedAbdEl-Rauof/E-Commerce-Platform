@@ -1,8 +1,8 @@
 import React from 'react';
-import {Box, FormControlLabel, IconButton, Radio, RadioGroup, Typography} from '@mui/material';
+import { Box, FormControlLabel, IconButton, Radio, RadioGroup, Typography } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
-import {AnimatePresence, motion} from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface Category {
     _id: string;
@@ -28,11 +28,11 @@ interface FiltersSidebarProps {
 }
 
 const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
-                                                           priceRanges,
-                                                           filters,
-                                                           onFilterChange,
-                                                           onClose,
-                                                       }) => {
+    priceRanges,
+    filters,
+    onFilterChange,
+    onClose,
+}) => {
     return (
         <Box
             component="aside"
@@ -51,48 +51,48 @@ const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
             }}
             aria-label="Filters"
         >
-            <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2}}>
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                    <FilterListIcon fontSize="small"/>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <FilterListIcon fontSize="small" />
                     <Typography variant="h6" component="h2">Filters</Typography>
                 </Box>
                 <IconButton
                     onClick={onClose}
                     sx={{
-                        display: {xs: 'block', lg: 'none'},
+                        display: { xs: 'block', lg: 'none' },
                         color: 'inherit',
-                        '&:hover': {bgcolor: 'var(--hover)'}
+                        '&:hover': { bgcolor: 'var(--hover)' }
                     }}
                     aria-label="Close filters"
                 >
-                    <CloseIcon fontSize="small"/>
+                    <CloseIcon fontSize="small" />
                 </IconButton>
             </Box>
 
-            <Box component="section" sx={{mb: 4}}>
-                <Typography variant="subtitle1" sx={{fontWeight: 'bold', mb: 2, color: 'var(--foreground)'}}>
+            <Box component="section" sx={{ mb: 4 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 2, color: 'var(--foreground)' }}>
                     Price Range
                 </Typography>
                 <AnimatePresence>
                     <motion.div
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        exit={{opacity: 0}}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                     >
                         <RadioGroup
                             value={filters.priceRange}
                             onChange={(e) => onFilterChange("priceRange", e.target.value)}
                         >
                             {priceRanges.map((range) => (
-                                <motion.div key={range.range} whileHover={{scale: 1.02}} whileTap={{scale: 0.98}}>
+                                <motion.div key={range.range} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                                     <FormControlLabel
                                         value={range.range}
                                         control={
                                             <Radio
                                                 sx={{
                                                     color: filters.priceRange === range.range ? 'var(--background)' : 'var(--foreground)',
-                                                    '&.Mui-checked': {color: 'var(--background)'},
-                                                    '& .MuiSvgIcon-root': {fontSize: 20}
+                                                    '&.Mui-checked': { color: 'var(--background)' },
+                                                    '& .MuiSvgIcon-root': { fontSize: 20 }
                                                 }}
                                             />
                                         }

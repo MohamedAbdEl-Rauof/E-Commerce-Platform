@@ -1,9 +1,9 @@
 import React from 'react';
-import {Box, Button, Grid} from '@mui/material';
-import {FilterList} from "@mui/icons-material";
+import { Box, Button, Grid } from '@mui/material';
+import { FilterList } from "@mui/icons-material";
 import SortSelect from './SortSelect';
 import ViewToggle from './ViewToggle';
-import {ViewOption} from "./constants";
+import { ViewOption } from "./constants";
 
 
 interface FilterBarProps {
@@ -20,13 +20,13 @@ interface FilterBarProps {
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
-                                                 filters,
-                                                 onFilterChange,
-                                                 isMobile,
-                                                 setIsMobileFiltersOpen,
-                                                 sortOptions,
-                                                 viewOptions
-                                             }) => {
+    filters,
+    onFilterChange,
+    isMobile,
+    setIsMobileFiltersOpen,
+    sortOptions,
+    viewOptions
+}) => {
     return (
         <Box sx={{
             display: 'flex',
@@ -36,7 +36,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         }}>
             {isMobile && (
                 <Button
-                    startIcon={<FilterList/>}
+                    startIcon={<FilterList />}
                     onClick={() => setIsMobileFiltersOpen(true)}
                     variant="outlined"
                     fullWidth
@@ -56,7 +56,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 <Grid item xs={5} sm={6} md={8} lg={9}>
                     <Box sx={{
                         display: 'flex',
-                        justifyContent: {xs: 'flex-start', sm: 'flex-end'},
+                        justifyContent: { xs: 'flex-start', sm: 'flex-end' },
                         width: '100%',
                     }}>
                         <ViewToggle

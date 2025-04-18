@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box} from '@mui/material';
+import { Box } from '@mui/material';
 import FilterSection from "./FilterSection";
 
 interface Category {
@@ -27,12 +27,12 @@ interface FiltersSidebarProps {
 
 
 const FiltersSidebar: React.FC<FiltersSidebarProps> = ({
-                                                           categories,
-                                                           priceRanges,
-                                                           filters,
-                                                           onFilterChange,
-                                                           onClose,
-                                                       }) => {
+    categories,
+    priceRanges,
+    filters,
+    onFilterChange,
+    onClose,
+}) => {
     return (
         <Box
             component="aside"
