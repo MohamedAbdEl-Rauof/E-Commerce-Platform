@@ -1,17 +1,17 @@
 "use client";
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {Box, Button, Container, Grid, Paper, Typography} from "@mui/material";
-import {styled} from "@mui/material/styles";
-import {useSession} from "next-auth/react";
-import {useForm} from "react-hook-form";
-import {valibotResolver} from "@hookform/resolvers/valibot";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Swal from "sweetalert2";
 import ContactInformation from "./components/step2/ContactInformation";
 import OrderSummary from "./components/step2/OrderSummary";
 import ShippingAddress from "./components/step2/ShippingAddress";
 import PaymentMethod from "./components/step2/PaymentMethod";
-import {CartItem, UserData} from "./types/type";
-import {schema} from "./schema/validationSchema";
+import { CartItem, UserData } from "./types/type";
+import { schema, FormData } from "./schema/validationSchema";
 
 interface StepProps {
     cartItems: CartItem[];
@@ -23,13 +23,13 @@ interface StepProps {
     addToCart: (userId: string, productId: string) => Promise<void>;
 }
 
-const StyledPaper = styled(Paper)(({theme}) => ({
+const StyledPaper = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(3),
     backgroundColor: 'var(--background-paper)',
     color: 'var(--text-primary)',
 }));
 
-const StyledButton = styled(Button)(({theme}) => ({
+const StyledButton = styled(Button)(({ theme }) => ({
     mt: 3,
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
@@ -43,14 +43,14 @@ const StyledButton = styled(Button)(({theme}) => ({
 }));
 
 const Step2: React.FC<StepProps> = ({
-                                        cartItems,
-                                        selectedShipping,
-                                        handleCheckout,
-                                        decrementFromCart,
-                                        addToCart,
-                                    }) => {
+    cartItems,
+    selectedShipping,
+    handleCheckout,
+    decrementFromCart,
+    addToCart,
+}) => {
     const [total, setTotal] = useState<number>(0);
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const userId = session?.user?.id;
     const [paymentMethod, setPaymentMethod] = useState<string>("");
     const [isFormValid, setIsFormValid] = useState(false);
@@ -60,7 +60,9 @@ const Step2: React.FC<StepProps> = ({
     // Handle payment method selection
     const handleSelect = (method: string) => {
         setPaymentMethod(method);
-        setValue('paymentMethod', method); // Add this line
+        setValue('paymentMethod', method);
+        // Trigger validation after setting the value
+        trigger('paymentMethod');
         console.log("Selected Payment Method:", method);
     };
 
@@ -86,12 +88,12 @@ const Step2: React.FC<StepProps> = ({
     const {
         control,
         handleSubmit,
-        formState: {errors, isValid},
+        formState: { errors, isValid },
         trigger,
         reset,
         setValue,
-    } = useForm<UserData>({
-        resolver: valibotResolver(schema),
+    } = useForm<FormData>({
+        resolver: zodResolver(schema),
         mode: "onChange",
         defaultValues: {
             firstName: "",
@@ -111,10 +113,18 @@ const Step2: React.FC<StepProps> = ({
     });
 
     useEffect(() => {
-        // Check if the form is valid
-        const isValidForm = isValid && cartItems.length > 0;
+        // Check if the form is valid and if payment method is selected
+        const isValidForm = isValid && cartItems.length > 0 && paymentMethod !== "";
         setIsFormValid(isValidForm);
-    }, [isValid, cartItems]);
+
+        // For debugging
+        console.log("Form validation status:", {
+            isValid,
+            hasCartItems: cartItems.length > 0,
+            paymentMethod,
+            isFormValid: isValidForm
+        });
+    }, [isValid, cartItems, paymentMethod]);
 
     const onSubmit = handleSubmit(async (data) => {
         const subtotal = calculateSubtotal(cartItems);
@@ -174,7 +184,7 @@ const Step2: React.FC<StepProps> = ({
         try {
             const response = await fetch("/api/orders", {
                 method: "POST",
-                headers: {"Content-Type": "application/json"},
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(orderData),
             });
 
@@ -186,7 +196,6 @@ const Step2: React.FC<StepProps> = ({
             const result = await response.json();
             console.log("Order created successfully:", result);
 
-            // Show success message
             Swal.fire({
                 title: "Order Placed!",
                 text: "Your order has been successfully placed.",
@@ -194,7 +203,6 @@ const Step2: React.FC<StepProps> = ({
                 confirmButtonText: "OK",
             });
 
-            // Reset form and cart
             reset();
             handleCheckout();
         } catch (error) {
@@ -210,7 +218,7 @@ const Step2: React.FC<StepProps> = ({
 
     return (
         <Container maxWidth="lg">
-            <Box sx={{mt: 4, mb: 4}}>
+            <Box sx={{ mt: 4, mb: 4 }}>
                 <Typography variant="h4" component="h1" gutterBottom>
                     Checkout
                 </Typography>
@@ -218,13 +226,13 @@ const Step2: React.FC<StepProps> = ({
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={8}>
                             <StyledPaper elevation={3}>
-                                <ContactInformation control={control} errors={errors} trigger={trigger}/>
-                                <ShippingAddress control={control} errors={errors} trigger={trigger}/>
+                                <ContactInformation control={control} errors={errors} trigger={trigger} />
+                                <ShippingAddress control={control} errors={errors} trigger={trigger} />
                                 <PaymentMethod control={control} errors={errors} handleSelect={handleSelect}
-                                               trigger={trigger} setValue={setValue}/>
+                                    trigger={trigger} setValue={setValue} />
                             </StyledPaper>
 
-                            <Box sx={{my: 3}}>
+                            <Box sx={{ my: 3 }}>
                                 <StyledButton
                                     type="submit"
                                     variant="contained"

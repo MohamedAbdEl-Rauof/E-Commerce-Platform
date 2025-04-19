@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {Box, Button, CircularProgress, Paper, Typography} from "@mui/material";
-import {useSession} from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import { Box, Button, CircularProgress, Paper, Typography } from "@mui/material";
+import { useSession } from "next-auth/react";
 import ThankYouMessage from "./components/step3/ThankYouMessage";
 import OrderBadges from "./components/step3/OrderBadges";
 import OrderDetails from "./components/step3/OrderDetails";
@@ -29,8 +29,8 @@ type Order = {
     orderCode: string;
 };
 
-const Step3: React.FC<StepProps> = ({cartItems}) => {
-    const {data: session} = useSession();
+const Step3: React.FC<StepProps> = ({ cartItems }) => {
+    const { data: session } = useSession();
     const userId = session?.user?.id || "";
     const [order, setOrder] = useState<Order[] | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +74,7 @@ const Step3: React.FC<StepProps> = ({cartItems}) => {
     if (isLoading) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <CircularProgress/>
+                <CircularProgress />
             </Box>
         );
     }
@@ -90,35 +90,36 @@ const Step3: React.FC<StepProps> = ({cartItems}) => {
     const firstOrder = order[0];
 
     return (
-        <Box sx={{maxWidth: 'lg', mx: 'auto', mt: 6, mb: 4, px: 2}}>
-            <Paper elevation={3} sx={{p: 4, borderRadius: 2, bgcolor: 'var(--light)'}}>
-                <ThankYouMessage/>
-                <OrderBadges cartItems={cartItems}/>
-                <OrderDetails order={firstOrder}/>
-                <Box sx={{mt: 4, display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap'}}>
+        <Box sx={{ maxWidth: 'lg', mx: 'auto', mt: 6, mb: 4, px: 2 }}>
+            <Paper elevation={3} sx={{ p: 4, borderRadius: 2, bgcolor: 'var(--light)' }}>
+                <ThankYouMessage />
+                <OrderBadges cartItems={cartItems} />
+                <OrderDetails order={firstOrder} />
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
                     <Button
                         variant="contained"
                         color="primary"
+                        href="/user/home"
                         sx={{
                             borderRadius: 2,
-                            bgcolor: 'var(--primary)',
-                            '&:hover': {bgcolor: 'var(--hover)'}
+                            padding: '10px 20px',
+                            fontWeight: 600,
+                            textTransform: 'none',
+                            boxShadow: '0 2px 4px var(--shadow)',
+                            backgroundColor: 'var(--primary)',
+                            color: 'var(--light)',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                                backgroundColor: 'var(--accent)',
+                                boxShadow: '0 4px 8px var(--shadow)',
+                                transform: 'translateY(-2px)'
+                            },
+                            '&:active': {
+                                transform: 'translateY(0)'
+                            }
                         }}
                     >
-                        Purchase History
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={handleRefresh}
-                        sx={{
-                            borderRadius: 2,
-                            borderColor: 'var(--primary)',
-                            color: 'var(--primary)',
-                            '&:hover': {borderColor: 'var(--hover)', color: 'var(--hover)'}
-                        }}
-                    >
-                        Refresh Order
+                        Continue Shopping
                     </Button>
                 </Box>
             </Paper>
