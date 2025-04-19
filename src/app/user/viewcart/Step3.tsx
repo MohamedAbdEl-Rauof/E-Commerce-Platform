@@ -55,7 +55,6 @@ const Step3: React.FC<StepProps> = ({ cartItems }) => {
 
             const data = await response.json();
             setOrder(data);
-            console.log("Order data:", data);
         } catch (error) {
             console.error("Error fetching order:", error);
         } finally {

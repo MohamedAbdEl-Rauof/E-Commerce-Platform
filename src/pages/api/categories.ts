@@ -127,8 +127,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                         {session}
                     );
 
-                    console.log(`Deleted ${deleteProductsResult.deletedCount} products`);
-
                     // Delete the category
                     const deleteCategoryResult = await db.collection('categories').deleteOne(
                         {_id: new ObjectId(id as string)},
@@ -138,8 +136,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     if (deleteCategoryResult.deletedCount === 0) {
                         throw new Error('Category not found');
                     }
-
-                    console.log('Category deleted successfully');
                 });
 
                 // If we reach here, the transaction was successful

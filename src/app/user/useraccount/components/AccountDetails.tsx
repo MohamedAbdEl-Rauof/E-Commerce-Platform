@@ -88,13 +88,6 @@ export default function AccountDetails({ userData, selectedFile, onFileUpload }:
         }
     }, [userData , reset]);
 
-    // Handle the selectedFile prop when it changes
-    useEffect(() => {
-        if (selectedFile) {
-            console.log("File selected for upload:", selectedFile.name);
-        }
-    }, [selectedFile]);
-
     const convertToBase64 = (file: File): Promise<string> => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -166,7 +159,6 @@ export default function AccountDetails({ userData, selectedFile, onFileUpload }:
     
             if (response.ok) {
                 const responseData = await response.json();
-                console.log('User updated:', responseData);
                 toast.success('User information updated successfully!');
                 refreshUser();
                 

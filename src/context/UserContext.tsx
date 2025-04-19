@@ -55,12 +55,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             }
 
             const userData = await response.json();
-            console.log("Fetched user data:", userData);
             setUser(userData);
         } catch (err) {
             console.error('Error fetching user:', err);
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
-            
+
             if (session?.user) {
                 setUser({
                     _id: session.user.id,
@@ -81,9 +80,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        console.log("Session status:", status);
-        console.log("Session data:", session);
-        
         if (status === 'authenticated') {
             fetchUser();
         } else if (status === 'unauthenticated') {

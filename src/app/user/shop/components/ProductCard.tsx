@@ -26,7 +26,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
     const userId = session?.user?.id;
     const { addToCart, toggleFavorite, updateRating, cart, checkUserSignin } = useCart();
 
-    console.log("categoryId", categoryId)
     const handleAddToCart = useCallback(() => {
         if (userId) {
             addToCart(userId, product._id);

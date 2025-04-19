@@ -114,7 +114,6 @@ const SignUp = () => {
             reset();
         } catch (error) {
             const err = error as Error;
-            console.log(err.message);
             toast.error(`Ooops error ${err.message}`);
         }
     };

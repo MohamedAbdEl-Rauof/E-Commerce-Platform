@@ -55,15 +55,12 @@ const Step2: React.FC<StepProps> = ({
     const [paymentMethod, setPaymentMethod] = useState<string>("");
     const [isFormValid, setIsFormValid] = useState(false);
 
-    console.log("cartItems:", cartItems);
-
     // Handle payment method selection
     const handleSelect = (method: string) => {
         setPaymentMethod(method);
         setValue('paymentMethod', method);
         // Trigger validation after setting the value
         trigger('paymentMethod');
-        console.log("Selected Payment Method:", method);
     };
 
     // Update total on cartItems or selectedShipping change
@@ -116,14 +113,6 @@ const Step2: React.FC<StepProps> = ({
         // Check if the form is valid and if payment method is selected
         const isValidForm = isValid && cartItems.length > 0 && paymentMethod !== "";
         setIsFormValid(isValidForm);
-
-        // For debugging
-        console.log("Form validation status:", {
-            isValid,
-            hasCartItems: cartItems.length > 0,
-            paymentMethod,
-            isFormValid: isValidForm
-        });
     }, [isValid, cartItems, paymentMethod]);
 
     const onSubmit = handleSubmit(async (data) => {
@@ -194,7 +183,6 @@ const Step2: React.FC<StepProps> = ({
             }
 
             const result = await response.json();
-            console.log("Order created successfully:", result);
 
             Swal.fire({
                 title: "Order Placed!",

@@ -43,11 +43,9 @@ const ContactForm = () => {
             )
             .then(
                 (result) => {
-                    console.log(result.text);
                     toast.success("Email sent successfully! We will contact you soon.");
                 },
                 (error) => {
-                    console.log(error.text);
                     toast.error("Failed to send email. Please try again later.");
                 }
             );
