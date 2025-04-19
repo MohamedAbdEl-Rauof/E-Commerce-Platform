@@ -11,12 +11,12 @@ import {
     ListItemText,
     Paper,
 } from '@mui/material';
-import { IoMdClose } from 'react-icons/io';
+import {IoMdClose} from 'react-icons/io';
 import SearchIcon from '@mui/icons-material/Search';
-import { Session } from 'next-auth';
-import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
-import { NavItem } from "./Navigation";
+import {Session} from 'next-auth';
+import {useRouter} from 'next/navigation';
+import {signOut} from 'next-auth/react';
+import {NavItem} from "./Navigation";
 import Swal from "sweetalert2";
 
 interface MobileSidebarProps {
@@ -53,7 +53,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
     };
 
     return (
-        <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+        <Box sx={{display: {xs: 'block', md: 'none'}}}>
             <Drawer
                 anchor="left"
                 open={isSidebarOpen}
@@ -65,12 +65,12 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
                     }
                 }}
             >
-                <Box sx={{ width: 250, height: '100%', backgroundColor: 'var(--background)' }} role="presentation">
+                <Box sx={{width: 250, height: '100%', backgroundColor: 'var(--background)'}} role="presentation">
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton onClick={toggleSidebar(false)}>
-                                <ListItemText primary="3𝓵𝓮𝓰𝓪𝓷𝓽" />
-                                <IoMdClose style={{ fontSize: '1.25rem', marginLeft: '0.5rem', color: 'var(--muted)' }} />
+                                <ListItemText primary="3𝓵𝓮𝓰𝓪𝓷𝓽"/>
+                                <IoMdClose style={{fontSize: '1.25rem', marginLeft: '0.5rem', color: 'var(--muted)'}}/>
                             </ListItemButton>
                         </ListItem>
                     </List>
@@ -87,12 +87,12 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
                         }}
                     >
                         <InputBase
-                            sx={{ ml: 1, flex: 1, color: 'var(--search-bar-text)' }}
+                            sx={{ml: 1, flex: 1, color: 'var(--search-bar-text)'}}
                             placeholder="Search"
-                            inputProps={{ 'aria-label': 'search' }}
+                            inputProps={{'aria-label': 'search'}}
                         />
-                        <IconButton type="button" sx={{ p: '1px', color: 'var(--search-bar-text)' }} aria-label="search">
-                            <SearchIcon />
+                        <IconButton type="button" sx={{p: '1px', color: 'var(--search-bar-text)'}} aria-label="search">
+                            <SearchIcon/>
                         </IconButton>
                     </Paper>
 
@@ -107,15 +107,15 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
                                         },
                                     }}
                                 >
-                                    <ListItemText primary={item} />
+                                    <ListItemText primary={item}/>
                                 </ListItemButton>
                             </ListItem>
                         ))}
                     </List>
 
-                    <Box sx={{ position: 'fixed', bottom: 20, width: 250 }}>
+                    <Box sx={{position: 'fixed', bottom: 20, width: 250}}>
                         {session?.user?.id ? (
-                            <Box sx={{ display: 'flex', justifyContent: 'space-around', p: 2 }}>
+                            <Box sx={{display: 'flex', justifyContent: 'space-around', p: 2}}>
                                 <Button
                                     sx={{
                                         width: '45%',

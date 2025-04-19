@@ -21,7 +21,6 @@ import CategoryIcon from '@mui/icons-material/Category';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
-import PeopleIcon from '@mui/icons-material/People';
 import Link from 'next/link';
 import {usePathname, useRouter} from 'next/navigation';
 import {useSession} from 'next-auth/react';
