@@ -4,32 +4,23 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Comment, ReactionType, ReplyStates } from './components/types';
 import NewCommentForm from './components/NewCommentForm';
 import CommentComponent from './components/CommentComponent';
-import { useSession } from 'next-auth/react'; 
+import { useSession } from 'next-auth/react';
+import { useUser } from '@/context/UserContext';
 
 function ProductDetails() {
-    // Get user session data
-    const { data: session } = useSession();
-    const [userName, setUserName] = useState(session?.user?.name || 'Anonymous User');
-    const userId = session?.user?.id || 'AnonymousUser';
-    const [userImage, setUserImage] = useState(session?.user?.image || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png');
+    const { user } = useUser();
+
+    const [userId, setUserId] = useState<string>('AnonymousUser');
+    const [userName, setUserName] = useState<string>('Anonymous User');
+    const [userImage, setUserImage] = useState<string>('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png');
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch(`/api/user?id=${userId}`);
-                const data = await response.json();
-
-                if (data) {
-                    if (data?.name) setUserName(data?.name);
-                    if (data?.image) setUserImage(data?.image);
-                }
-            } catch (error) {
-                console.error("Error fetching user data:", error);
-            }
-        };
-        fetchData();
-
-    }, [userId]);
+        if (user) {
+            setUserId(user._id || 'AnonymousUser');
+            setUserName(user.name || 'Anonymous User');
+            setUserImage(user.image || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png');
+        }
+    }, [user]);
 
     // Load comments from localStorage on initial render
     const [comments, setComments] = useState<Comment[]>(() => {
