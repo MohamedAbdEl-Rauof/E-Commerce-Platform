@@ -85,8 +85,10 @@
 > password : 123456789
 >
 >
-> email : HIHICaptain@gmail.com
-> password : HIHICaptain@gmail.com
+> email : testraouf12@mozej.com
+> password :testraouf12@mozej.com
+
+
 >
 >
 > this is two page the first when user select on categories , send to the product page as context api , to open it ,

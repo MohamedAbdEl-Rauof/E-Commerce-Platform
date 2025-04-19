@@ -1,11 +1,11 @@
-import React, {useCallback, useMemo} from 'react';
-import {Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography} from '@mui/material';
+import React, { useCallback, useMemo } from 'react';
+import { Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography } from '@mui/material';
 import Rating from "@mui/material/Rating";
-import {useSession} from "next-auth/react";
-import {useCart} from "@/context/AddToCartContext";
+import { useSession } from "next-auth/react";
+import { useCart } from "@/context/AddToCartContext";
 import Image from "next/image";
-import {FaHeart, FaRegHeart} from "react-icons/fa";
-import {Product} from "@/context/ProductContext";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { Product } from "@/context/ProductContext";
 
 interface ProductCardProps {
     product: Product;
@@ -16,17 +16,16 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
-                                                     product,
-                                                     isList,
-                                                     onFavorite,
-                                                     isFavorite = false,
-                                                     categoryId
-                                                 }) => {
-    const {data: session} = useSession();
+    product,
+    isList,
+    onFavorite,
+    isFavorite = false,
+    categoryId
+}) => {
+    const { data: session } = useSession();
     const userId = session?.user?.id;
-    const {addToCart, toggleFavorite, updateRating, cart, checkUserSignin} = useCart();
+    const { addToCart, toggleFavorite, updateRating, cart, checkUserSignin } = useCart();
 
-    console.log("categoryId", categoryId)
     const handleAddToCart = useCallback(() => {
         if (userId) {
             addToCart(userId, product._id);
@@ -76,7 +75,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 },
             },
         }}>
-            <Box sx={{position: 'relative', width: isList ? '33%' : '100%', overflow: 'hidden'}}>
+            <Box sx={{ position: 'relative', width: isList ? '33%' : '100%', overflow: 'hidden' }}>
                 <CardMedia
                     component="div"
                     sx={{
@@ -128,9 +127,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     }}
                 >
                     {isFavorite || cartItem?.isFavourite ? (
-                        <FaHeart className="text-red-500"/>
+                        <FaHeart className="text-red-500" />
                     ) : (
-                        <FaRegHeart/>
+                        <FaRegHeart />
                     )}
                 </IconButton>
 
@@ -161,8 +160,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     />
                 )}
             </Box>
-            <CardContent sx={{flexGrow: 1, display: 'flex', flexDirection: 'column', p: 2}}>
-                <Typography variant="h6" component="h3" gutterBottom noWrap sx={{fontWeight: 'bold'}}>
+            <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', p: 2 }}>
+                <Typography variant="h6" component="h3" gutterBottom noWrap sx={{ fontWeight: 'bold' }}>
                     {product.name}
                 </Typography>
                 <Rating
@@ -179,12 +178,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
                     }}
                     onChange={handleRatingChange}
                 />
-                <Box sx={{display: 'flex', alignItems: 'center', gap: 1, mt: 1}}>
-                    <Typography variant="h6" component="span" sx={{fontWeight: 'bold', color: 'var(--foreground)'}}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
+                    <Typography variant="h6" component="span" sx={{ fontWeight: 'bold', color: 'var(--foreground)' }}>
                         ${product.price.toFixed(2)}
                     </Typography>
                     {product.PriceBeforeDiscount && (
-                        <Typography variant="body2" sx={{textDecoration: 'line-through', color: 'var(--muted)'}}>
+                        <Typography variant="body2" sx={{ textDecoration: 'line-through', color: 'var(--muted)' }}>
                             ${product.PriceBeforeDiscount}
                         </Typography>
                     )}

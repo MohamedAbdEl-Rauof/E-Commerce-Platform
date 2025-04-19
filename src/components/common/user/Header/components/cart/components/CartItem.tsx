@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
-import {Box, Button, IconButton, Typography, useMediaQuery} from "@mui/material";
-import {IoMdClose} from "react-icons/io";
-import {FaHeart, FaRegHeart} from "react-icons/fa";
+import { Box, Button, IconButton, Typography, useMediaQuery } from "@mui/material";
+import { IoMdClose } from "react-icons/io";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import Image from "next/image";
 
 interface Item {
@@ -25,22 +25,22 @@ interface CartItemProps {
 }
 
 const CartItem: React.FC<CartItemProps> = ({
-                                               item,
-                                               userId,
-                                               deleteItem,
-                                               toggleFavorite,
-                                               decrementFromCart,
-                                               addToCart,
-                                               checkUserSignin,
-                                           }) => {
+    item,
+    userId,
+    deleteItem,
+    toggleFavorite,
+    decrementFromCart,
+    addToCart,
+    checkUserSignin,
+}) => {
     const isSmallScreen = useMediaQuery('(max-width:600px)');
 
     return (
         <Box
             sx={{
                 display: 'flex',
-                flexDirection: {xs: 'column', sm: 'row'},
-                alignItems: {xs: 'flex-start', sm: 'center'},
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: { xs: 'flex-start', sm: 'center' },
                 gap: 2,
                 p: 2,
                 bgcolor: 'var(--background)',
@@ -50,31 +50,31 @@ const CartItem: React.FC<CartItemProps> = ({
                 mb: 2,
             }}
         >
-            <Box sx={{display: 'flex', justifyContent: {xs: 'center', sm: 'flex-start'}}}>
+            <Box sx={{ display: 'flex', justifyContent: { xs: 'center', sm: 'flex-start' } }}>
                 <Image
                     width={isSmallScreen ? 48 : 64}
                     height={isSmallScreen ? 48 : 64}
                     priority
                     src={item.image}
                     alt={item.name || "Product image"}
-                    style={{objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--border)'}}
+                    style={{ objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--border)' }}
                 />
             </Box>
-            <Box sx={{display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 1}}>
-                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-                    <Typography variant="subtitle1" sx={{fontWeight: 'bold', color: 'var(--foreground)'}}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, gap: 1 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'var(--foreground)' }}>
                         {item.name || "Product"}
                     </Typography>
-                    <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
-                        <Typography variant="subtitle1" sx={{fontWeight: 'bold', color: 'var(--foreground)'}}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: 'var(--foreground)' }}>
                             ${item.price?.toFixed(2) || "0.00"}
                         </Typography>
                         <IconButton onClick={() => deleteItem(item.productId)} size="small">
-                            <IoMdClose/>
+                            <IoMdClose />
                         </IconButton>
                     </Box>
                 </Box>
-                <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Box sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -84,23 +84,23 @@ const CartItem: React.FC<CartItemProps> = ({
                     }}>
                         <Button
                             onClick={() => userId ? decrementFromCart(userId, item.productId) : checkUserSignin()}
-                            sx={{minWidth: '40px', color: 'var(--foreground)'}}
+                            sx={{ minWidth: '40px', color: 'var(--foreground)' }}
                         >
                             -
                         </Button>
-                        <Typography sx={{mx: 2, color: 'var(--foreground)'}}>{item.quantity}</Typography>
+                        <Typography sx={{ mx: 2, color: 'var(--foreground)' }}>{item.quantity}</Typography>
                         <Button
                             onClick={() => userId ? addToCart(userId, item.productId) : checkUserSignin()}
-                            sx={{minWidth: '40px', color: 'var(--foreground)'}}
+                            sx={{ minWidth: '40px', color: 'var(--foreground)' }}
                         >
                             +
                         </Button>
                     </Box>
                     <IconButton onClick={() => toggleFavorite(userId, item.productId)} size="small">
                         {item.isFavourite ? (
-                            <FaHeart style={{color: 'var(--danger)'}}/>
+                            <FaHeart style={{ color: 'var(--danger)' }} />
                         ) : (
-                            item.quantity > 0 && <FaRegHeart style={{color: 'var(--muted)'}}/>
+                            item.quantity > 0 && <FaRegHeart style={{ color: 'var(--muted)' }} />
                         )}
                     </IconButton>
                 </Box>

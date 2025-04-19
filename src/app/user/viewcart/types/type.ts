@@ -27,8 +27,8 @@ export interface UserData {
     city: string;
     state: string;
     zipCode: string;
-    cardNumber: string;
-    expirationDate: string;
-    cvc: string;
+    cardNumber?: string;
+    expirationDate?: string;
+    cvc?: string;
     paymentMethod: string;
 }

@@ -3,9 +3,17 @@ import {NextApiRequest, NextApiResponse} from "next";
 import bcrypt from "bcrypt";
 import {ObjectId} from "mongodb";
 
+interface UpdateUserData {
+    name: string;
+    username: string;
+    email: string;
+    phone: string;
+    image?: string;
+}
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const client = await clientPromise;
-    const db = client.db("e-commerce");
+    const db = client.db(process.env.MONGODB_DB);
 
     if (req.method === "POST") {
         try {
@@ -37,6 +45,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 email,
                 phone,
                 password: hashedPassword,
+                image: null,
             };
 
             const result = await db.collection("users").insertOne(newUser);
@@ -50,70 +59,66 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         }
     } else if (req.method === "PUT") {
         try {
-            const {id, firstName, username, email, phone} = req.body;
+            const {userId} = req.query;
+            const {id: bodyId, name, username, email, phone, image} = req.body;
+            // Use userId from query params if available, otherwise use id from body
+            const id = userId || bodyId;
 
-            // Ensure the user ID is provided
+            // Ensure the ID is provided
             if (!id) {
                 return res.status(400).json({error: "User ID is required"});
             }
-
-            // Log the ID and its conversion to ObjectId
-            console.log("Incoming ID:", id);
-            console.log("Converted ObjectId:", new ObjectId(id));
 
             // Ensure the ID is a valid MongoDB ObjectId
             if (!ObjectId.isValid(id)) {
                 return res.status(400).json({error: "Invalid User ID"});
             }
 
-            // Check if the user exists by ID before updating
-            const existingUser = await db
-                .collection("users")
-                .findOne({_id: new ObjectId(id)});
+            // Find the user by ID
+            const existingUser = await db.collection("users").findOne({_id: new ObjectId(id as string)});
             if (!existingUser) {
                 return res.status(404).json({error: "User not found"});
             }
 
             // Check if a user with the same email exists, but exclude the current user
-            const existingEmail = await db.collection("users").findOne({email});
-            if (existingEmail && existingEmail._id.toString() !== id) {
-                return res
-                    .status(409)
-                    .json({error: "A user with this email already exists"});
+            const existingEmail = await db.collection("users").findOne({email, _id: {$ne: new ObjectId(id as string)}});
+            if (existingEmail) {
+                return res.status(409).json({error: "A user with this email already exists"});
             }
 
             // Check if a user with the same phone number exists, but exclude the current user
-            const existingPhone = await db.collection("users").findOne({phone});
-            if (existingPhone && existingPhone._id.toString() !== id) {
-                return res
-                    .status(409)
-                    .json({error: "A user with this phone number already exists"});
+            const existingPhone = await db.collection("users").findOne({phone, _id: {$ne: new ObjectId(id as string)}});
+            if (existingPhone) {
+                return res.status(409).json({error: "A user with this phone number already exists"});
             }
 
-            // Proceed to update the user
-            const updatedUser = await db.collection("users").findOneAndUpdate(
-                {_id: new ObjectId(id)},
-                {
-                    $set: {
-                        name: firstName,
-                        username,
-                        email,
-                        phone,
-                    },
-                },
-                {returnDocument: "after"},
-            );
+            const updateObject: UpdateUserData = {
+                name,
+                username,
+                email,
+                phone,
+            };
 
-            if (!updatedUser?.value) {
-                return res.status(404).json({error: "User not found"});
+            if (image) {
+                updateObject.image = image;
+            }
+
+            const updatedUser = await db.collection("users").findOneAndUpdate(
+                {_id: new ObjectId(id as string)},
+                {$set: updateObject},
+                {returnDocument: "after"}
+            );
+            
+            if (!updatedUser) {
+                return res.status(404).json({error: "User not found after update"});
             }
 
             res.status(200).json({
                 message: "User updated successfully",
-                user: updatedUser.value,
+                user: updatedUser,
             });
         } catch (error) {
-            console.error(error);
+            console.error("Error in PUT method:", error);
             res.status(500).json({error: "Error updating user data"});
         }
     } else if (req.method === "GET") {
@@ -127,11 +132,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 if (!user) {
                     return res.status(404).json({error: "User not found"});
                 }
-                return res.status(200).json(user);
+                
+                const userWithImage = {
+                    ...user,
+                    image: user.image || null
+                };
+                
+                return res.status(200).json(userWithImage);
             }
 
             const users = await db.collection("users").find({}).toArray();
-            res.status(200).json(users);
+
+            const usersWithImage = users.map(user => ({
+                ...user,
+                image: user.image || null
+            }));
+            
+            res.status(200).json(usersWithImage);
         } catch (e) {
             console.error(e);
             res.status(500).json({error: "Error fetching users"});

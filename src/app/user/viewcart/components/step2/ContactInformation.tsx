@@ -10,8 +10,6 @@ interface ContactInformationProps {
 }
 
 const ContactInformation: React.FC<ContactInformationProps> = ({control, errors, trigger}) => {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const inputStyle = {
         '& .MuiOutlinedInput-root': {

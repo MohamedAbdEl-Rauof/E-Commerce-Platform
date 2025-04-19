@@ -5,6 +5,7 @@ import {SliderProvider} from "@/context/SliderContext";
 import {CategoriesProvider} from "@/context/CategoriesContext";
 import Header from "@/components/common/user/Header/Page";
 import Footer from "@/components/common/user/Footer";
+import {UserProvider} from "@/context/UserContext"; 
 
 import {Inter, Roboto_Mono} from 'next/font/google';
 
@@ -27,6 +28,7 @@ export default function UserLayout({children}: { children: React.ReactNode }) {
                 <CategoriesProvider>
                     <ProductProvider>
                         <CartProvider>
+                            <UserProvider>
                             <div className="flex flex-col min-h-screen">
                                 <Header/>
                                 <main className="flex-grow">
@@ -34,6 +36,7 @@ export default function UserLayout({children}: { children: React.ReactNode }) {
                                 </main>
                                 <Footer/>
                             </div>
+                            </UserProvider>
                         </CartProvider>
                     </ProductProvider>
                 </CategoriesProvider>

@@ -14,16 +14,8 @@ interface ViewProductProps {
 const ViewProduct: React.FC<ViewProductProps> = ({productId, onBack, products, categories}) => {
 
     const ProductData = products?.find((product) => product._id === productId);
-    console.log("Product Data:", ProductData);
-    const selectedCategory = categories?.find((category => category._id === ProductData?.categoryId));
-    console.log("Selected Category:", selectedCategory);
 
-    useEffect(() => {
-        if (productId) {
-            // Fetch product data here
-            console.log("Fetching data for viewing product:", productId);
-        }
-    }, [productId]);
+    const selectedCategory = categories?.find((category => category._id === ProductData?.categoryId));
 
     return (
         <Paper

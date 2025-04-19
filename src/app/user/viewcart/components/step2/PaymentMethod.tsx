@@ -10,52 +10,43 @@ import {
     useTheme
 } from "@mui/material";
 import {Control, Controller, FieldErrors, UseFormSetValue, UseFormTrigger} from "react-hook-form";
-import {UserData} from "../../types/type";
 import {CheckCircle, CreditCard, PaymentOutlined, RadioButtonUnchecked} from "@mui/icons-material";
+import { FormData } from "../../schema/validationSchema";
 
 interface PaymentMethodProps {
-    control: Control<UserData>;
-    errors: FieldErrors<UserData>;
-    trigger: UseFormTrigger<UserData>;
-    handleSelect: (method: 'credit-card' | 'paypal') => void;
-    setValue: UseFormSetValue<UserData>;
+    control: Control<FormData>;
+    errors: FieldErrors<FormData>;
+    trigger: UseFormTrigger<FormData>;
+    handleSelect: (method: string) => void;
+    setValue: UseFormSetValue<FormData>;
 }
 
 const PaymentMethod: React.FC<PaymentMethodProps> = ({
-                                                         control,
-                                                         errors,
-                                                         trigger,
-                                                         handleSelect,
-                                                         setValue,
-                                                     }) => {
-    const [selectedMethod, setSelectedMethod] = useState<'credit-card' | 'paypal' | null>(null);
+    control,
+    errors,
+    trigger,
+    handleSelect,
+    setValue,
+}) => {
+    const [selectedMethod, setSelectedMethod] = useState<string>("");
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const handleMethodSelect = (method: 'credit-card' | 'paypal') => {
+    const handleMethodSelect = (method: string) => {
         setSelectedMethod(method);
         handleSelect(method);
         setValue('paymentMethod', method);
 
         if (method === 'paypal') {
+            // Clear credit card fields when PayPal is selected
             setValue('cardNumber', '', {shouldValidate: false});
             setValue('expirationDate', '', {shouldValidate: false});
             setValue('cvc', '', {shouldValidate: false});
         }
 
+        // Only trigger validation for the payment method field
         trigger('paymentMethod');
     };
-
-    useEffect(() => {
-        if (selectedMethod) {
-            trigger("paymentMethod");
-            if (selectedMethod === 'paypal') {
-                setValue('cardNumber', '', {shouldValidate: false});
-                setValue('expirationDate', '', {shouldValidate: false});
-                setValue('cvc', '', {shouldValidate: false});
-            }
-        }
-    }, [selectedMethod, trigger, setValue]);
 
     const inputStyle = {
         '& .MuiOutlinedInput-root': {
@@ -108,6 +99,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                     '&:hover': {
                                         backgroundColor: 'var(--hover)',
                                     },
+                                    backgroundColor: field.value === "credit-card" ? 'var(--hover)' : 'transparent',
                                 }}
                                 onClick={() => handleMethodSelect("credit-card")}
                             >
@@ -128,7 +120,6 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                     <Controller
                                         name="cardNumber"
                                         control={control}
-                                        rules={{required: "Card number is required"}}
                                         render={({field}) => (
                                             <TextField
                                                 {...field}
@@ -146,24 +137,23 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                         <Controller
                                             name="expirationDate"
                                             control={control}
-                                            rules={{required: "Expiration date is required"}}
                                             render={({field}) => (
                                                 <TextField
                                                     {...field}
-                                                    label="Expiration Date"
+                                                    label="Expiration Date (MM/YY)"
                                                     margin="normal"
                                                     error={!!errors.expirationDate}
                                                     helperText={errors.expirationDate?.message}
                                                     onBlur={() => trigger("expirationDate")}
                                                     sx={inputStyle}
                                                     fullWidth={isMobile}
+                                                    placeholder="MM/YY"
                                                 />
                                             )}
                                         />
                                         <Controller
                                             name="cvc"
                                             control={control}
-                                            rules={{required: "CVC is required"}}
                                             render={({field}) => (
                                                 <TextField
                                                     {...field}
@@ -189,6 +179,7 @@ const PaymentMethod: React.FC<PaymentMethodProps> = ({
                                     '&:hover': {
                                         backgroundColor: 'var(--hover)',
                                     },
+                                    backgroundColor: field.value === "paypal" ? 'var(--hover)' : 'transparent',
                                 }}
                                 onClick={() => handleMethodSelect("paypal")}
                             >

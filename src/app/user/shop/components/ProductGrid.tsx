@@ -33,7 +33,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, view, toggleFavorite
 
     return (
         <Box>
-            <Grid container spacing={gridProps.spacing}>
+            <Grid container spacing={gridProps.spacing} sx={{mb: 7  }}>
                 {products.slice(0, visibleProducts).map((product) => (
                     <Grid item key={product._id} xs={gridProps.xs} md={gridProps.md} lg={gridProps.lg}>
                         <ProductCard
@@ -47,7 +47,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, view, toggleFavorite
                 ))}
             </Grid>
             {visibleProducts < products.length && (
-                <Box sx={{display: 'flex', justifyContent: 'center', mt: 4}}>
+                <Box sx={{display: 'flex', justifyContent: 'center', mt: 4 , mb:5}}>
                     <Button
                         variant="contained"
                         onClick={handleShowMore}

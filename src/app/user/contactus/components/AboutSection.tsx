@@ -36,7 +36,7 @@ const AboutSection = () => {
                 display="flex"
                 flexDirection="column"
                 justifyContent="center"
-                bgcolor={isDarkTheme ? 'var(--background)' : 'grey.100'}
+                bgcolor="var(--background)"
             >
                 <Box
                     pl={5}

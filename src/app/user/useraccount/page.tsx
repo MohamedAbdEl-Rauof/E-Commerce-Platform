@@ -1,9 +1,11 @@
-"use client";
+import UserAccountContent from "./components/UserAccountContent";
+import {Box} from "@mui/material";
 
-import AccountPage from "./account/page"
-
-export default function Page() {
+const Page = () => {
     return (
-        <AccountPage/>
-    );
+        <Box style={{maxWidth: 1200, margin: '2rem auto', padding: '0 1rem'}}>
+            <UserAccountContent/>
+        </Box>
+    )
 }
+export default Page

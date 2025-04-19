@@ -15,7 +15,6 @@ interface OrderDetailsProps {
 }
 
 const OrderDetails: React.FC<OrderDetailsProps> = ({order}) => {
-    console.log("ordeeeeeeeeeeeeeer", order);
     const details = [
         {label: 'Order Code:', value: order?.orderCode ?? 'Loading...'},
         {label: 'Date:', value: order?.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'Loading...'},
@@ -29,13 +28,13 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({order}) => {
                 {details.map((detail, index) => (
                     <React.Fragment key={index}>
                         <Grid item xs={6} sm={3}>
-                            <Typography variant="subtitle1" fontWeight="bold" color="text.secondary" textAlign="right">
+                            <Typography variant="subtitle1" fontWeight="bold" color="var(--foreground)" textAlign="right">
                                 {detail.label}
                             </Typography>
                         </Grid>
                         <Grid item xs={6} sm={3}>
                             {order ? (
-                                <Typography variant="subtitle1" color="text.primary" textAlign="left">
+                                <Typography variant="subtitle1" color="var(--foreground)"  textAlign="left">
                                     {detail.value}
                                 </Typography>
                             ) : (

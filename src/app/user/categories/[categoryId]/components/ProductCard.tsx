@@ -29,8 +29,6 @@ const ProductCard: React.FC<ProductCardProps> = ({product, categoryId, isList, i
     const {data: session} = useSession();
     const userId = session?.user?.id;
     const {addToCart, toggleFavorite, updateRating, cart, checkUserSignin} = useCart();
-
-    console.log("isFavorite: ", isFavorite);
     
     const handleAddToCart = useCallback(() => {
         if (userId) {

@@ -37,6 +37,7 @@ const Page = () => {
 
     const handleCheckout = () => {
         router.push("/user/viewcart");
+        closeCart();
     };
 
     const cartItems: CartItem[] = cart

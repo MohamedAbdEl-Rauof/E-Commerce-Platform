@@ -21,7 +21,7 @@ const ContactInfo = () => {
                 {contactItems.map((item, index) => (
                     <Grid item key={index} xs={12} sm={6} md={4}>
                         <Paper
-                            elevation={3}
+                            elevation={2}
                             sx={{
                                 p: 3,
                                 height: '100%',
@@ -32,16 +32,47 @@ const ContactInfo = () => {
                                 bgcolor: 'var(--background)',
                                 color: 'var(--foreground)',
                                 borderRadius: 2,
-                                transition: 'background-color 0.3s, color 0.3s',
+                                transition: 'all 0.3s ease',
+                                border: '1px solid var(--border)',
+                                '&:hover': {
+                                    transform: 'translateY(-5px)',
+                                    boxShadow: '0 10px 20px var(--shadow)',
+                                    borderColor: 'var(--primary)',
+                                }
                             }}
                         >
-                            <Box sx={{fontSize: '3rem', color: 'var(--primary)', mb: 2}}>
+                            <Box sx={{
+                                fontSize: '3rem', 
+                                color: 'var(--primary)', 
+                                mb: 2,
+                                transition: 'transform 0.3s ease',
+                                '&:hover': {
+                                    transform: 'scale(1.1)',
+                                }
+                            }}>
                                 {item.icon}
                             </Box>
-                            <Typography variant="h6" component="h2" gutterBottom color="inherit">
+                            <Typography 
+                                variant="h6" 
+                                component="h2" 
+                                gutterBottom 
+                                color="inherit"
+                                sx={{
+                                    fontWeight: 600,
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.5px'
+                                }}
+                            >
                                 {item.title}
                             </Typography>
-                            <Typography variant="body2" color="inherit" sx={{opacity: 0.7}}>
+                            <Typography 
+                                variant="body2" 
+                                color="inherit" 
+                                sx={{
+                                    opacity: 0.8,
+                                    fontWeight: 400
+                                }}
+                            >
                                 {item.content}
                             </Typography>
                         </Paper>

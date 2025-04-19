@@ -1,6 +1,6 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
     Card,
     Chip,
@@ -13,8 +13,8 @@ import {
     TableRow,
     Typography,
 } from "@mui/material";
-import {useSession} from "next-auth/react";
-import {styled} from "@mui/material/styles";
+import { useSession } from "next-auth/react";
+import { styled } from "@mui/material/styles";
 
 
 interface OrderItem {
@@ -39,7 +39,7 @@ interface Order {
     };
 }
 
-const StyledCard = styled(Card)(({theme}) => ({
+const StyledCard = styled(Card)(({ theme }) => ({
     padding: theme.spacing(4),
     backgroundColor: "var(--background)",
     color: "var(--foreground)",
@@ -47,7 +47,7 @@ const StyledCard = styled(Card)(({theme}) => ({
     boxShadow: "var(--shadow)",
 }));
 
-const StyledTable = styled(Table)(({theme}) => ({
+const StyledTable = styled(Table)(({ theme }) => ({
     "& .MuiTableCell-head": {
         backgroundColor: "var(--card-bg)",
         color: "var(--heading)",
@@ -96,7 +96,7 @@ const formatCurrency = (amount: string | number) => {
 };
 
 export default function OrdersList() {
-    const {data: session} = useSession();
+    const { data: session } = useSession();
     const userId = session?.user?.id || "";
     const [orderData, setOrderData] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -128,23 +128,32 @@ export default function OrdersList() {
 
     if (isLoading) {
         return (
-            <Card sx={{p: 4, display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400}}>
-                <CircularProgress/>
+            <Card sx={{ p: 4, display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
+                <CircularProgress />
             </Card>
         );
     }
 
     if (isLoading) {
         return (
-            <StyledCard sx={{display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400}}>
-                <CircularProgress sx={{color: "var(--primary)"}}/>
+            <StyledCard sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '50vh'
+            }}>
+                <CircularProgress size={60} sx={{ color: 'var(--primary)' }} />
+                <Typography sx={{ mt: 3, color: 'var(--muted)' }}>
+                    Loading orders...
+                </Typography>
             </StyledCard>
         );
     }
 
     return (
         <StyledCard>
-            <Typography variant="h5" sx={{mb: 4, color: "var(--heading)"}}>
+            <Typography variant="h5" sx={{ mb: 4, color: "var(--heading)" }}>
                 My Orders
             </Typography>
 

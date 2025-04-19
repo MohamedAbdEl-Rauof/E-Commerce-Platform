@@ -7,6 +7,27 @@ import {useRouter} from "next/navigation";
 import {signIn} from "next-auth/react";
 import Image from "next/image";
 
+const inputStyle = {
+    '& .MuiOutlinedInput-root': {
+        '& fieldset': {
+            borderColor: 'var(--border)',
+        },
+        '&:hover fieldset': {
+            borderColor: 'var(--hover)',
+        },
+        '&.Mui-focused fieldset': {
+            borderColor: 'var(--focus)',
+        },
+    },
+    '& .MuiInputLabel-root': {
+        color: 'var(--muted)',
+    },
+    '& .MuiInputBase-input': {
+        color: 'var(--foreground)',
+    },
+};
+
+
 const Signin = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -84,6 +105,7 @@ const Signin = () => {
                             label="Email"
                             variant="standard"
                             className="mt-4"
+                            sx={inputStyle}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
@@ -93,6 +115,7 @@ const Signin = () => {
                             variant="standard"
                             type="password"
                             className="mt-4"
+                            sx={inputStyle}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
