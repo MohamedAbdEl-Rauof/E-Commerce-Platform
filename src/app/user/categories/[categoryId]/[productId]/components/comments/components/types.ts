@@ -1,6 +1,5 @@
 import { ThumbsUp, Heart, Angry, Frown, Laugh } from 'lucide-react';
 
-// Types
 export type ReactionType = 'like' | 'love' | 'angry' | 'sad' | 'haha';
 
 export interface BaseComment {
@@ -39,7 +38,6 @@ export interface ReplyStates {
     [key: string]: ReplyState;
 }
 
-// Constants
 export const reactionIcons: Record<ReactionType, ReactionIcon> = {
     like: {
         icon: ThumbsUp,

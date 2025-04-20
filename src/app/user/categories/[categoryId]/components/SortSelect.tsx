@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormControl, MenuItem, Select} from '@mui/material';
+import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 interface SortSelectProps {
     value: string;
@@ -7,29 +7,73 @@ interface SortSelectProps {
     options: { value: string; label: string }[];
 }
 
-const SortSelect: React.FC<SortSelectProps> = ({value, onChange, options}) => (
-    <FormControl size="small">
-        <Select
-            value={value}
-            onChange={(e) => onChange(e.target.value as string)}
-            displayEmpty
-            sx={{
-                backgroundColor: 'var(--background)',
-                color: 'var(--foreground)',
-                border: '1px solid var(--border)',
-                '&:hover': {
-                    backgroundColor: 'var(--hover)',
-                },
-            }}
-        >
-            <MenuItem value="" disabled>Sort by</MenuItem>
-            {options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+const SortSelect: React.FC<SortSelectProps> = ({ value, onChange, options }) => {
+    const handleChange = (event: SelectChangeEvent) => {
+        onChange(event.target.value as string);
+    };
+
+    return (
+        <FormControl size="small" sx={{ minWidth: 120 }}>
+            <Select
+                value={value}
+                onChange={handleChange}
+                displayEmpty
+                MenuProps={{
+                    PaperProps: {
+                        sx: {
+                            backgroundColor: 'var(--background)',
+                            color: 'var(--foreground)',
+                            border: '1px solid var(--border)',
+                            boxShadow: '0 4px 20px var(--shadow)',
+                        }
+                    }
+                }}
+                sx={{
+                    backgroundColor: 'var(--background)',
+                    color: 'var(--foreground)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '4px',
+                    '&:hover': {
+                        backgroundColor: 'var(--hover)',
+                        borderColor: 'var(--primary)',
+                    },
+                    '&.Mui-focused': {
+                        borderColor: 'var(--focus)',
+                        boxShadow: '0 0 0 2px var(--focus)',
+                    },
+                    '& .MuiSelect-icon': {
+                        color: 'var(--muted)',
+                    },
+                    transition: 'all 0.2s ease-in-out',
+                }}
+            >
+                <MenuItem value="" disabled sx={{ color: 'var(--muted)' }}>
+                    Sort by
                 </MenuItem>
-            ))}
-        </Select>
-    </FormControl>
-);
+                {options.map((option) => (
+                    <MenuItem 
+                        key={option.value} 
+                        value={option.value}
+                        sx={{
+                            color: 'var(--foreground)',
+                            '&:hover': {
+                                backgroundColor: 'var(--hover)',
+                            },
+                            '&.Mui-selected': {
+                                backgroundColor: 'var(--primary)',
+                                color: 'var(--light)',
+                                '&:hover': {
+                                    backgroundColor: 'var(--accent)',
+                                },
+                            },
+                        }}
+                    >
+                        {option.label}
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    );
+};
 
 export default SortSelect;

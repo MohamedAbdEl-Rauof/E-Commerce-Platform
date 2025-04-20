@@ -1,4 +1,3 @@
-// context for light or dark mood
 "use client"
 
 import * as React from "react"

@@ -11,7 +11,7 @@ const SliderContainer = styled(Box)(({theme}) => ({
     position: 'relative',
     overflow: 'hidden',
     width: '100%',
-    height: '40vh', // Set a default height
+    height: '40vh', 
     [theme.breakpoints.up('sm')]: {
         height: '50vh',
     },
@@ -36,7 +36,7 @@ const NavigationButton = styled(IconButton)(({theme}) => ({
     '&:hover': {
         backgroundColor: 'var(--background-light)',
     },
-    zIndex: 1, // Ensure buttons are above the image
+    zIndex: 1, 
 }));
 
 const SliderImage = React.memo(() => {

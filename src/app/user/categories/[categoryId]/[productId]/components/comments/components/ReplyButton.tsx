@@ -5,7 +5,6 @@ import { styled } from '@mui/material/styles';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import { ReplyState } from './types';
 
-// Custom styled button that uses CSS variables
 const StyledButton = styled(Button)(() => ({
   borderRadius: '24px',
   padding: '6px 12px',

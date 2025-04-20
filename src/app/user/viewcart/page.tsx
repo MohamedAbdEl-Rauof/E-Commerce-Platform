@@ -1,12 +1,12 @@
 "use client";
-import React, {useCallback, useMemo, useState} from "react";
-import {Box, Button, Step, StepButton, Stepper, Typography, useMediaQuery} from "@mui/material";
+import React, { useCallback, useMemo, useState } from "react";
+import { Box, Button, Step, StepButton, Stepper, Typography, useMediaQuery } from "@mui/material";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
-import {useCart} from "@/context/AddToCartContext";
-import {useProduct} from "@/context/ProductContext";
-import {CartItem} from './types/type';
+import { useCart } from "@/context/AddToCartContext";
+import { useProduct } from "@/context/ProductContext";
+import { CartItem } from './types/type';
 
 const STEPS = ["Shopping Cart", "Checkout Details", "Order Complete"] as const;
 
@@ -24,7 +24,7 @@ const ViewCart = () => {
         toggleFavorite,
         checkUserSignin,
     } = useCart();
-    const {products, loading} = useProduct();
+    const { products, loading } = useProduct();
 
     const handleBack = useCallback(() => {
         setActiveStep((prevStep) => Math.max(prevStep - 1, 0));
@@ -88,7 +88,7 @@ const ViewCart = () => {
                 );
             case 2:
                 return (
-                    <Step3 cartItems={cartItems}/>
+                    <Step3 cartItems={cartItems} />
                 );
             default:
                 return null;
@@ -96,8 +96,8 @@ const ViewCart = () => {
     }, [activeStep, cartItems, handleCheckout, selectedShipping, deleteItem, toggleFavorite, decrementFromCart, addToCart, checkUserSignin]);
 
     return (
-        <Box sx={{width: '85%', maxWidth: '1500px', mx: 'auto', mt: 12}}>
-            <Box sx={{width: '100%'}}>
+        <Box sx={{ width: '85%', maxWidth: '1500px', mx: 'auto', mt: 12 }}>
+            <Box sx={{ width: '100%' }}>
                 <Stepper
                     nonLinear
                     activeStep={activeStep}

@@ -4,7 +4,6 @@ import { Box, IconButton, Paper, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ReactionType, reactionIcons, reactionPickerVariants } from './types';
 
-// Custom styled components that use CSS variables
 const ReactionContainer = styled(Paper)(() => ({
   position: 'absolute',
   top: '100%',
@@ -19,7 +18,6 @@ const ReactionContainer = styled(Paper)(() => ({
   border: '1px solid var(--border)'
 }));
 
-// Map reaction types to CSS variable names
 const reactionColorMap: Record<string, string> = {
   like: 'primary',
   love: 'danger',
@@ -29,7 +27,6 @@ const reactionColorMap: Record<string, string> = {
   angry: 'danger'
 };
 
-// Custom styled reaction button
 const ReactionButton = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== 'reactionType'
 })<{ reactionType: string }>(({ reactionType }) => {

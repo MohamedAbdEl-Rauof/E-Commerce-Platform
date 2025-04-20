@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, } from '@mui/material';
 
 interface DeleteConfirmationDialogProps {
     open: boolean;
@@ -11,13 +11,13 @@ interface DeleteConfirmationDialogProps {
 }
 
 const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
-                                                                               open,
-                                                                               onClose,
-                                                                               onConfirm,
-                                                                               isCategory,
-                                                                               productCount,
-                                                                               categoryName,
-                                                                           }) => {
+    open,
+    onClose,
+    onConfirm,
+    isCategory,
+    productCount,
+    categoryName,
+}) => {
 
     return (
         <Dialog
@@ -30,14 +30,14 @@ const DeleteConfirmationDialog: React.FC<DeleteConfirmationDialogProps> = ({
             <DialogContent>
                 <DialogContentText id="delete-dialog-description">
                     {`Are you sure you want to delete the "${categoryName}"`} {isCategory ? 'Category' : 'Product'}
-                    <br/>
+                    <br />
                     {isCategory && productCount > 0 && (
                         `This category contains ${productCount} product${productCount > 1 ? 's' : ''}.`
                     )}
                     {!isCategory && productCount < 0 && (
                         `This Product contains ${productCount} product${productCount > 1 ? 's' : ''}.`
                     )}
-                    <br/>
+                    <br />
                     This action cannot be undone.
                 </DialogContentText>
             </DialogContent>

@@ -55,8 +55,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     (item: CartItem) => item.productId.toString() === productId
                 );
 
-                // ... (previous code remains unchanged)
-
                 if (existingProductIndex !== -1) {
                     const updates: Partial<CartItem> = {};
                     if (quantity !== undefined) {

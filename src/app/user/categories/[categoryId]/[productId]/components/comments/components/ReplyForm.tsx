@@ -9,7 +9,6 @@ import {
 import { styled } from '@mui/material/styles';
 import { ReplyState } from './types';
 
-// Custom styled components that use CSS variables
 const StyledTextField = styled(TextField)(() => ({
   width: '100%',
   '& .MuiOutlinedInput-root': {

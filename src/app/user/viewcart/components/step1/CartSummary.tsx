@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import {CartItem} from '@/context/AddToCartContext';
+import { CartItem } from '@/context/AddToCartContext';
 
 interface CartSummaryProps {
     cartItems: CartItem[];
@@ -26,19 +26,19 @@ interface CartSummaryProps {
 }
 
 const shippingOptions = [
-    {id: 1, label: "Free Shipping", price: "$0.00"},
-    {id: 2, label: "Express Shipping", price: "+ $15.00"},
-    {id: 3, label: "Pickup", price: "- $21.00"},
+    { id: 1, label: "Free Shipping", price: "$0.00" },
+    { id: 2, label: "Express Shipping", price: "+ $15.00" },
+    { id: 3, label: "Pickup", price: "- $21.00" },
 ];
 
 const CartSummary: React.FC<CartSummaryProps> = ({
-                                                     cartItems,
-                                                     selectedShipping,
-                                                     handleSelectShipping,
-                                                     total,
-                                                     handleCheckout,
-                                                     loading
-                                                 }) => {
+    cartItems,
+    selectedShipping,
+    handleSelectShipping,
+    total,
+    handleCheckout,
+    loading
+}) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -58,7 +58,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({
         >
             <Typography
                 variant="h6"
-                sx={{fontWeight: "bold", mb: 2, textAlign: "center", color: 'var(--foreground)'}}
+                sx={{ fontWeight: "bold", mb: 2, textAlign: "center", color: 'var(--foreground)' }}
             >
                 Cart Summary
             </Typography>
@@ -73,27 +73,27 @@ const CartSummary: React.FC<CartSummaryProps> = ({
                         >
                             <Checkbox
                                 checked={selectedShipping === option.id}
-                                icon={<RadioButtonUncheckedIcon/>}
-                                checkedIcon={<CheckCircleIcon/>}
-                                sx={{color: 'var(--foreground)'}}
+                                icon={<RadioButtonUncheckedIcon />}
+                                checkedIcon={<CheckCircleIcon />}
+                                sx={{ color: 'var(--foreground)' }}
                             />
-                            <Box sx={{display: "flex", justifyContent: "space-between", width: "100%"}}>
-                                <ListItemText primary={option.label} sx={{color: 'var(--foreground)'}}/>
+                            <Box sx={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+                                <ListItemText primary={option.label} sx={{ color: 'var(--foreground)' }} />
                                 <ListItemText
                                     primary={option.price}
-                                    sx={{textAlign: "right", color: 'var(--foreground)'}}
+                                    sx={{ textAlign: "right", color: 'var(--foreground)' }}
                                 />
                             </Box>
                         </ListItemButton>
-                        {index < shippingOptions.length - 1 && <Divider/>}
+                        {index < shippingOptions.length - 1 && <Divider />}
                     </React.Fragment>
                 ))}
             </Box>
 
             {/* Summary */}
-            <Box sx={{display: "flex", justifyContent: "space-between", mt: 2}}>
-                <Typography variant="subtitle1" sx={{color: 'var(--foreground)'}}>Subtotal</Typography>
-                <Typography variant="subtitle1" sx={{color: 'var(--foreground)'}}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+                <Typography variant="subtitle1" sx={{ color: 'var(--foreground)' }}>Subtotal</Typography>
+                <Typography variant="subtitle1" sx={{ color: 'var(--foreground)' }}>
                     ${calculateSubtotal.toFixed(2)}
                 </Typography>
             </Box>
@@ -106,8 +106,8 @@ const CartSummary: React.FC<CartSummaryProps> = ({
                     mt: 1,
                 }}
             >
-                <Typography variant="h6" sx={{color: 'var(--foreground)'}}>Total</Typography>
-                <Typography variant="h6" sx={{color: 'var(--foreground)'}}>${total.toFixed(2)}</Typography>
+                <Typography variant="h6" sx={{ color: 'var(--foreground)' }}>Total</Typography>
+                <Typography variant="h6" sx={{ color: 'var(--foreground)' }}>${total.toFixed(2)}</Typography>
             </Box>
 
             <Button
@@ -116,14 +116,14 @@ const CartSummary: React.FC<CartSummaryProps> = ({
                 sx={{
                     mt: 3,
                     backgroundColor: 'var(--primary)',
-                    '&:hover': {backgroundColor: 'var(--focus)'},
-                    '&:disabled': {backgroundColor: 'var(--disabled)'},
+                    '&:hover': { backgroundColor: 'var(--focus)' },
+                    '&:disabled': { backgroundColor: 'var(--disabled)' },
                 }}
                 onClick={handleCheckout}
                 disabled={loading}
             >
                 {loading ? (
-                    <CircularProgress size={24} color="inherit"/>
+                    <CircularProgress size={24} color="inherit" />
                 ) : (
                     'Checkout'
                 )}

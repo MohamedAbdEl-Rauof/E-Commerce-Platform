@@ -91,26 +91,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
                         objectFit="cover"
                     />
                 </CardMedia>
-                {/*<IconButton*/}
-                {/*    onClick={handleFavoriteToggle}*/}
-                {/*    sx={{*/}
-                {/*        position: 'absolute',*/}
-                {/*        top: 8,*/}
-                {/*        right: 8,*/}
-                {/*        bgcolor: 'white',*/}
-                {/*        transition: 'all 0.2s ease-in-  out',*/}
-                {/*        '&:hover': {*/}
-                {/*            bgcolor: 'var(--hover)',*/}
-                {/*            transform: 'scale(1.1)',*/}
-                {/*        },*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    {cartItem?.isFavourite ? (*/}
-                {/*        <FaHeart className="text-red-500"/>*/}
-                {/*    ) : (*/}
-                {/*        <FaRegHeart/>*/}
-                {/*    )}*/}
-                {/*</IconButton>*/}
 
                 <IconButton
                     onClick={handleFavoriteToggle}

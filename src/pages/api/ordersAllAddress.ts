@@ -4,7 +4,7 @@ import clientPromise from "../../lib/mongodb";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const client = await clientPromise;
-    const db = client.db("e-commerce");
+    const db = client.db(process.env.MONGODB_DB);
     const orderCollection = db.collection("orders");
 
     if (req.method === "GET") {
@@ -13,7 +13,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         try {
             // Check if the userId is a special value to fetch all orders
             if (userId === '*') {
-                // Fetch all orders
                 const allOrders = await orderCollection.find({}).toArray();
 
                 if (allOrders.length === 0) {
@@ -23,7 +22,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 return res.status(200).json(allOrders);
             }
 
-            // Original behavior for specific userId
             if (!userId || !ObjectId.isValid(userId as string)) {
                 return res.status(400).json({message: "Invalid user ID"});
             }
