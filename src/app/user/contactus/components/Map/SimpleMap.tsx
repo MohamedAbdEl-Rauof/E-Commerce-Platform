@@ -16,7 +16,7 @@ const SimpleMap = () => {
                     inset: 0,
                     background: isDarkTheme
                         ? 'linear-gradient(to bottom right, #1A1D1F, #2C3E50)'
-                        : 'linear-gradient(to bottom right, #E8EAED, #D1D5DB)', // Improved light mode gradient
+                        : 'linear-gradient(to bottom right, #E8EAED, #D1D5DB)', 
                     '&::before': {
                         content: '""',
                         position: 'absolute',

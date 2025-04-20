@@ -4,7 +4,6 @@ import { Button, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Comment, reactionIcons } from './types';
 
-// Custom styled button that uses CSS variables
 const StyledButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== 'hasReaction' && prop !== 'reactionColor'
 })<{ hasReaction?: boolean; reactionColor?: string }>(({ hasReaction, reactionColor }) => ({
@@ -20,7 +19,6 @@ const StyledButton = styled(Button, {
   gap: '8px',
   transition: 'all 0.2s ease',
   
-  // Apply different styles based on whether there's a reaction
   ...(hasReaction ? {
     backgroundColor: `var(--${reactionColor || 'primary'})`,
     color: 'var(--light)',
@@ -41,7 +39,6 @@ const StyledButton = styled(Button, {
   })
 }));
 
-// Map reaction types to CSS variable names
 const reactionColorMap: Record<string, string> = {
   like: 'primary',
   love: 'danger',

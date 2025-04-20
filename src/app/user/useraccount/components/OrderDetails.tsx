@@ -101,13 +101,6 @@ export default function OrdersList() {
     const [orderData, setOrderData] = useState<Order[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Ensure code involving localStorage runs only in the client
-    useEffect(() => {
-        if (typeof window !== "undefined" && localStorage) {
-            // Safely use localStorage here, if needed
-        }
-    }, []);
-
     useEffect(() => {
         const fetchOrders = async () => {
             if (!userId) return;
@@ -125,14 +118,6 @@ export default function OrdersList() {
 
         fetchOrders();
     }, [userId]);
-
-    if (isLoading) {
-        return (
-            <Card sx={{ p: 4, display: "flex", justifyContent: "center", alignItems: "center", minHeight: 400 }}>
-                <CircularProgress />
-            </Card>
-        );
-    }
 
     if (isLoading) {
         return (

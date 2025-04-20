@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { formatDate } from './types';
 
-// Custom styled components that use CSS variables
+
 const UserAvatar = styled(Avatar)(() => ({
   width: 36,
   height: 36,

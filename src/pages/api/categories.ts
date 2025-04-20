@@ -119,7 +119,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const session = client.startSession();
 
             try {
-                // Start a transaction
                 await session.withTransaction(async () => {
                     // Delete all products associated with this category
                     const deleteProductsResult = await db.collection('products').deleteMany(
@@ -138,7 +137,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 });
 
-                // If we reach here, the transaction was successful
                 res.status(200).json({
                     message: 'Category and associated products deleted successfully'
                 });
@@ -150,7 +148,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     res.status(500).json({error: 'Error deleting category and products'});
                 }
             } finally {
-                // End the session
                 await session.endSession();
             }
         } catch (err) {

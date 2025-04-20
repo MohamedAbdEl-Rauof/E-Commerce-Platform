@@ -4,6 +4,8 @@ import { FilterList } from "@mui/icons-material";
 import {
     Box,
     Button,
+    Card,
+    CircularProgress,
     Container,
     Drawer,
     FormControl,
@@ -11,6 +13,7 @@ import {
     IconButton,
     MenuItem,
     Select,
+    styled,
     Typography,
     useMediaQuery,
     useTheme
@@ -22,6 +25,11 @@ import ProductGrid from "./ProductGrid";
 import { Category, FilterState, PRICE_RANGES, SORT_OPTIONS, VIEW_OPTIONS } from './types/shopTypes';
 import { Product } from "@/context/ProductContext";
 
+const StyledCard = styled(Card)(({ theme }) => ({
+    padding: theme.spacing(4),
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)"
+}));
 const Shop: React.FC = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
@@ -186,19 +194,53 @@ const Shop: React.FC = () => {
                                             color: 'var(--foreground)',
                                         },
                                     }}>
-                                        <Select
+                                                                               <Select
                                             value={filters.sortBy}
                                             onChange={(e) => handleFilterChange("sortBy", e.target.value as string)}
+                                            displayEmpty
+                                            MenuProps={{
+                                                PaperProps: {
+                                                    sx: {
+                                                        backgroundColor: 'var(--background)',
+                                                        color: 'var(--foreground)',
+                                                        border: '1px solid var(--border)',
+                                                        boxShadow: '0 4px 20px var(--shadow)',
+                                                    }
+                                                }
+                                            }}
                                             sx={{
-                                                backgroundColor: 'var(--light)',
+                                                backgroundColor: 'var(--background)',
+                                                color: 'var(--foreground)',
+                                                borderRadius: '4px',
                                                 '&:hover': {
                                                     backgroundColor: 'var(--hover)',
                                                 },
+                                                '& .MuiSelect-select': {
+                                                    padding: '8px 14px',
+                                                },
+                                                transition: 'all 0.2s ease-in-out',
                                             }}
                                         >
                                             {SORT_OPTIONS.map((option) => (
-                                                <MenuItem key={option.value}
-                                                    value={option.value}>{option.label}</MenuItem>
+                                                <MenuItem 
+                                                    key={option.value}
+                                                    value={option.value}
+                                                    sx={{
+                                                        color: 'var(--foreground)',
+                                                        '&:hover': {
+                                                            backgroundColor: 'var(--hover)',
+                                                        },
+                                                        '&.Mui-selected': {
+                                                            backgroundColor: 'var(--primary)',
+                                                            color: 'var(--light)',
+                                                            '&:hover': {
+                                                                backgroundColor: 'var(--accent)',
+                                                            },
+                                                        },
+                                                    }}
+                                                >
+                                                    {option.label}
+                                                </MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
@@ -224,7 +266,18 @@ const Shop: React.FC = () => {
                                 </Box>
                             </Box>
                             {isLoading ? (
-                                <Typography>Loading...</Typography>
+                                <StyledCard sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    minHeight: '50vh'
+                                }}>
+                                    <CircularProgress size={60} sx={{ color: 'var(--primary)' }} />
+                                    <Typography sx={{ mt: 3, color: 'var(--muted)' }}>
+                                        Loading Products ...
+                                    </Typography>
+                                </StyledCard>
                             ) : (
                                 <ProductGrid
                                     products={filteredProducts}

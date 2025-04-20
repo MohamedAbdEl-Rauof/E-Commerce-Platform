@@ -1,20 +1,93 @@
 import React from "react";
+import { Box, Container, Paper, Skeleton } from "@mui/material";
 
 const BannerSectionLoading = () => {
     return (
-        <div className="flex flex-col md:flex-row justify-between mt-20 h-auto md:h-96">
-            <div className="bg-slate-200 flex-1 flex justify-center items-center">
-                <div className="w-full h-full bg-gray-300 animate-pulse"></div>
-            </div>
-            <div className="flex-1 p-6 md:p-4 flex flex-col justify-center bg-gray-100">
-                <div className="pl-9 text-center md:text-left mx-auto md:mx-0 md:w-10/12 lg:w-8/12">
-                    <div className="h-8 bg-gray-300 mb-4 animate-pulse"></div>
-                    <div className="h-4 bg-gray-300 mb-2 animate-pulse"></div>
-                    <div className="h-4 bg-gray-300 mb-2 animate-pulse"></div>
-                    <div className="h-4 bg-gray-300 animate-pulse"></div>
-                </div>
-            </div>
-        </div>
+        <Container maxWidth="xl" sx={{ mt: 10 }}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    justifyContent: 'space-between',
+                    height: { xs: 'auto', md: '400px' },
+                    borderRadius: 2,
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 20px var(--shadow)',
+                }}
+            >
+                {/* Left side - Image placeholder */}
+                <Paper
+                    elevation={0}
+                    sx={{
+                        flex: 1,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'var(--hover)',
+                        height: { xs: '200px', md: '100%' },
+                    }}
+                >
+                    <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height="100%"
+                        animation="pulse"
+                        sx={{ backgroundColor: 'var(--border)' }}
+                    />
+                </Paper>
+
+                {/* Right side - Content placeholder */}
+                <Paper
+                    elevation={0}
+                    sx={{
+                        flex: 1,
+                        p: { xs: 3, md: 4 },
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        backgroundColor: 'var(--background)',
+                    }}
+                >
+                    <Box
+                        sx={{
+                            pl: { xs: 0, md: 4 },
+                            textAlign: { xs: 'center', md: 'left' },
+                            mx: { xs: 'auto', md: 0 },
+                            width: { xs: '100%', md: '83.33%', lg: '66.67%' },
+                        }}
+                    >
+                        <Skeleton
+                            variant="rectangular"
+                            height={40}
+                            width="100%"
+                            animation="pulse"
+                            sx={{ mb: 2, backgroundColor: 'var(--border)' }}
+                        />
+                        <Skeleton
+                            variant="rectangular"
+                            height={20}
+                            width="100%"
+                            animation="pulse"
+                            sx={{ mb: 1, backgroundColor: 'var(--border)' }}
+                        />
+                        <Skeleton
+                            variant="rectangular"
+                            height={20}
+                            width="100%"
+                            animation="pulse"
+                            sx={{ mb: 1, backgroundColor: 'var(--border)' }}
+                        />
+                        <Skeleton
+                            variant="rectangular"
+                            height={20}
+                            width="100%"
+                            animation="pulse"
+                            sx={{ backgroundColor: 'var(--border)' }}
+                        />
+                    </Box>
+                </Paper>
+            </Box>
+        </Container>
     );
 };
 

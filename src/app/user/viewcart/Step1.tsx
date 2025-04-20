@@ -1,8 +1,8 @@
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
-import {Box} from '@mui/material';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Box } from '@mui/material';
 import CartTable from './components/step1/CartTable';
 import CartSummary from './components/step1/CartSummary';
-import {CartItem} from './types/type';
+import { CartItem } from './types/type';
 
 interface StepProps {
     cartItems: CartItem[];
@@ -16,15 +16,15 @@ interface StepProps {
 }
 
 const Step1: React.FC<StepProps> = ({
-                                        cartItems,
-                                        handleCheckout,
-                                        selectedShipping,
-                                        setSelectedShipping,
-                                        deleteItem,
-                                        decrementFromCart,
-                                        addToCart,
-                                        loading
-                                    }) => {
+    cartItems,
+    handleCheckout,
+    selectedShipping,
+    setSelectedShipping,
+    deleteItem,
+    decrementFromCart,
+    addToCart,
+    loading
+}) => {
     const [total, setTotal] = useState<number>(0);
 
     // Calculate Subtotal
@@ -52,7 +52,7 @@ const Step1: React.FC<StepProps> = ({
 
     return (
         <Box className="flex flex-col md:flex-row gap-8">
-            <Box sx={{flex: 1}}>
+            <Box sx={{ flex: 1 }}>
                 <CartTable
                     cartItems={cartItems}
                     addToCart={addToCart}
@@ -64,9 +64,9 @@ const Step1: React.FC<StepProps> = ({
             <Box>
                 <Box sx={{
                     display: 'flex',
-                    justifyContent: {xs: 'center', sm: 'center'},
-                    width: {xs: '100%', md: 'auto'},
-                    mt: {xs: 4, md: 0}
+                    justifyContent: { xs: 'center', sm: 'center' },
+                    width: { xs: '100%', md: 'auto' },
+                    mt: { xs: 4, md: 0 }
                 }}>
                     <CartSummary
                         cartItems={cartItems}

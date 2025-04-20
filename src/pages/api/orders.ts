@@ -44,7 +44,8 @@ interface Order {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const client = await clientPromise;
-    const db = client.db("e-commerce");
+    const db = client.db(process.env.MONGODB_DB);
+
 
     if (req.method === "POST") {
         const {
