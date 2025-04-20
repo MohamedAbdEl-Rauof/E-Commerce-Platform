@@ -16,7 +16,7 @@ interface Stat {
     title: string;
     value: string;
     icon: JSX.Element;
-    color: string;
+    color: 'primary' | 'secondary' | 'accent' | 'success' | 'info' | 'warning' | 'danger';
     change: string;
     trend: 'up' | 'down' | 'neutral';
 }
@@ -47,32 +47,32 @@ const initialStats: Stat[] = [
     {
         title: 'Total Orders',
         value: '0',
-        icon: <ShoppingCartIcon sx={{ fontSize: 40 }} color="primary" />,
-        color: '#4361ee',
+        icon: <ShoppingCartIcon sx={{ fontSize: 40 }} />,
+        color: 'primary',
         change: 'N/A',
         trend: 'neutral'
     },
     {
         title: 'Total Users',
         value: '0',
-        icon: <PeopleIcon sx={{ fontSize: 40 }} color="secondary" />,
-        color: '#3a0ca3',
+        icon: <PeopleIcon sx={{ fontSize: 40 }} />,
+        color: 'secondary',
         change: 'N/A',
         trend: 'neutral'
     },
     {
         title: 'Products',
         value: '0',
-        icon: <InventoryIcon sx={{ fontSize: 40 }} style={{ color: '#4cc9f0' }} />,
-        color: '#4cc9f0',
+        icon: <InventoryIcon sx={{ fontSize: 40 }} />,
+        color: 'info',
         change: 'N/A',
         trend: 'neutral'
     },
     {
         title: 'Revenue',
         value: '$0',
-        icon: <AttachMoneyIcon sx={{ fontSize: 40 }} style={{ color: '#4d908e' }} />,
-        color: '#4d908e',
+        icon: <AttachMoneyIcon sx={{ fontSize: 40 }} />,
+        color: 'success',
         change: 'N/A',
         trend: 'neutral'
     },
@@ -228,7 +228,7 @@ export default function Home() {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold' }}>Dashboard Overview</Typography>
+            <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold' , color:'var(--foreground)' }}>Dashboard Overview</Typography>
             <Grid container spacing={3} sx={{ mb: 4 }}>
                 {memoizedStatsCards}
             </Grid>

@@ -96,7 +96,7 @@ const AppBar = styled(MuiAppBar, {
     margin: '8px',
     ...(open && {
         marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
+        width: `calc(100% - 285px)`,
         transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
@@ -214,7 +214,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex' , backgroundColor: 'var(--background)'}}>
             <CssBaseline />
             <AppBar position="fixed" open={open}
                 sx={{ backgroundColor: 'var(--background)', color: 'var(--foreground)' }}>
@@ -263,7 +263,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
-                    <Typography variant="h6" fontWeight="bold">E-Commerce</Typography>
+                    <Typography variant="h6" fontWeight="bold">3𝓵𝓮𝓰𝓪𝓷𝓽</Typography>
                     <IconButton onClick={handleDrawerClose} sx={{ color: 'inherit' }}>
                         {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>

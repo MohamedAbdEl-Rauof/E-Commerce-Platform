@@ -1,6 +1,6 @@
-import React, {MouseEvent, TouchEvent} from 'react';
-import {useRouter} from 'next/navigation';
-import {signOut, useSession} from 'next-auth/react';
+import React, { MouseEvent, TouchEvent } from 'react';
+import { useRouter } from 'next/navigation';
+import { signOut, useSession } from 'next-auth/react';
 import {
     Avatar,
     Box,
@@ -23,19 +23,14 @@ export interface AdminDropdownProps {
     };
 }
 
-const AdminDropdown = ({anchorEl, open, handleDropdownClose, settings}: AdminDropdownProps) => {
+const AdminDropdown = ({ anchorEl, open, handleDropdownClose, settings }: AdminDropdownProps) => {
     const router = useRouter();
-    const {data: session} = useSession();
+    const { data: session } = useSession();
 
     const handleUserLogout = async () => {
-        await signOut({redirect: false});
+        await signOut({ redirect: false });
         handleDropdownClose();
         router.push('/signin');
-    };
-
-    const handleMenuItemClick = (e: MouseEvent | TouchEvent, path: string) => {
-        handleDropdownClose();
-        router.push(path);
     };
 
     if (!open) return null;
@@ -45,52 +40,109 @@ const AdminDropdown = ({anchorEl, open, handleDropdownClose, settings}: AdminDro
             open={open}
             anchorEl={anchorEl}
             placement="bottom-end"
-            style={{zIndex: 1300}}
+            style={{ zIndex: 1300 }}
         >
             <Paper
                 className={settings.skin === 'bordered' ? 'border shadow-none' : 'shadow-lg'}
-                sx={{width: 200}}
+                sx={{ 
+                    width: 200,
+                    backgroundColor: 'var(--light)',
+                    border: '1px solid var(--border)',
+                    boxShadow: '0 4px 10px var(--shadow)',
+                    borderRadius: '8px',
+                    overflow: 'hidden'
+                }}
             >
                 <ClickAwayListener onClickAway={handleDropdownClose}>
-                    <MenuList sx={{width: '100%'}}>
-                        <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
-                            <Box sx={{pl: 2}}>
-                                <Avatar alt={session?.user?.name || ''} src={session?.user?.image || ''}/>
+                    <MenuList sx={{ width: '100%', padding: '0.5rem 0' }}>
+                        <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1} style={{ padding: '0.75rem 1rem' }}>
+                            <Box>
+                                <Avatar 
+                                    alt={session?.user?.name || ''} 
+                                    src={session?.user?.image || ''} 
+                                    sx={{ 
+                                        border: '2px solid var(--primary)',
+                                        boxShadow: '0 2px 5px var(--shadow)'
+                                    }}
+                                />
                             </Box>
                             <div className='flex items-start flex-col'>
-                                <Typography className='font-medium' color='text.primary'>
+                                <Typography 
+                                    className='font-medium' 
+                                    sx={{ 
+                                        color: 'var(--foreground)',
+                                        fontWeight: 'bold'
+                                    }}
+                                >
                                     Admin
                                 </Typography>
-                                <Typography variant='caption'>{session?.user?.email || ''}</Typography>
+                                <Typography 
+                                    variant='caption'
+                                    sx={{ color: 'var(--muted)' }}
+                                >
+                                    {session?.user?.email || ''}
+                                </Typography>
                             </div>
                         </div>
-                        <Divider className='m-3'/>
-                        <MenuItem className='mli-2 gap-3' onClick={e => handleMenuItemClick(e, '/pages/user-profile')}>
-                            <i className='tabler-user'/>
-                            <Typography color='text.primary'>My Profile</Typography>
+                        <Divider sx={{ margin: '0.5rem 0', backgroundColor: 'var(--border)' }} />
+                        <MenuItem 
+                            className='mli-2 gap-3'
+                            sx={{ 
+                                padding: '0.5rem 1rem',
+                                '&:hover': { backgroundColor: 'var(--hover)' }
+                            }}
+                        >
+                            <i className='tabler-user' style={{ color: 'var(--primary)' }} />
+                            <Typography sx={{ color: 'var(--foreground)' }}>My Profile</Typography>
                         </MenuItem>
-                        <MenuItem className='mli-2 gap-3'
-                                  onClick={e => handleMenuItemClick(e, '/pages/account-settings')}>
-                            <i className='tabler-settings'/>
-                            <Typography color='text.primary'>Settings</Typography>
+                        <MenuItem 
+                            className='mli-2 gap-3'
+                            sx={{ 
+                                padding: '0.5rem 1rem',
+                                '&:hover': { backgroundColor: 'var(--hover)' }
+                            }}
+                        >
+                            <i className='tabler-settings' style={{ color: 'var(--info)' }} />
+                            <Typography sx={{ color: 'var(--foreground)' }}>Settings</Typography>
                         </MenuItem>
-                        <MenuItem className='mli-2 gap-3' onClick={e => handleMenuItemClick(e, '/pages/pricing')}>
-                            <i className='tabler-currency-dollar'/>
-                            <Typography color='text.primary'>Pricing</Typography>
+                        <MenuItem 
+                            className='mli-2 gap-3'
+                            sx={{ 
+                                padding: '0.5rem 1rem',
+                                '&:hover': { backgroundColor: 'var(--hover)' }
+                            }}
+                        >
+                            <i className='tabler-currency-dollar' style={{ color: 'var(--success)' }} />
+                            <Typography sx={{ color: 'var(--foreground)' }}>Pricing</Typography>
                         </MenuItem>
-                        <MenuItem className='mli-2 gap-3' onClick={e => handleMenuItemClick(e, '/pages/faq')}>
-                            <i className='tabler-help-circle'/>
-                            <Typography color='text.primary'>FAQ</Typography>
+                        <MenuItem 
+                            className='mli-2 gap-3'
+                            sx={{ 
+                                padding: '0.5rem 1rem',
+                                '&:hover': { backgroundColor: 'var(--hover)' }
+                            }}
+                        >
+                            <i className='tabler-help-circle' style={{ color: 'var(--warning)' }} />
+                            <Typography sx={{ color: 'var(--foreground)' }}>FAQ</Typography>
                         </MenuItem>
-                        <div className='flex items-center plb-2 pli-3'>
+                        <div className='flex items-center plb-2 pli-3' style={{ padding: '0.75rem 1rem' }}>
                             <Button
                                 fullWidth
                                 variant='contained'
-                                color='error'
                                 size='small'
-                                endIcon={<i className='tabler-logout'/>}
+                                endIcon={<i className='tabler-logout' />}
                                 onClick={handleUserLogout}
-                                sx={{'& .MuiButton-endIcon': {marginInlineStart: 1.5}}}
+                                sx={{ 
+                                    backgroundColor: 'var(--danger)',
+                                    color: 'white',
+                                    '&:hover': { 
+                                        backgroundColor: 'var(--danger)',
+                                        opacity: 0.9
+                                    },
+                                    '& .MuiButton-endIcon': { 
+                                        marginInlineStart: 1.5 
+                                    }
+                                }}
                             >
                                 Logout
                             </Button>
