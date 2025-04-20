@@ -116,6 +116,10 @@ const OrderList: React.FC = () => {
 
 
     const getStatusColor = (status: string): { bg: string, text: string } => {
+        if (!status) {
+            return {bg: '#ffebee', text: '#c62828'}; 
+        }
+
         switch (status.toLowerCase()) {
             case 'delivered':
                 return {bg: '#d8f3dc', text: '#2d6a4f'};

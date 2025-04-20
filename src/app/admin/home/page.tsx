@@ -1,7 +1,7 @@
 'use client';
 
-import React, {useMemo} from 'react';
-import {Box, Grid, Typography} from '@mui/material';
+import React, { useMemo } from 'react';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PeopleIcon from '@mui/icons-material/People';
 import InventoryIcon from '@mui/icons-material/Inventory';
@@ -9,8 +9,8 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import StatsCard from './components/StatsCard';
 import TopSellingProducts from './components/TopSellingProducts';
 import RecentOrders from './components/RecentOrders';
-import {format, isValid, parseISO} from 'date-fns';
-import {useQueries} from 'react-query';
+import { format, isValid, parseISO } from 'date-fns';
+import { useQueries } from 'react-query';
 
 interface Stat {
     title: string;
@@ -47,7 +47,7 @@ const initialStats: Stat[] = [
     {
         title: 'Total Orders',
         value: '0',
-        icon: <ShoppingCartIcon sx={{fontSize: 40}} color="primary"/>,
+        icon: <ShoppingCartIcon sx={{ fontSize: 40 }} color="primary" />,
         color: '#4361ee',
         change: 'N/A',
         trend: 'neutral'
@@ -55,7 +55,7 @@ const initialStats: Stat[] = [
     {
         title: 'Total Users',
         value: '0',
-        icon: <PeopleIcon sx={{fontSize: 40}} color="secondary"/>,
+        icon: <PeopleIcon sx={{ fontSize: 40 }} color="secondary" />,
         color: '#3a0ca3',
         change: 'N/A',
         trend: 'neutral'
@@ -63,7 +63,7 @@ const initialStats: Stat[] = [
     {
         title: 'Products',
         value: '0',
-        icon: <InventoryIcon sx={{fontSize: 40}} style={{color: '#4cc9f0'}}/>,
+        icon: <InventoryIcon sx={{ fontSize: 40 }} style={{ color: '#4cc9f0' }} />,
         color: '#4cc9f0',
         change: 'N/A',
         trend: 'neutral'
@@ -71,14 +71,14 @@ const initialStats: Stat[] = [
     {
         title: 'Revenue',
         value: '$0',
-        icon: <AttachMoneyIcon sx={{fontSize: 40}} style={{color: '#4d908e'}}/>,
+        icon: <AttachMoneyIcon sx={{ fontSize: 40 }} style={{ color: '#4d908e' }} />,
         color: '#4d908e',
         change: 'N/A',
         trend: 'neutral'
     },
 ];
 
-const fetchData = async <T, >(url: string): Promise<T> => {
+const fetchData = async <T,>(url: string): Promise<T> => {
     const response = await fetch(url);
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -90,10 +90,10 @@ const calculateChange = (current: number, previous: number): {
     changeText: string;
     trend: 'up' | 'down';
 } => {
-    if (previous === 0) return {changeText: 'N/A', trend: 'up'};
+    if (previous === 0) return { changeText: 'N/A', trend: 'up' };
     const percentChange = ((current - previous) / previous) * 100;
     const trend = current >= previous ? 'up' : 'down';
-    return {changeText: `${percentChange.toFixed(2)}%`, trend};
+    return { changeText: `${percentChange.toFixed(2)}%`, trend };
 };
 
 const processProducts = (products: Product[]) => {
@@ -215,7 +215,11 @@ export default function Home() {
     ), [stats]);
 
     if (queries.some((query) => query.isLoading)) {
-        return <div>Loading...</div>;
+        return (
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </Box>
+        );
     }
 
     if (queries.some((query) => query.isError)) {
@@ -223,17 +227,17 @@ export default function Home() {
     }
 
     return (
-        <Box sx={{p: 3}}>
-            <Typography variant="h4" sx={{mb: 4, fontWeight: 'bold'}}>Dashboard Overview</Typography>
-            <Grid container spacing={3} sx={{mb: 4}}>
+        <Box sx={{ p: 3 }}>
+            <Typography variant="h4" sx={{ mb: 4, fontWeight: 'bold' }}>Dashboard Overview</Typography>
+            <Grid container spacing={3} sx={{ mb: 4 }}>
                 {memoizedStatsCards}
             </Grid>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                    <TopSellingProducts products={topProducts}/>
+                    <TopSellingProducts products={topProducts} />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <RecentOrders orders={recentOrders}/>
+                    <RecentOrders orders={recentOrders} />
                 </Grid>
             </Grid>
         </Box>
