@@ -188,7 +188,7 @@ export default function AdminDashboardLayout({ children }: { children: React.Rea
                     gap: 2
                 }}
             >
-                <Typography variant="h6">Loading Admin Dashboard...</Typography>
+                <Typography variant="h6" sx={{color:'var(--foreground)'}}>Loading Admin Dashboard...</Typography>
                 <CircularProgress />
             </Box>
         );

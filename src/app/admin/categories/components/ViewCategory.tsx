@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import {Box, Button, Card, CardMedia, Chip, Divider, Grid, Paper, Stack, Typography} from '@mui/material';
-import {TbArrowLeft} from 'react-icons/tb';
-import {Category} from '@/context/CategoriesContext';
+import { Box, Button, Card, CardMedia, Chip, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import { TbArrowLeft } from 'react-icons/tb';
+import { Category } from '@/context/CategoriesContext';
 
 interface ViewCategoryProps {
     categoryId: string | undefined;
@@ -12,27 +12,33 @@ interface ViewCategoryProps {
 }
 
 const ViewCategory: React.FC<ViewCategoryProps> = ({
-                                                       categoryId,
-                                                       categories,
-                                                       onBack,
-                                                   }) => {
+    categoryId,
+    categories,
+    onBack,
+}) => {
 
     const selectedCategory = categories?.find((category) => category._id === categoryId);
 
     return (
         <Paper
-            elevation={3}
             sx={{
-                p: 3,
-                borderRadius: 2,
-                bgcolor: 'var(--light)',
+                p: { xs: 2, sm: 3, md: 4 },
+                maxWidth: '1200px',
+                width: '100%',
+                mx: 'auto',
+                backgroundColor: 'var(--light)',
                 color: 'var(--foreground)',
-                width: '100%'
+                boxShadow: '0 8px 24px var(--shadow)',
+                borderRadius: '16px',
+                border: '1px solid var(--border)',
+                transition: 'all 0.3s ease',
+                overflow: 'hidden',
             }}
+            elevation={3}
         >
-            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
                 <Button
-                    startIcon={<TbArrowLeft/>}
+                    startIcon={<TbArrowLeft />}
                     onClick={onBack}
                     sx={{
                         color: 'var(--primary)',
@@ -71,7 +77,7 @@ const ViewCategory: React.FC<ViewCategoryProps> = ({
                             }}
                         />
 
-                        <Box sx={{p: 2, textAlign: 'center'}}>
+                        <Box sx={{ p: 2, textAlign: 'center' }}>
                             <Chip
                                 label={`${selectedCategory?.productCount} Products`}
                                 sx={{
@@ -106,7 +112,7 @@ const ViewCategory: React.FC<ViewCategoryProps> = ({
                             {selectedCategory?.name}
                         </Typography>
 
-                        <Divider sx={{my: 2, borderColor: 'var(--border)'}}/>
+                        <Divider sx={{ my: 2, borderColor: 'var(--border)' }} />
 
                         <Stack spacing={3}>
                             <Box>
@@ -121,7 +127,7 @@ const ViewCategory: React.FC<ViewCategoryProps> = ({
                                 </Typography>
                                 <Typography
                                     variant="body1"
-                                    sx={{color: 'var(--foreground)'}}
+                                    sx={{ color: 'var(--foreground)' }}
                                 >
                                     {`This category contains ${selectedCategory?.productCount} related products.`}
                                 </Typography>
@@ -164,7 +170,7 @@ const ViewCategory: React.FC<ViewCategoryProps> = ({
                                     </Typography>
                                     <Typography
                                         variant="body2"
-                                        sx={{color: 'var(--foreground)'}}
+                                        sx={{ color: 'var(--foreground)' }}
                                     >
                                         {selectedCategory?.createdAt ? new Date(selectedCategory?.createdAt).toLocaleString() : 'N/A'}
                                     </Typography>
@@ -182,7 +188,7 @@ const ViewCategory: React.FC<ViewCategoryProps> = ({
                                     </Typography>
                                     <Typography
                                         variant="body2"
-                                        sx={{color: 'var(--foreground)'}}
+                                        sx={{ color: 'var(--foreground)' }}
                                     >
                                         {selectedCategory?.updatedAt ? new Date(selectedCategory?.updatedAt).toLocaleString() : 'N/A'}
                                     </Typography>
