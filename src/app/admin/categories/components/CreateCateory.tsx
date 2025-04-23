@@ -377,7 +377,6 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({ categories, onUpdate })
                                                             borderColor: 'var(--border)',
                                                             borderWidth: '1.5px',
                                                         },
-                                                        backgroundColor: 'var(--hover)',
                                                         borderRadius: '8px',
                                                     },
                                                     '& .MuiInputLabel-root': {
@@ -385,10 +384,17 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({ categories, onUpdate })
                                                         fontWeight: 500,
                                                     },
                                                     '& .MuiInputBase-input': {
-                                                        color: 'var(--muted)',
+                                                        color: '#ffcc00', /* Bright gold/yellow for high visibility */
                                                         padding: '14px 16px',
+                                                        fontWeight: 700, /* Extra bold */
+                                                        textShadow: '0 0 2px rgba(0,0,0,0.5)', /* Stronger text shadow */
+                                                        letterSpacing: '0.5px', /* Slightly increase letter spacing */
                                                     },
-                                                    opacity: 0.9,
+                                                }}
+                                                InputProps={{
+                                                    style: { 
+                                                        backgroundColor: '#333344', /* Dark blue-gray background that works in both modes */
+                                                    }
                                                 }}
                                             />
                                         )}
@@ -411,7 +417,6 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({ categories, onUpdate })
                                                             borderColor: 'var(--border)',
                                                             borderWidth: '1.5px',
                                                         },
-                                                        backgroundColor: 'var(--hover)',
                                                         borderRadius: '8px',
                                                     },
                                                     '& .MuiInputLabel-root': {
@@ -419,10 +424,17 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({ categories, onUpdate })
                                                         fontWeight: 500,
                                                     },
                                                     '& .MuiInputBase-input': {
-                                                        color: 'var(--muted)',
+                                                        color: '#ffcc00', /* Bright gold/yellow for high visibility */
                                                         padding: '14px 16px',
+                                                        fontWeight: 700, /* Extra bold */
+                                                        textShadow: '0 0 2px rgba(0,0,0,0.5)', /* Stronger text shadow */
+                                                        letterSpacing: '0.5px', /* Slightly increase letter spacing */
                                                     },
-                                                    opacity: 0.9,
+                                                }}
+                                                InputProps={{
+                                                    style: { 
+                                                        backgroundColor: '#333344', /* Dark blue-gray background that works in both modes */
+                                                    }
                                                 }}
                                             />
                                         )}
