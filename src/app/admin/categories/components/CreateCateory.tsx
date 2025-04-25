@@ -384,16 +384,15 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({ categories, onUpdate })
                                                         fontWeight: 500,
                                                     },
                                                     '& .MuiInputBase-input': {
-                                                        color: '#ffcc00', /* Bright gold/yellow for high visibility */
+                                                        color: 'var(--primary)',
                                                         padding: '14px 16px',
-                                                        fontWeight: 700, /* Extra bold */
-                                                        textShadow: '0 0 2px rgba(0,0,0,0.5)', /* Stronger text shadow */
-                                                        letterSpacing: '0.5px', /* Slightly increase letter spacing */
+                                                        fontWeight: 700,
+                                                        letterSpacing: '0.5px',
                                                     },
                                                 }}
                                                 InputProps={{
                                                     style: { 
-                                                        backgroundColor: '#333344', /* Dark blue-gray background that works in both modes */
+                                                        backgroundColor: 'var(--hover)',
                                                     }
                                                 }}
                                             />
@@ -424,16 +423,15 @@ const CreateCategory: React.FC<CreateCategoryProps> = ({ categories, onUpdate })
                                                         fontWeight: 500,
                                                     },
                                                     '& .MuiInputBase-input': {
-                                                        color: '#ffcc00', /* Bright gold/yellow for high visibility */
+                                                        color: 'var(--primary)',
                                                         padding: '14px 16px',
-                                                        fontWeight: 700, /* Extra bold */
-                                                        textShadow: '0 0 2px rgba(0,0,0,0.5)', /* Stronger text shadow */
-                                                        letterSpacing: '0.5px', /* Slightly increase letter spacing */
+                                                        fontWeight: 700,
+                                                        letterSpacing: '0.5px',
                                                     },
                                                 }}
                                                 InputProps={{
                                                     style: { 
-                                                        backgroundColor: '#333344', /* Dark blue-gray background that works in both modes */
+                                                        backgroundColor: 'var(--hover)',
                                                     }
                                                 }}
                                             />
