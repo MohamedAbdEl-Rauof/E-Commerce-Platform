@@ -53,6 +53,7 @@ const ProductContent = ({
         if (newValue === 'myProducts') {
             setIsEditMode(false);
             setIsViewMode(false);
+            router.push('/admin/products');
         }
         setActiveTab(newValue);
     };

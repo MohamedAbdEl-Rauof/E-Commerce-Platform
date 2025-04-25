@@ -71,22 +71,46 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
         <Box sx={{
             width: '100%',
             borderRadius: 2,
-            boxShadow: 3,
+            boxShadow: '0 4px 20px var(--shadow)',
             bgcolor: 'var(--background)',
-            color: 'var(--foreground)'
+            color: 'var(--foreground)',
+            overflow: 'hidden',
+            border: '1px solid var(--border)',
+            transition: 'box-shadow 0.3s ease',
+            '&:hover': {
+                boxShadow: '0 6px 24px var(--shadow)'
+            }
         }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="h5" component="h1"
+            <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderBottom: '1px solid var(--border)',
+                background: 'linear-gradient(to right, var(--background), color-mix(in srgb, var(--primary) 5%, var(--background)))'
+            }}>
+                <Typography 
+                    variant="h5" 
+                    component="h1"
                     sx={{
                         p: 3,
-                        bgcolor: 'var(--background)',
-                        borderBottom: 1,
-                        borderColor: 'var(--border)',
-                        color: 'var(--foreground)'
-                    }}>
+                        fontWeight: 'bold', 
+                        color: 'var(--foreground)',
+                        position: 'relative',
+                        '&::after': {
+                            content: '""',
+                            position: 'absolute',
+                            bottom: 15,
+                            left: 24,
+                            width: '40%',
+                            height: 3,
+                            borderRadius: 1,
+                            bgcolor: 'var(--primary)'
+                        }
+                    }}
+                >
                     Category List
                 </Typography>
-                <Box sx={{ p: 2, bgcolor: 'var(--background)' }}>
+                <Box sx={{ p: 2 }}>
                     <TextField
                         variant="outlined"
                         size="small"
@@ -94,29 +118,32 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         sx={{
+                            width: 250,
                             '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: 'var(--border)',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: 'var(--primary)',
-                                },
+                                borderRadius: 2,
+                                '& fieldset': {borderColor: 'var(--border)'},
+                                '&:hover fieldset': {borderColor: 'var(--primary)'},
                                 '&.Mui-focused fieldset': {
-                                    borderColor: 'var(--focus)',
+                                    borderColor: 'var(--primary)',
+                                    borderWidth: 2
                                 },
-                                backgroundColor: 'var(--search-bar-bg)',
+                                backgroundColor: 'color-mix(in srgb, var(--background) 95%, var(--primary))',
+                                transition: 'all 0.3s ease',
+                                boxShadow: '0 2px 8px var(--shadow)'
                             },
                             '& .MuiInputBase-input': {
-                                color: 'var(--search-bar-text)',
+                                color: 'var(--foreground)',
+                                '&::placeholder': {
+                                    color: 'var(--muted)',
+                                    opacity: 0.8
+                                }
                             },
-                            '& .MuiInputAdornment-root': {
-                                color: 'var(--muted)',
-                            }
+                            '& .MuiInputAdornment-root': {color: 'var(--primary)'}
                         }}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <TbSearch />
+                                    <TbSearch size={18} />
                                 </InputAdornment>
                             ),
                         }}
@@ -126,32 +153,30 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
             <TableContainer
                 component={Paper}
                 sx={{
-                    maxHeight: 700, 
+                    maxHeight: 650, 
                     bgcolor: 'var(--light)',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 12px var(--shadow)',
                     overflow: 'hidden',
-                    border: '1px solid var(--border)',
+                    border: 'none',
+                    boxShadow: 'none',
                     '& .MuiPaper-root': {
                         bgcolor: 'var(--light)',
+                        boxShadow: 'none'
                     },
                     '&::-webkit-scrollbar': {
                         width: '8px',
-                    },
-                    '&::-webkit-scrollbar-track': {
-                        background: 'var(--light)',
-                        borderRadius: '10px',
+                        height: '8px'
                     },
                     '&::-webkit-scrollbar-thumb': {
-                        backgroundColor: 'var(--muted)',
-                        borderRadius: '10px',
-                        border: '2px solid var(--light)',
+                        backgroundColor: 'var(--border)',
+                        borderRadius: '4px',
+                        '&:hover': {
+                            backgroundColor: 'var(--primary)'
+                        }
                     },
-                    '&::-webkit-scrollbar-thumb:hover': {
-                        backgroundColor: 'var(--dark)',
+                    '&::-webkit-scrollbar-track': {
+                        backgroundColor: 'var(--background)'
                     }
                 }}
-                className="scroll-container"
             >
                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="category table">
                     <TableHead>
@@ -163,10 +188,10 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                                     sx={{
                                         fontWeight: 'bold',
                                         color: 'var(--foreground)',
-                                        bgcolor: 'var(--background)',
+                                        bgcolor: 'color-mix(in srgb, var(--primary) 10%, var(--background))',
                                         fontSize: '0.95rem',
                                         padding: '16px',
-                                        borderBottom: '2px solid var(--border)',
+                                        borderBottom: '2px solid var(--primary)',
                                         position: 'sticky',
                                         top: 0,
                                         zIndex: 10
@@ -187,9 +212,9 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                                         '&:last-child td, &:last-child th': { border: 0 },
                                         transition: 'all 0.2s ease',
                                         '&:hover': {
-                                            bgcolor: 'var(--hover)',
-                                            transform: 'translateY(-1px)',
-                                            boxShadow: '0 2px 5px var(--shadow)'
+                                            bgcolor: 'color-mix(in srgb, var(--primary) 5%, var(--hover))',
+                                            transform: 'translateY(-2px)',
+                                            boxShadow: '0 4px 8px var(--shadow)'
                                         },
                                         color: 'var(--foreground)',
                                         borderBottom: '1px solid var(--border)'
@@ -199,7 +224,8 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                                         sx={{
                                             fontWeight: 'medium',
                                             color: 'var(--foreground)',
-                                            padding: '12px 16px'
+                                            padding: '12px 16px',
+                                            fontSize: '0.95rem'
                                         }}
                                     >
                                         {category.name}
@@ -212,15 +238,29 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                                             sx={{
                                                 width: 60, 
                                                 height: 60,
-                                                border: '1px solid var(--border)',
-                                                boxShadow: '0 2px 4px var(--shadow)'
+                                                borderRadius: 1,
+                                                border: '2px solid var(--border)',
+                                                transition: 'transform 0.2s ease, border 0.2s ease',
+                                                '&:hover': {
+                                                    transform: 'scale(1.05)',
+                                                    border: '2px solid var(--primary)'
+                                                },
+                                                boxShadow: '0 2px 8px var(--shadow)'
                                             }}
                                         />
                                     </TableCell>
-                                    <TableCell sx={{ color: 'var(--foreground)', padding: '12px 16px' }}>
+                                    <TableCell sx={{ 
+                                        color: 'var(--muted)', 
+                                        padding: '12px 16px',
+                                        fontSize: '0.9rem'
+                                    }}>
                                         {formatDate(category.createdAt)}
                                     </TableCell>
-                                    <TableCell sx={{ color: 'var(--foreground)', padding: '12px 16px' }}>
+                                    <TableCell sx={{ 
+                                        color: 'var(--muted)', 
+                                        padding: '12px 16px',
+                                        fontSize: '0.9rem'
+                                    }}>
                                         {formatDate(category.updatedAt)}
                                     </TableCell>
                                     <TableCell align="center" sx={{ padding: '12px 16px' }}>
@@ -228,12 +268,17 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                                             label={category.productCount || 0}
                                             size="small"
                                             sx={{
-                                                borderColor: 'var(--primary)',
+                                                bgcolor: 'color-mix(in srgb, var(--primary) 15%, transparent)',
                                                 color: 'var(--primary)',
-                                                backgroundColor: 'transparent',
                                                 fontWeight: 'bold',
                                                 padding: '4px',
-                                                minWidth: '40px'
+                                                minWidth: '40px',
+                                                border: '1px solid var(--primary)',
+                                                transition: 'all 0.2s ease',
+                                                '&:hover': {
+                                                    bgcolor: 'color-mix(in srgb, var(--primary) 25%, transparent)',
+                                                    transform: 'scale(1.05)'
+                                                }
                                             }}
                                         />
                                     </TableCell>
@@ -245,15 +290,16 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                                                     aria-label="view category"
                                                     size="small"
                                                     sx={{
-                                                        bgcolor: 'var(--info)',
-                                                        color: 'var(--light)',
+                                                        color: 'var(--info)',
+                                                        bgcolor: 'color-mix(in srgb, var(--info) 10%, transparent)',
                                                         width: '32px',
                                                         height: '32px',
                                                         transition: 'all 0.2s ease',
+                                                        boxShadow: '0 2px 5px var(--shadow)',
                                                         '&:hover': {
-                                                            bgcolor: 'var(--info)',
-                                                            opacity: 0.9,
-                                                            transform: 'scale(1.1)'
+                                                            bgcolor: 'var(--info-light)',
+                                                            transform: 'translateY(-2px)',
+                                                            boxShadow: '0 4px 8px var(--shadow)'
                                                         }
                                                     }}
                                                 >
@@ -266,15 +312,16 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                                                     aria-label="edit category"
                                                     size="small"
                                                     sx={{
-                                                        bgcolor: 'var(--warning)',
-                                                        color: 'var(--dark)',
+                                                        color: 'var(--warning)',
+                                                        bgcolor: 'color-mix(in srgb, var(--warning) 10%, transparent)',
                                                         width: '32px',
                                                         height: '32px',
                                                         transition: 'all 0.2s ease',
+                                                        boxShadow: '0 2px 5px var(--shadow)',
                                                         '&:hover': {
-                                                            bgcolor: 'var(--warning)',
-                                                            opacity: 0.9,
-                                                            transform: 'scale(1.1)'
+                                                            bgcolor: 'var(--warning-light)',
+                                                            transform: 'translateY(-2px)',
+                                                            boxShadow: '0 4px 8px var(--shadow)'
                                                         }
                                                     }}
                                                 >
@@ -287,15 +334,16 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                                                     aria-label="delete category"
                                                     size="small"
                                                     sx={{
-                                                        bgcolor: 'var(--danger)',
-                                                        color: 'var(--light)',
-                                                        width: '32px', 
+                                                        color: 'var(--danger)',
+                                                        bgcolor: 'color-mix(in srgb, var(--danger) 10%, transparent)',
+                                                        width: '32px',
                                                         height: '32px',
                                                         transition: 'all 0.2s ease',
+                                                        boxShadow: '0 2px 5px var(--shadow)',
                                                         '&:hover': {
-                                                            bgcolor: 'var(--danger)',
-                                                            opacity: 0.9,
-                                                            transform: 'scale(1.1)'
+                                                            bgcolor: 'var(--danger-light)',
+                                                            transform: 'translateY(-2px)',
+                                                            boxShadow: '0 4px 8px var(--shadow)'
                                                         }
                                                     }}
                                                 >
@@ -308,14 +356,60 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
                             ))
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={6} align="center" sx={{ py: 3, color: 'var(--muted)' }}>
-                                    No categories found
+                                <TableCell 
+                                    colSpan={6} 
+                                    align="center" 
+                                    sx={{ 
+                                        py: 5, 
+                                        color: 'var(--muted)',
+                                        fontStyle: 'italic',
+                                        bgcolor: 'color-mix(in srgb, var(--background) 98%, var(--primary))'
+                                    }}
+                                >
+                                    {searchTerm ? 
+                                        `No categories found matching "${searchTerm}"` : 
+                                        "No categories available yet"}
                                 </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
                 </Table>
             </TableContainer>
+            
+            {/* Footer with category count */}
+            <Box 
+                sx={{ 
+                    p: 2, 
+                    borderTop: '1px solid var(--border)',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    bgcolor: 'color-mix(in srgb, var(--background) 98%, var(--primary))'
+                }}
+            >
+                <Typography 
+                    variant="body2" 
+                    sx={{ 
+                        color: 'var(--muted)',
+                        fontStyle: 'italic'
+                    }}
+                >
+                    {filteredCategories.length} {filteredCategories.length === 1 ? 'category' : 'categories'} found
+                    {searchTerm && ` for "${searchTerm}"`}
+                </Typography>
+                
+                <Typography 
+                    variant="body2" 
+                    sx={{ 
+                        color: 'var(--muted)',
+                        fontStyle: 'italic'
+                    }}
+                >
+                    Total categories: {categories.length}
+                </Typography>
+            </Box>
+            
+            {/* Delete confirmation dialog */}
             <DeleteConfirmationDialog
                 open={deleteDialogOpen}
                 onClose={handleDeleteCancel}
@@ -327,5 +421,6 @@ const CategorytList: React.FC<ProductListProps> = ({ categories, onEdit, onView,
         </Box>
     );
 };
+
 
 export default CategorytList;
