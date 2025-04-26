@@ -314,12 +314,11 @@ const ViewProduct: React.FC<ViewProductProps> = ({ productId, onBack, products, 
 
                                     {ProductData.PriceBeforeDiscount && (
                                         <Chip
-                                            label={`${Math.round((1 - (ProductData.price || 0) / (ProductData.PriceBeforeDiscount || 1)) * 100)}% OFF`}
-                                            size="small"
+                                        label={`${Math.round((1 - (Number(ProductData.price) || 0) / (Number(ProductData.PriceBeforeDiscount) || 1)) * 100)}% OFF`}                                            size="small"
                                             sx={{
                                                 bgcolor: 'var(--success-light)',
                                                 color: 'var(--success)',
-                                                fontWeight: 'bold',
+                                                fontWeight: 'bold',                     
                                                 fontSize: '0.7rem',
                                                 height: 20
                                             }}
