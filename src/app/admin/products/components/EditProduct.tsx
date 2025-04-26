@@ -8,6 +8,18 @@ import {toast} from 'react-toastify';
 import {Product} from "@/context/ProductContext";
 import SaveIcon from "@mui/icons-material/Save";
 import {parseISO} from 'date-fns';
+import EditIcon from '@mui/icons-material/Edit';
+import LabelIcon from '@mui/icons-material/Label';
+import DescriptionIcon from '@mui/icons-material/Description';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import CircularProgress from '@mui/material/CircularProgress';
+import InfoIcon from '@mui/icons-material/Info';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import InputAdornment from '@mui/material/InputAdornment';
+import CategoryIcon from '@mui/icons-material/Category';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+
 
 const formatDateForInput = (date: string | Date): string => {
     const d = typeof date === 'string' ? parseISO(date) : date;
@@ -115,23 +127,42 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
 
     return (
         <Paper sx={{
-            p: {xs: 2, sm: 3, md: 4},
-            maxWidth: '1200px',
+            p: {xs: 3, sm: 4, md: 5},
+            maxWidth: '12000px',
             width: '100%',
             mx: 'auto',
-            backgroundColor: 'var(--background-paper)',
-            color: 'var(--text-primary)',
-            boxShadow: '0 4px 12px var(--shadow)',
-            borderRadius: '12px'
+            backgroundColor: 'var(--light)',
+            color: 'var(--foreground)',
+            boxShadow: '0 8px 24px var(--shadow)',
+            borderRadius: '16px',
+            transition: 'all 0.3s ease'
         }}>
-            <Typography variant="h4" sx={{mb: {xs: 3, md: 4}, fontWeight: 600, color: 'var(--text-primary)'}}>
+            <Typography 
+                variant="h4" 
+                sx={{
+                    mb: {xs: 3, md: 4}, 
+                    fontWeight: 700, 
+                    color: 'var(--foreground)',
+                    borderBottom: '2px solid var(--primary)',
+                    pb: 2,
+                    display: 'inline-block'
+                }}
+            >
                 Edit Product: {watchName || selectedProduct?.name || ''}
             </Typography>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                <Grid container spacing={{xs: 2, md: 4}}>
+                <Grid container spacing={{xs: 3, md: 5}}>
                     <Grid item xs={12} md={5} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                        <Typography variant="h6" sx={{mb: 2, alignSelf: 'flex-start', color: 'var(--text-secondary)'}}>
+                        <Typography 
+                            variant="h6" 
+                            sx={{
+                                mb: 2, 
+                                alignSelf: 'flex-start', 
+                                color: 'var(--muted)',
+                                fontWeight: 600
+                            }}
+                        >
                             Product Image
                         </Typography>
 
@@ -141,40 +172,93 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
-                            backgroundColor: 'var(--background-default)',
+                            backgroundColor: 'var(--background)',
                             border: '2px dashed var(--border)',
-                            borderRadius: '12px',
+                            borderRadius: '16px',
                             overflow: 'hidden',
                             mb: 2,
                             transition: 'all 0.3s ease',
-                            '&:hover': {borderColor: 'var(--primary)'}
+                            '&:hover': {
+                                borderColor: 'var(--primary)',
+                                boxShadow: '0 4px 12px var(--shadow)'
+                            }
                         }}>
                             {previewImage ? (
-                                <CardMedia component="img" sx={{height: '100%', objectFit: 'contain'}}
-                                           image={previewImage} alt="Product preview"
-                                           onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                                               e.currentTarget.src = '/broken-image.jpg';
-                                           }}/>
+                                <CardMedia 
+                                    component="img" 
+                                    sx={{
+                                        height: '100%', 
+                                        objectFit: 'contain',
+                                        padding: 2
+                                    }}
+                                    image={previewImage} 
+                                    alt="Product preview"
+                                    onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                                        e.currentTarget.src = '/broken-image.jpg';
+                                    }}
+                                />
                             ) : (
-                                <Box sx={{textAlign: 'center', p: 3}}>
+                                <Box sx={{
+                                    textAlign: 'center', 
+                                    p: 3,
+                                    backgroundColor: 'var(--hover)',
+                                    borderRadius: '8px',
+                                    width: '80%'
+                                }}>
                                     <ImageIcon
-                                        sx={{fontSize: {xs: 40, sm: 50, md: 60}, color: 'var(--text-disabled)'}}/>
-                                    <Typography sx={{color: 'var(--text-disabled)', mt: 1}}>
+                                        sx={{
+                                            fontSize: {xs: 50, sm: 60, md: 70}, 
+                                            color: 'var(--muted)',
+                                            mb: 2
+                                        }}
+                                    />
+                                    <Typography 
+                                        sx={{
+                                            color: 'var(--muted)', 
+                                            fontWeight: 500
+                                        }}
+                                    >
                                         No image preview available
                                     </Typography>
                                 </Box>
                             )}
                         </Card>
 
-                        <Typography variant="body2" sx={{color: 'var(--text-secondary)', mt: 1, textAlign: 'center'}}>
+                        <Typography 
+                            variant="body2" 
+                            sx={{
+                                color: 'var(--muted)', 
+                                mt: 2, 
+                                textAlign: 'center',
+                                backgroundColor: 'var(--info-light)',
+                                p: 2,
+                                borderRadius: '8px',
+                                width: '100%'
+                            }}
+                        >
+                            <InfoIcon sx={{ fontSize: 16, mr: 1, verticalAlign: 'middle' }} />
                             Enter a valid image URL in the form to update the preview
                         </Typography>
                     </Grid>
 
                     <Grid item xs={12} md={7}>
-                        <Box sx={{p: {xs: 0, md: 2}}}>
-                            <Typography variant="h6" sx={{mb: 3, color: 'var(--text-secondary)'}}>
-                                Product Details
+                        <Box sx={{
+                            p: {xs: 0, md: 2},
+                            backgroundColor: 'var(--background)',
+                            borderRadius: '16px',
+                            height: '100%'
+                        }}>
+                            <Typography 
+                                variant="h6" 
+                                sx={{
+                                    mb: 3, 
+                                    color: 'var(--muted)',
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <EditIcon sx={{ mr: 1 }} /> Product Details
                             </Typography>
 
                             <Grid container spacing={3}>
@@ -185,30 +269,45 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                         control={control}
                                         render={({field}) => (
                                             <>
-                                                <Typography variant="subtitle2"
-                                                            sx={{mb: 1, color: 'var(--text-secondary)'}}>
-                                                    Product Name
+                                                <Typography 
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        mb: 1, 
+                                                        color: 'var(--muted)',
+                                                        fontWeight: 600,
+                                                        display: 'flex',
+                                                        alignItems: 'center'
+                                                    }}
+                                                >
+                                                    <LabelIcon sx={{ fontSize: 16, mr: 1 }} /> Product Name
                                                 </Typography>
                                                 <TextField
                                                     {...field}
-                                                    variant="filled"
+                                                    variant="outlined"
                                                     placeholder="Enter product name"
                                                     fullWidth
                                                     error={!!errors.name}
                                                     helperText={errors.name?.message}
                                                     sx={{
-                                                        '& .MuiFilledInput-root': {
-                                                            backgroundColor: 'var(--background-default)',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                        '& .MuiOutlinedInput-root': {
+                                                            backgroundColor: 'var(--light)',
+                                                            borderRadius: '8px',
+                                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
                                                             },
-                                                            '&.Mui-focused': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
+                                                                borderWidth: '2px',
                                                             },
                                                         },
-                                                        '& .MuiFilledInput-input': {
-                                                            color: 'var(--text-primary)',
+                                                        '& .MuiOutlinedInput-input': {
+                                                            color: 'var(--foreground)',
+                                                            padding: '14px 16px',
                                                         },
+                                                        '& .MuiFormHelperText-root': {
+                                                            marginLeft: '4px',
+                                                            fontWeight: 500
+                                                        }
                                                     }}
                                                 />
                                             </>
@@ -223,13 +322,21 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                         control={control}
                                         render={({field}) => (
                                             <>
-                                                <Typography variant="subtitle2"
-                                                            sx={{mb: 1, color: 'var(--text-secondary)'}}>
-                                                    Product Description
+                                                <Typography 
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        mb: 1, 
+                                                        color: 'var(--muted)',
+                                                        fontWeight: 600,
+                                                        display: 'flex',
+                                                        alignItems: 'center'
+                                                    }}
+                                                >
+                                                    <DescriptionIcon sx={{ fontSize: 16, mr: 1 }} /> Product Description
                                                 </Typography>
                                                 <TextField
                                                     {...field}
-                                                    variant="filled"
+                                                    variant="outlined"
                                                     placeholder="Enter product description"
                                                     fullWidth
                                                     multiline
@@ -237,18 +344,25 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                                     error={!!errors.description}
                                                     helperText={errors.description?.message}
                                                     sx={{
-                                                        '& .MuiFilledInput-root': {
-                                                            backgroundColor: 'var(--background-default)',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                        '& .MuiOutlinedInput-root': {
+                                                            backgroundColor: 'var(--light)',
+                                                            borderRadius: '8px',
+                                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
                                                             },
-                                                            '&.Mui-focused': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
+                                                                borderWidth: '2px',
                                                             },
                                                         },
-                                                        '& .MuiFilledInput-input': {
-                                                            color: 'var(--text-primary)',
+                                                        '& .MuiOutlinedInput-input': {
+                                                            color: 'var(--foreground)',
+                                                            padding: '14px 16px',
                                                         },
+                                                        '& .MuiFormHelperText-root': {
+                                                            marginLeft: '4px',
+                                                            fontWeight: 500
+                                                        }
                                                     }}
                                                 />
                                             </>
@@ -263,30 +377,45 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                         control={control}
                                         render={({field}) => (
                                             <>
-                                                <Typography variant="subtitle2"
-                                                            sx={{mb: 1, color: 'var(--text-secondary)'}}>
-                                                    Image URL
+                                                <Typography 
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        mb: 1, 
+                                                        color: 'var(--muted)',
+                                                        fontWeight: 600,
+                                                        display: 'flex',
+                                                        alignItems: 'center'
+                                                    }}
+                                                >
+                                                    <ImageIcon sx={{ fontSize: 16, mr: 1 }} /> Image URL
                                                 </Typography>
                                                 <TextField
                                                     {...field}
-                                                    variant="filled"
+                                                    variant="outlined"
                                                     placeholder="Enter image URL"
                                                     fullWidth
                                                     error={!!errors.image}
                                                     helperText={errors.image?.message}
                                                     sx={{
-                                                        '& .MuiFilledInput-root': {
-                                                            backgroundColor: 'var(--background-default)',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                        '& .MuiOutlinedInput-root': {
+                                                            backgroundColor: 'var(--light)',
+                                                            borderRadius: '8px',
+                                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
                                                             },
-                                                            '&.Mui-focused': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
+                                                                borderWidth: '2px',
                                                             },
                                                         },
-                                                        '& .MuiFilledInput-input': {
-                                                            color: 'var(--text-primary)',
+                                                        '& .MuiOutlinedInput-input': {
+                                                            color: 'var(--foreground)',
+                                                            padding: '14px 16px',
                                                         },
+                                                        '& .MuiFormHelperText-root': {
+                                                            marginLeft: '4px',
+                                                            fontWeight: 500
+                                                        }
                                                     }}
                                                 />
                                             </>
@@ -301,31 +430,49 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                         control={control}
                                         render={({field}) => (
                                             <>
-                                                <Typography variant="subtitle2"
-                                                            sx={{mb: 1, color: 'var(--text-secondary)'}}>
-                                                    Price
+                                                <Typography 
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        mb: 1, 
+                                                        color: 'var(--muted)',
+                                                        fontWeight: 600,
+                                                        display: 'flex',
+                                                        alignItems: 'center'
+                                                    }}
+                                                >
+                                                    <AttachMoneyIcon sx={{ fontSize: 16, mr: 1 }} /> Price
                                                 </Typography>
                                                 <TextField
                                                     {...field}
-                                                    variant="filled"
+                                                    variant="outlined"
                                                     placeholder="Enter price"
                                                     type="text"
                                                     fullWidth
                                                     error={!!errors.price}
                                                     helperText={errors.price?.message}
+                                                    InputProps={{
+                                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                    }}
                                                     sx={{
-                                                        '& .MuiFilledInput-root': {
-                                                            backgroundColor: 'var(--background-default)',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                        '& .MuiOutlinedInput-root': {
+                                                            backgroundColor: 'var(--light)',
+                                                            borderRadius: '8px',
+                                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
                                                             },
-                                                            '&.Mui-focused': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
+                                                                borderWidth: '2px',
                                                             },
                                                         },
-                                                        '& .MuiFilledInput-input': {
-                                                            color: 'var(--text-primary)',
+                                                        '& .MuiOutlinedInput-input': {
+                                                            color: 'var(--foreground)',
+                                                            padding: '14px 16px',
                                                         },
+                                                        '& .MuiFormHelperText-root': {
+                                                            marginLeft: '4px',
+                                                            fontWeight: 500
+                                                        }
                                                     }}
                                                 />
                                             </>
@@ -340,31 +487,49 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                         control={control}
                                         render={({field}) => (
                                             <>
-                                                <Typography variant="subtitle2"
-                                                            sx={{mb: 1, color: 'var(--text-secondary)'}}>
-                                                    Price Before Discount
+                                                <Typography 
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        mb: 1, 
+                                                        color: 'var(--muted)',
+                                                        fontWeight: 600,
+                                                        display: 'flex',
+                                                        alignItems: 'center'
+                                                    }}
+                                                >
+                                                    <LocalOfferIcon sx={{ fontSize: 16, mr: 1 }} /> Price Before Discount
                                                 </Typography>
                                                 <TextField
                                                     {...field}
-                                                    variant="filled"
+                                                    variant="outlined"
                                                     placeholder="Enter price before discount"
                                                     type="text"
                                                     fullWidth
                                                     error={!!errors.priceBeforeDiscount}
                                                     helperText={errors.priceBeforeDiscount?.message}
+                                                    InputProps={{
+                                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                    }}
                                                     sx={{
-                                                        '& .MuiFilledInput-root': {
-                                                            backgroundColor: 'var(--background-default)',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                        '& .MuiOutlinedInput-root': {
+                                                            backgroundColor: 'var(--light)',
+                                                            borderRadius: '8px',
+                                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
                                                             },
-                                                            '&.Mui-focused': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
+                                                                borderWidth: '2px',
                                                             },
                                                         },
-                                                        '& .MuiFilledInput-input': {
-                                                            color: 'var(--text-primary)',
+                                                        '& .MuiOutlinedInput-input': {
+                                                            color: 'var(--foreground)',
+                                                            padding: '14px 16px',
                                                         },
+                                                        '& .MuiFormHelperText-root': {
+                                                            marginLeft: '4px',
+                                                            fontWeight: 500
+                                                        }
                                                     }}
                                                 />
                                             </>
@@ -373,37 +538,52 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                 </Grid>
 
                                 {/* Category field */}
-                                <Grid item xs={12}>
+                                <Grid item xs={12} sm={6}>
                                     <Controller
                                         name="categoryId"
                                         control={control}
                                         render={({field}) => (
                                             <>
-                                                <Typography variant="subtitle2"
-                                                            sx={{mb: 1, color: 'var(--text-secondary)'}}>
-                                                    Related Category
+                                                <Typography 
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        mb: 1, 
+                                                        color: 'var(--muted)',
+                                                        fontWeight: 600,
+                                                        display: 'flex',
+                                                        alignItems: 'center'
+                                                    }}
+                                                >
+                                                    <CategoryIcon sx={{ fontSize: 16, mr: 1 }} /> Category
                                                 </Typography>
                                                 <TextField
                                                     {...field}
                                                     select
-                                                    variant="filled"
+                                                    variant="outlined"
                                                     placeholder="Select category"
                                                     fullWidth
                                                     error={!!errors.categoryId}
                                                     helperText={errors.categoryId?.message}
                                                     sx={{
-                                                        '& .MuiFilledInput-root': {
-                                                            backgroundColor: 'var(--background-default)',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                        '& .MuiOutlinedInput-root': {
+                                                            backgroundColor: 'var(--light)',
+                                                            borderRadius: '8px',
+                                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
                                                             },
-                                                            '&.Mui-focused': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
+                                                                borderWidth: '2px',
                                                             },
                                                         },
-                                                        '& .MuiFilledInput-input': {
-                                                            color: 'var(--text-primary)',
+                                                        '& .MuiOutlinedInput-input': {
+                                                            color: 'var(--foreground)',
+                                                            padding: '14px 16px',
                                                         },
+                                                        '& .MuiFormHelperText-root': {
+                                                            marginLeft: '4px',
+                                                            fontWeight: 500
+                                                        }
                                                     }}
                                                 >
                                                     {categories.map((category) => (
@@ -418,37 +598,51 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                 </Grid>
 
                                 {/* Created At field */}
-                                <Grid item xs={12}>
+                                <Grid item xs={12} sm={6}>
                                     <Controller
                                         name="createdAt"
                                         control={control}
                                         render={({field}) => (
                                             <>
-                                                <Typography variant="subtitle2"
-                                                            sx={{mb: 1, color: 'var(--text-secondary)'}}>
-                                                    Created At
+                                                <Typography 
+                                                    variant="subtitle2"
+                                                    sx={{
+                                                        mb: 1, 
+                                                        color: 'var(--muted)',
+                                                        fontWeight: 600,
+                                                        display: 'flex',
+                                                        alignItems: 'center'
+                                                    }}
+                                                >
+                                                    <CalendarTodayIcon sx={{ fontSize: 16, mr: 1 }} /> Created At
                                                 </Typography>
                                                 <TextField
                                                     {...field}
-                                                    variant="filled"
+                                                    variant="outlined"
                                                     type="datetime-local"
                                                     fullWidth
-                                                    InputLabelProps={{shrink: true}}
                                                     error={!!errors.createdAt}
                                                     helperText={errors.createdAt?.message}
                                                     sx={{
-                                                        '& .MuiFilledInput-root': {
-                                                            backgroundColor: 'var(--background-default)',
-                                                            '&:hover': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                        '& .MuiOutlinedInput-root': {
+                                                            backgroundColor: 'var(--light)',
+                                                            borderRadius: '8px',
+                                                            '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
                                                             },
-                                                            '&.Mui-focused': {
-                                                                backgroundColor: 'var(--background-paper)',
+                                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'var(--primary)',
+                                                                borderWidth: '2px',
                                                             },
                                                         },
-                                                        '& .MuiFilledInput-input': {
-                                                            color: 'var(--text-primary)',
+                                                        '& .MuiOutlinedInput-input': {
+                                                            color: 'var(--foreground)',
+                                                            padding: '14px 16px',
                                                         },
+                                                        '& .MuiFormHelperText-root': {
+                                                            marginLeft: '4px',
+                                                            fontWeight: 500
+                                                        }
                                                     }}
                                                 />
                                             </>
@@ -456,42 +650,57 @@ const EditProduct: React.FC<EditProductProps> = ({products, productId, onBack, c
                                     />
                                 </Grid>
 
-                                <Grid item xs={12}>
-                                    <Box sx={{display: 'flex', justifyContent: 'space-between', mt: 2}}>
-                                        <Button
-                                            onClick={onBack}
-                                            variant="outlined"
-                                            sx={{
-                                                color: 'var(--text-primary)',
-                                                borderColor: 'var(--border)',
-                                                '&:hover': {
-                                                    borderColor: 'var(--primary)',
-                                                    backgroundColor: 'var(--primary-light)',
-                                                },
-                                            }}
-                                        >
-                                            Back
-                                        </Button>
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            startIcon={<SaveIcon/>}
-                                            // disabled={!isValid || isSubmitting}
-                                            sx={{
-                                                backgroundColor: 'var(--primary)',
-                                                color: 'var(--text-primary)',
-                                                '&:hover': {
-                                                    backgroundColor: 'var(--primary-dark)',
-                                                },
-                                                '&:disabled': {
-                                                    backgroundColor: 'var(--disabled)',
-                                                    color: 'var(--text-disabled)',
-                                                },
-                                            }}
-                                        >
-                                            {isSubmitting ? 'Updating...' : 'Update Product'}
-                                        </Button>
-                                    </Box>
+                                {/* Action buttons */}
+                                <Grid item xs={12} sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
+                                    <Button
+                                        onClick={onBack}
+                                        variant="outlined"
+                                        startIcon={<ArrowBackIcon />}
+                                        sx={{
+                                            borderColor: 'var(--muted)',
+                                            color: 'var(--muted)',
+                                            borderRadius: '8px',
+                                            padding: '10px 20px',
+                                            '&:hover': {
+                                                borderColor: 'var(--primary)',
+                                                color: 'var(--primary)',
+                                                backgroundColor: 'rgba(var(--primary-rgb), 0.05)',
+                                            },
+                                        }}
+                                    >
+                                        Back to Products
+                                    </Button>
+                                    
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        startIcon={<SaveIcon />}
+                                        disabled={isSubmitting}
+                                        sx={{
+                                            backgroundColor: 'var(--primary)',
+                                            color: 'var(--text-on-image)',
+                                            borderRadius: '8px',
+                                            padding: '10px 24px',
+                                            fontWeight: 600,
+                                            boxShadow: '0 4px 10px rgba(var(--primary-rgb), 0.3)',
+                                            '&:hover': {
+                                                backgroundColor: 'var(--primary-dark)',
+                                                boxShadow: '0 6px 15px rgba(var(--primary-rgb), 0.4)',
+                                            },
+                                            '&:disabled': {
+                                                backgroundColor: 'var(--muted)',
+                                                color: 'var(--light)',
+                                            },
+                                            transition: 'all 0.3s ease',
+                                        }}
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <CircularProgress size={20} color="inherit" sx={{ mr: 1 }} />
+                                                Updating...
+                                            </>
+                                        ) : 'Update Product'}
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Box>

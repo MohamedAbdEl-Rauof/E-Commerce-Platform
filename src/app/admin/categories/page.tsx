@@ -14,4 +14,4 @@ const CategoriesPage = () => {
         </div>
     );
 }
-export default CategoriesPage;
+export default CategoriesPage;      
