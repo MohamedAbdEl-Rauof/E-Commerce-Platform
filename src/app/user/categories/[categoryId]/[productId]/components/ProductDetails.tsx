@@ -1,6 +1,6 @@
 import React, { SyntheticEvent, useCallback, useMemo, useState } from 'react';
 import { Box, Button, CircularProgress, Grid, Typography } from '@mui/material';
-import Image from 'next/image';
+import AppImage from "@/components/common/ui/AppImage";
 import { motion } from 'framer-motion';
 import Rating from "@mui/material/Rating";
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
@@ -98,23 +98,17 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, categoryId }) 
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
                         >
-                            <Box
-                                sx={{
-                                    position: 'relative',
-                                    width: '100%',
-                                    paddingTop: '75%',
+                            <AppImage
+                                src={product?.image}
+                                alt={product?.name || 'Product Image'}
+                                ratio="1/1"
+                                priority
+                                sizes="(max-width: 900px) 100vw, 50vw"
+                                style={{
                                     borderRadius: '8px',
-                                    overflow: 'hidden',
-                                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                                    boxShadow: '0 4px 6px var(--shadow)',
                                 }}
-                            >
-                                <Image
-                                    src={product?.image || '/placeholder-image.jpg'}
-                                    alt={product?.name || 'Product Image'}
-                                    layout="fill"
-                                    objectFit="cover"
-                                />
-                            </Box>
+                            />
                         </motion.div>
                     </Grid>
                     <Grid item xs={12} md={6}>

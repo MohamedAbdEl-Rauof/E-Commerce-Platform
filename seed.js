@@ -93,13 +93,13 @@ const PRODUCTS_BY_CATEGORY = {
   ],
   "Bedroom": [
     { name: "Upholstered Bed Frame", price: 459.0, was: 650.0, image: img("1505693416388-ac5ce068fe85"), description: "Queen-size upholstered bed frame with a tall tufted headboard and a slatted base — no box spring needed." },
-    { name: "Nightstand Walnut", price: 99.0, was: 140.0, image: img("1532372320572-cda25615339b"), description: "Two-drawer walnut nightstand with soft-close runners and tapered mid-century legs." },
+    { name: "Nightstand Walnut", price: 99.0, was: 140.0, image: img("1540574163026-643ea20ade25"), description: "Two-drawer walnut nightstand with soft-close runners and tapered mid-century legs." },
     { name: "Linen Duvet Set", price: 79.0, was: 110.0, image: img("1522771739844-6a9f6d5f14af"), description: "Stonewashed pure-linen duvet cover set, breathable and softer with every wash. Includes two pillow shams." },
     { name: "Full-Length Mirror", price: 119.0, was: 160.0, image: img("1618220179428-22790b461013"), description: "Floor-standing full-length mirror with a slim aluminum frame; lean it or mount it." },
   ],
   "Kitchen": [
     { name: "Ceramic Dinnerware Set", price: 64.0, was: 95.0, image: img("1556909212-d5b604d0c90d"), description: "16-piece stoneware dinnerware set in a warm matte glaze, dishwasher and microwave safe." },
-    { name: "Stainless Cookware Set", price: 189.0, was: 270.0, image: img("1584990347449-a2d4c2c8c8c8"), description: "Tri-ply stainless steel cookware set with riveted handles and tempered glass lids — induction ready." },
+    { name: "Stainless Cookware Set", price: 189.0, was: 270.0, image: img("1604908176997-125f25cc6f3d"), description: "Tri-ply stainless steel cookware set with riveted handles and tempered glass lids — induction ready." },
     { name: "Acacia Cutting Board", price: 34.0, was: 50.0, image: img("1594041680534-e8c8cdebd659"), description: "End-grain acacia wood cutting board with juice groove and built-in handles." },
     { name: "Pour-Over Coffee Set", price: 49.0, was: 70.0, image: img("1495474472287-4d71bcdd2085"), description: "Glass pour-over carafe with a reusable stainless filter and cork collar — barista-quality at home." },
   ],
@@ -118,7 +118,7 @@ const PRODUCTS_BY_CATEGORY = {
   "Outdoor": [
     { name: "Patio Lounge Chair", price: 159.0, was: 230.0, image: img("1600210492486-724fe5c67fb0"), description: "Weather-resistant rattan lounge chair with quick-dry cushions and a powder-coated frame." },
     { name: "Folding Bistro Set", price: 119.0, was: 170.0, image: img("1600585154340-be6161a56a0c"), description: "Two-chair folding bistro set in acacia wood, ideal for balconies and small patios." },
-    { name: "Outdoor String Lights", price: 24.0, was: 38.0, image: img("1530043867251-b2d3e6c0c8b1"), description: "48ft weatherproof LED string lights with 24 shatterproof bulbs for warm outdoor ambiance." },
+    { name: "Outdoor String Lights", price: 24.0, was: 38.0, image: img("1467043153537-a4fba2cd39ef"), description: "48ft weatherproof LED string lights with 24 shatterproof bulbs for warm outdoor ambiance." },
     { name: "Hammock with Stand", price: 139.0, was: 200.0, image: img("1520038410233-7141be7e6f97"), description: "Quilted double hammock with a freestanding steel frame — assembles in minutes, no trees required." },
   ],
 };

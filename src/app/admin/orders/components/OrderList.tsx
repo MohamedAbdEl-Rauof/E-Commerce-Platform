@@ -118,20 +118,20 @@ const OrderList: React.FC = () => {
 
     const getStatusColor = (status: string): { bg: string, text: string } => {
         if (!status) {
-            return {bg: '#ffebee', text: '#c62828'}; 
+            return {bg: 'var(--status-cancelled-bg)', text: 'var(--status-cancelled)'};
         }
 
         switch (status.toLowerCase()) {
             case 'delivered':
-                return {bg: '#d8f3dc', text: '#2d6a4f'};
+                return {bg: 'var(--status-delivered-bg)', text: 'var(--status-delivered)'};
             case 'processing':
-                return {bg: '#caf0f8', text: '#0077b6'};
+                return {bg: 'var(--status-processing-bg)', text: 'var(--status-processing)'};
             case 'shipped':
-                return {bg: '#ede7f6', text: '#5e35b1'};
+                return {bg: 'var(--status-shipped-bg)', text: 'var(--status-shipped)'};
             case 'pending':
-                return {bg: '#fff3e0', text: '#e65100'};
+                return {bg: 'var(--status-pending-bg)', text: 'var(--status-pending)'};
             default:
-                return {bg: '#ffebee', text: '#c62828'};
+                return {bg: 'var(--status-cancelled-bg)', text: 'var(--status-cancelled)'};
         }
     };
 

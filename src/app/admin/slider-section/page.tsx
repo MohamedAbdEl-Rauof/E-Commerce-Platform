@@ -62,7 +62,7 @@ const SliderSection = () => {
                         left: 0,
                         width: '40px',
                         height: '3px',
-                        backgroundColor: '#2563eb',
+                        backgroundColor: 'var(--primary)',
                         borderRadius: '2px'
                     }
                 }}>
@@ -72,11 +72,11 @@ const SliderSection = () => {
                     aria-label="add" 
                     onClick={handleAdd}
                     sx={{
-                        backgroundColor: '#2563eb',
+                        backgroundColor: 'var(--primary)',
                         color: 'white',
                         boxShadow: '0 4px 10px rgba(37, 99, 235, 0.25)',
                         '&:hover': {
-                            backgroundColor: '#1d4ed8',
+                            backgroundColor: 'var(--primary-dark)',
                             transform: 'translateY(-2px)',
                             boxShadow: '0 6px 15px rgba(37, 99, 235, 0.3)',
                         },

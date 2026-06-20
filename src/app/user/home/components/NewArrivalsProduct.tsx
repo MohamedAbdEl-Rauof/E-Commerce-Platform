@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import Link from "next/link";
 import { useProduct, Product } from "@/context/ProductContext";
-import Image from "next/image";
 import Head from "next/head";
+import AppImage from "@/components/common/ui/AppImage";
 import NewArrivalsProductLoading from "@/components/userUiLoading/Home/NewArrivalsProductLoading";
 import {useCart} from "@/context/AddToCartContext";
 import {useSession} from 'next-auth/react';
@@ -51,7 +51,7 @@ const NewArrivalsProduct = () => {
                     <div>
                         <header className="flex justify-between items-center">
                             <h1 className="text-4xl font-bold">New Arrivals</h1>
-                            <u className="flex items-center text-black font-bold cursor-pointer hover:underline">
+                            <u className="flex items-center font-bold cursor-pointer hover:underline" style={{color: 'var(--foreground)'}}>
                                 <Link href="/user/categories"> More Products</Link>
                                 <FaArrowRight
                                     className="ml-1 transform transition-transform duration-300 hover:translate-x-1"/>
@@ -65,14 +65,13 @@ const NewArrivalsProduct = () => {
                                         const cartItem = getCartItem(item._id);
                                         return (
                                             <article key={item._id} className="relative flex-shrink-0 w-64">
-                                                <div className="group relative">
-                                                    <Image
-                                                        width={300}
-                                                        height={300}
+                                                <div className="group relative overflow-hidden rounded-md">
+                                                    <AppImage
                                                         src={item.image}
                                                         alt={item.name}
-                                                        className="object-cover rounded-md shadow-lg transition-transform duration-300 transform group-hover:scale-105"
-                                                        loading="lazy"
+                                                        ratio="1/1"
+                                                        className="rounded-md shadow-lg transition-transform duration-300 group-hover:scale-105"
+                                                        sizes="256px"
                                                     />
                                                     <button
                                                         aria-label="Toggle Favorite"

@@ -2,62 +2,130 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * 3legant brand design tokens.
+ * Identity: neutral ink base + deep-green primary, tuned for both light and dark.
+ * `--light` is a *surface* token (card/section background) that flips in dark mode,
+ * not a literal white — many components rely on this behaviour.
+ */
 :root {
-    --background: #f0f4f8;
-    --foreground: #000000;
-    --primary: #1a73e8;
-    --secondary: #ff6f61;
-    --rating-color: #000000;
-    --rating-unselected-color: #cccccc;
-    --text-on-image: #ffffff;
-
-    /* New color variables */
-    --accent: #4caf50;
-    --success: #28a745;
-    --info: #17a2b8;
-    --warning: #ffc107;
-    --danger: #dc3545;
+    /* Base surfaces & text */
+    --background: #ffffff;
+    --surface: #f6f7f9;
+    --foreground: #141718;
+    --muted: #6c7275;
+    --border: #e3e6ea;
+    --hover: #f0f2f4;
     --light: #ffffff;
-    --dark: #343a40;
-    --muted: #6c757d;
-    --border: #dee2e6;
-    --shadow: rgba(0, 0, 0, 0.1);
-    --hover: #e9ecef;
-    --focus: #80bdff;
-    --search-bar-bg: #ffffff;
-    --search-bar-text: #495057;
+    --dark: #141718;
+
+    /* Brand */
+    --primary: #377f73;
+    --primary-dark: #2c655c;
+    --primary-light: #e7f1ee;
+    --primary-rgb: 55, 127, 115;
+    --accent: #38cb89;
+    --secondary: #e8927c;
+
+    /* Semantic */
+    --success: #2d6a4f;
+    --info: #0077b6;
+    --warning: #b26a00;
+    --danger: #d23b3b;
+    --error: #d23b3b;
+    --danger-dark: #b02a2a;
+    --danger-darker: #8f2020;
+    --focus: #5fa093;
+
+    /* Order status (centralized from the admin order components) */
+    --status-pending: #b26a00;
+    --status-pending-bg: #fff3e0;
+    --status-processing: #0077b6;
+    --status-processing-bg: #caf0f8;
+    --status-shipped: #5e35b1;
+    --status-shipped-bg: #ede7f6;
+    --status-delivered: #2d6a4f;
+    --status-delivered-bg: #d8f3dc;
+    --status-cancelled: #c62828;
+    --status-cancelled-bg: #ffebee;
+
+    /* Misc / legacy */
+    --rating-color: #f5a623;
+    --rating-unselected-color: #d6d9dd;
+    --text-on-image: #ffffff;
+    --shadow: rgba(16, 24, 32, 0.08);
+    --shadow-rgb: 16, 24, 32;
+    --search-bar-bg: #f6f7f9;
+    --search-bar-text: #141718;
 }
 
 .dark {
-    --background: #0F1214;
-    --foreground: #e0e0e0;
-    --primary: #8ab4f8;
-    --secondary: #ff8a80;
-    --rating-color: #e0e0e0;
-    --rating-unselected-color: #cccccc;
-    --text-on-image: #ffffff;
+    /* Base surfaces & text */
+    --background: #0f1417;
+    --surface: #171c20;
+    --foreground: #f1f3f5;
+    --muted: #9aa0a6;
+    --border: #2a3036;
+    --hover: #1f262b;
+    --light: #1a1f24;
+    --dark: #0b0e10;
 
-    /* New color variables for dark mode */
-    --accent: #66bb6a;
-    --success: #4caf50;
-    --info: #26c6da;
-    --warning: #ffca28;
+    /* Brand */
+    --primary: #4fb196;
+    --primary-dark: #3c8e78;
+    --primary-light: #14302a;
+    --primary-rgb: 79, 177, 150;
+    --accent: #57e3a4;
+    --secondary: #f0a48f;
+
+    /* Semantic */
+    --success: #4cae8a;
+    --info: #38b6e0;
+    --warning: #e0a93c;
     --danger: #ef5350;
-    --light: #0F1214;
-    --dark: #212121;
-    --muted: #9e9e9e;
-    --border: #424242;
-    --shadow: rgba(255, 255, 255, 0.1);
-    --hover: #333333;
-    --focus: #5c6bc0;
-    --search-bar-bg: #333333;
-    --search-bar-text: #e0e0e0;
+    --error: #ef5350;
+    --danger-dark: #d94440;
+    --danger-darker: #b83532;
+    --focus: #4fb196;
+
+    /* Order status (dark-tuned) */
+    --status-pending: #f0a93c;
+    --status-pending-bg: #3a2c14;
+    --status-processing: #4fc3e8;
+    --status-processing-bg: #14323d;
+    --status-shipped: #b39ddb;
+    --status-shipped-bg: #2a2440;
+    --status-delivered: #74d0a8;
+    --status-delivered-bg: #163528;
+    --status-cancelled: #ef9a9a;
+    --status-cancelled-bg: #3a1f1f;
+
+    /* Misc / legacy */
+    --rating-color: #f5b942;
+    --rating-unselected-color: #3a4046;
+    --text-on-image: #ffffff;
+    --shadow: rgba(0, 0, 0, 0.4);
+    --shadow-rgb: 0, 0, 0;
+    --search-bar-bg: #171c20;
+    --search-bar-text: #f1f3f5;
 }
 
 html {
     background: var(--background);
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Consistent keyboard-focus ring across interactive elements */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: 4px;
 }
 
 .scroll-container::-webkit-scrollbar {

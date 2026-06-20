@@ -1,8 +1,8 @@
 import React from 'react';
 import {Box, Container, Grid, Typography} from '@mui/material';
 import {motion} from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
+import AppImage from "@/components/common/ui/AppImage";
 
 interface Category {
     _id: string;
@@ -46,13 +46,17 @@ const CategoryGrid: React.FC<CategoryGridProps> = ({categories, loading}) => {
                             style={{background: 'var(--background)'}}
                         >
                             <Link href={`/user/categories/${(category._id)}`} passHref>
-                                <Box className="aspect-w-16 aspect-h-9 relative h-64">
-                                    <Image
+                                <Box className="relative">
+                                    <AppImage
                                         src={category.image}
                                         alt={category.name}
-                                        layout="fill"
-                                        objectFit="cover"
+                                        ratio="1/1"
                                         className="transition-transform duration-300 group-hover:scale-110"
+                                        sizes="(max-width: 600px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                                    />
+                                    <Box
+                                        className="absolute inset-0 pointer-events-none"
+                                        sx={{background: 'linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%)'}}
                                     />
                                     <Box className="absolute inset-0 flex items-end p-6">
                                         <Box className="w-full">

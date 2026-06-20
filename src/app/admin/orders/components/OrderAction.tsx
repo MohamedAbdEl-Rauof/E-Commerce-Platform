@@ -34,11 +34,11 @@ const OrderAction: React.FC<OrderActionProps> = ({open, onClose, orderId, curren
 
     // Status options with colors and icons
     const statusOptions = [
-        { value: "pending", label: "Pending", color: "#e65100", bgColor: "#fff3e0", icon: "⏳" },
-        { value: "processing", label: "Processing", color: "#0077b6", bgColor: "#caf0f8", icon: "⚙️" },
-        { value: "shipped", label: "Shipped", color: "#5e35b1", bgColor: "#ede7f6", icon: "🚚" },
-        { value: "delivered", label: "Delivered", color: "#2d6a4f", bgColor: "#d8f3dc", icon: "✅" },
-        { value: "cancelled", label: "Cancelled", color: "#c62828", bgColor: "#ffebee", icon: "❌" }
+        { value: "pending", label: "Pending", color: "var(--status-pending)", bgColor: "var(--status-pending-bg)", icon: "⏳" },
+        { value: "processing", label: "Processing", color: "var(--status-processing)", bgColor: "var(--status-processing-bg)", icon: "⚙️" },
+        { value: "shipped", label: "Shipped", color: "var(--status-shipped)", bgColor: "var(--status-shipped-bg)", icon: "🚚" },
+        { value: "delivered", label: "Delivered", color: "var(--status-delivered)", bgColor: "var(--status-delivered-bg)", icon: "✅" },
+        { value: "cancelled", label: "Cancelled", color: "var(--status-cancelled)", bgColor: "var(--status-cancelled-bg)", icon: "❌" }
     ];
 
     // Get status color based on selected value

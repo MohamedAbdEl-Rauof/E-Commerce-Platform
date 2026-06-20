@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Skeleton } from "@mui/material";
 
+/**
+ * Matches the real slider's responsive height (40vh→70vh) so swapping the
+ * skeleton for the loaded slider doesn't shift the page.
+ */
 const SliderImageLoading = () => {
     const fadeInUp = {
         initial: { opacity: 0, y: 20 },
@@ -9,44 +13,37 @@ const SliderImageLoading = () => {
     };
 
     return (
-        <motion.div
-            initial="initial"
-            animate="animate"
-            variants={fadeInUp}
-            transition={{ duration: 0.3 }}
-            style={{
-                position: "relative",
-                overflow: "hidden",
-                height: "350px",
+        <Box
+            sx={{
                 width: "100%",
-                borderRadius: "8px",
-                backgroundColor: "var(--hover)",
-                boxShadow: "0 4px 12px var(--shadow)"
+                paddingTop: "20px",
+                display: "flex",
+                justifyContent: "center",
             }}
         >
             <Box
+                component={motion.div}
+                initial="initial"
+                animate="animate"
+                variants={fadeInUp}
+                transition={{ duration: 0.3 }}
                 sx={{
-                    position: "absolute",
-                    inset: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
+                    position: "relative",
+                    overflow: "hidden",
+                    width: "100%",
+                    height: { xs: "40vh", sm: "50vh", md: "60vh", lg: "70vh" },
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 12px var(--shadow)",
                 }}
             >
-                <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 1 }}
-                    style={{
-                        width: "64px",
-                        height: "64px",
-                        borderRadius: "50%",
-                        border: "4px solid var(--border)",
-                        borderTopColor: "var(--primary)",
-                        boxSizing: "border-box"
-                    }}
+                <Skeleton
+                    variant="rectangular"
+                    width="100%"
+                    height="100%"
+                    sx={{ backgroundColor: "var(--border)" }}
                 />
             </Box>
-        </motion.div>
+        </Box>
     );
 };
 

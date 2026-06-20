@@ -16,20 +16,25 @@ const StyledBox = styled(Box)(({theme}) => ({
     height: "auto",
     minHeight: 120,
     backgroundColor: "var(--background)",
-    color: "var(--text)",
+    color: "var(--foreground)",
     [theme.breakpoints.up("md")]: {
         flexDirection: "row",
         height: 650,
     },
 }));
 
-const ImageContainer = styled(Box)({
+const ImageContainer = styled(Box)(({theme}) => ({
     flex: 1,
+    position: "relative",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "var(--secondary-light)",
-});
+    height: 320,
+    backgroundColor: "var(--surface)",
+    [theme.breakpoints.up("md")]: {
+        height: "auto",
+    },
+}));
 
 const ContentContainer = styled(Box)(({theme}) => ({
     flex: 1,
@@ -37,7 +42,7 @@ const ContentContainer = styled(Box)(({theme}) => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
-    backgroundColor: "var(--background-light)",
+    backgroundColor: "var(--background)",
     [theme.breakpoints.up("md")]: {
         padding: theme.spacing(2),
     },
@@ -48,7 +53,7 @@ const StyledTypography = styled(Typography)({
 });
 
 const StyledLink = styled(Link)({
-    color: "var(--text)",
+    color: "var(--foreground)",
     fontWeight: "bold",
     cursor: "pointer",
     textDecoration: "underline",
@@ -72,10 +77,10 @@ const BannerSection = () => {
             <ImageContainer>
                 <Image
                     src="/images/Paste image.jpg"
-                    alt="Sign Up"
-                    width={500}
-                    height={500}
-                    style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                    alt="Promotional banner"
+                    fill
+                    sizes="(max-width: 900px) 100vw, 50vw"
+                    style={{objectFit: 'cover'}}
                 />
             </ImageContainer>
 

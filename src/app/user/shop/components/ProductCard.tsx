@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo } from 'react';
-import { Box, Button, Card, CardContent, CardMedia, Chip, IconButton, Typography } from '@mui/material';
+import { Box, Button, Card, CardContent, Chip, IconButton, Typography } from '@mui/material';
 import Rating from "@mui/material/Rating";
 import { useSession } from "next-auth/react";
 import { useCart } from "@/context/AddToCartContext";
-import Image from "next/image";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { Product } from "@/context/ProductContext";
+import AppImage from "@/components/common/ui/AppImage";
 
 interface ProductCardProps {
     product: Product;
@@ -63,10 +63,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
             borderRadius: '8px',
             overflow: 'hidden',
             boxShadow: '0 4px 6px var(--shadow)',
+            '& .product-media img': {
+                transition: 'transform 0.3s ease-in-out',
+            },
             '&:hover': {
                 boxShadow: '0 8px 16px var(--shadow)',
                 transform: 'translateY(-4px)',
-                '& .MuiCardMedia-root': {
+                '& .product-media img': {
                     transform: 'scale(1.05)',
                 },
                 '& .add-to-cart': {
@@ -76,21 +79,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
             },
         }}>
             <Box sx={{ position: 'relative', width: isList ? '33%' : '100%', overflow: 'hidden' }}>
-                <CardMedia
-                    component="div"
-                    sx={{
-                        position: 'relative',
-                        paddingTop: '100%',
-                        transition: 'transform 0.3s ease-in-out',
-                    }}
-                >
-                    <Image
-                        src={product.image}
-                        alt={product.name}
-                        layout="fill"
-                        objectFit="cover"
-                    />
-                </CardMedia>
+                <AppImage
+                    src={product.image}
+                    alt={product.name}
+                    ratio="1/1"
+                    className="product-media"
+                    sizes="(max-width: 600px) 50vw, (max-width: 1200px) 25vw, 300px"
+                />
 
                 <IconButton
                     onClick={handleFavoriteToggle}
@@ -98,8 +93,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
                         position: 'absolute',
                         top: 8,
                         right: 8,
-                        bgcolor: 'white',
-                        transition: 'all 0.2s ease-in-  out',
+                        bgcolor: 'var(--light)',
+                        color: 'var(--foreground)',
+                        transition: 'all 0.2s ease-in-out',
                         '&:hover': {
                             bgcolor: 'var(--hover)',
                             transform: 'scale(1.1)',

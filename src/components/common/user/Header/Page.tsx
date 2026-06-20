@@ -8,7 +8,6 @@ import Navigation from './components/Navigation';
 import MobileMenu from './components/MobileMenu';
 import MobileSidebar from './components/MobileSidebar';
 import DesktopActions from './components/DesktopActions';
-import Announcement from './components/Announcement';
 
 const NAV_ITEMS = ['Home', 'Shop', 'Categories', 'Contact Us'] as const;
 type NavItem = (typeof NAV_ITEMS)[number];
@@ -39,7 +38,6 @@ const Header = () => {
 
     return (
         <>
-            <Announcement/>
             <header className="flex flex-col md:flex-row justify-between items-center w-[90%] mx-auto mt-11 text-3xl">
                 <Logo/>
                 <Navigation

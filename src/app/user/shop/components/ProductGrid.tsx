@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Box, Button, Grid} from '@mui/material';
+import {Box, Button, Grid, Typography} from '@mui/material';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
 import ProductCard from './ProductCard';
 import {Product} from "@/context/ProductContext";
 
@@ -30,6 +31,30 @@ const ProductGrid: React.FC<ProductGridProps> = ({products, view, toggleFavorite
     const handleShowMore = () => {
         setVisibleProducts(prevVisible => prevVisible + 9);
     };
+
+    if (products.length === 0) {
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    py: 10,
+                    color: 'var(--muted)',
+                }}
+            >
+                <SearchOffIcon sx={{fontSize: 64, mb: 2, color: 'var(--muted)'}}/>
+                <Typography variant="h6" sx={{color: 'var(--foreground)', fontWeight: 600, mb: 1}}>
+                    No products found
+                </Typography>
+                <Typography variant="body2" sx={{color: 'var(--muted)', maxWidth: 360}}>
+                    Try adjusting your search or filters to find what you&apos;re looking for.
+                </Typography>
+            </Box>
+        );
+    }
 
     return (
         <Box>

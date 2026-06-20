@@ -25,10 +25,11 @@ const CategoryBanner: React.FC<CategoryBannerProps> = ({loading}) => {
                 <Image
                     src="/images/main image.jpg"
                     alt="Shop Banner"
-                    layout="fill"
-                    objectFit="cover"
+                    fill
+                    sizes="100vw"
                     priority
                     className="transform hover:scale-105 transition-transform duration-700"
+                    style={{objectFit: 'cover'}}
                 />
                 <Box
                     className="absolute inset-0 flex flex-col items-center justify-center"

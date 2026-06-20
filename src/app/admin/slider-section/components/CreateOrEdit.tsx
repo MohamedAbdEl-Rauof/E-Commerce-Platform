@@ -384,8 +384,8 @@ const CreateOrEdit: React.FC<CreateOrEditProps> = ({ image, onClose, triggerUpda
                                             startIcon={<SaveIcon sx={{ fontSize: '1.2rem' }} />}
                                             disabled={isSubmitDisabled}
                                             sx={{
-                                                backgroundColor: '#2563eb', // Reliable blue color
-                                                color: '#ffffff',
+                                                backgroundColor: 'var(--primary)',
+                                                color: 'var(--text-on-image)',
                                                 borderRadius: '10px',
                                                 textTransform: 'none',
                                                 py: 1.2,
@@ -406,14 +406,14 @@ const CreateOrEdit: React.FC<CreateOrEditProps> = ({ image, onClose, triggerUpda
                                                     zIndex: 1,
                                                 },
                                                 '&:hover': {
-                                                    backgroundColor: '#1d4ed8', // Darker blue on hover
+                                                    backgroundColor: 'var(--primary-dark)',
                                                     boxShadow: '0 6px 20px rgba(37, 99, 235, 0.35)',
                                                     transform: 'translateY(-2px)',
                                                 },
                                                 '&:active': {
                                                     boxShadow: '0 2px 10px rgba(37, 99, 235, 0.25)',
                                                     transform: 'translateY(1px)',
-                                                    backgroundColor: '#1e40af', // Even darker on active
+                                                    backgroundColor: 'var(--primary-dark)',
                                                 },
                                                 '&.Mui-disabled': {
                                                     backgroundColor: 'rgba(37, 99, 235, 0.4)',
@@ -423,14 +423,14 @@ const CreateOrEdit: React.FC<CreateOrEditProps> = ({ image, onClose, triggerUpda
                                                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                                                 // Light mode specific adjustments
                                                 '@media (prefers-color-scheme: light)': {
-                                                    backgroundColor: '#2563eb',
+                                                    backgroundColor: 'var(--primary)',
                                                     boxShadow: '0 4px 14px rgba(37, 99, 235, 0.2)',
                                                     '&:hover': {
-                                                        backgroundColor: '#1d4ed8',
+                                                        backgroundColor: 'var(--primary-dark)',
                                                         boxShadow: '0 6px 20px rgba(37, 99, 235, 0.3)',
                                                     },
                                                     '&:active': {
-                                                        backgroundColor: '#1e40af',
+                                                        backgroundColor: 'var(--primary-dark)',
                                                         boxShadow: '0 2px 10px rgba(37, 99, 235, 0.2)',
                                                     },
                                                     '&.Mui-disabled': {

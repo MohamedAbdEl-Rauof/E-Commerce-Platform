@@ -17,7 +17,9 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import CloseIcon from '@mui/icons-material/Close';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import Image from 'next/image';
+import Link from 'next/link';
 import { CartItem } from '@/context/AddToCartContext';
 import { useSession } from "next-auth/react";
 
@@ -79,10 +81,41 @@ const CartTable: React.FC<CartTableProps> = React.memo(({
 
     if (cartItems.length === 0) {
         return (
-            <Paper elevation={3} sx={{ p: 3, backgroundColor: 'var(--background)', textAlign: 'center' }}>
-                <Typography variant="h6" sx={{ color: 'var(--foreground)' }}>
-                    Your cart is empty, let&#39;s Shop Now
+            <Paper
+                elevation={0}
+                sx={{
+                    p: 6,
+                    backgroundColor: 'var(--background)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 2,
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: 2,
+                }}
+            >
+                <ShoppingBagOutlinedIcon sx={{ fontSize: 64, color: 'var(--muted)' }} />
+                <Typography variant="h6" sx={{ color: 'var(--foreground)', fontWeight: 600 }}>
+                    Your cart is empty
                 </Typography>
+                <Typography variant="body2" sx={{ color: 'var(--muted)' }}>
+                    Looks like you haven&apos;t added anything yet.
+                </Typography>
+                <Button
+                    component={Link}
+                    href="/user/shop"
+                    variant="contained"
+                    sx={{
+                        mt: 1,
+                        bgcolor: 'var(--foreground)',
+                        color: 'var(--background)',
+                        textTransform: 'none',
+                        '&:hover': { bgcolor: 'var(--muted)' },
+                    }}
+                >
+                    Continue Shopping
+                </Button>
             </Paper>
         );
     }

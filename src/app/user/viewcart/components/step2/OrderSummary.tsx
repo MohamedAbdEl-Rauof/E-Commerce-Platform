@@ -56,7 +56,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
                             alt={item.name}
                             width={50}
                             height={50}
-                            style={{ marginRight: '10px', borderRadius: '4px' }}
+                            style={{ marginRight: '10px', borderRadius: '4px', objectFit: 'cover', width: 50, height: 50 }}
                         />
                         <Box>
                             <Typography sx={{ fontWeight: 'medium', color: 'var(--foreground)' }}>{item.name}</Typography>

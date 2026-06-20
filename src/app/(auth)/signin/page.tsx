@@ -79,13 +79,14 @@ const Signin = () => {
     return (
         <div className="flex flex-col h-screen md:flex-row">
             {/* Left */}
-            <div className="bg-slate-200 flex-1 flex justify-center items-center">
+            <div className="flex-1 flex justify-center items-center p-8" style={{ backgroundColor: 'var(--surface)' }}>
                 <Image
                     priority
                     width={300}
                     height={300}
                     src="/images/auth/Paste_image-removebg-preview.png"
-                    alt="Sign Up"
+                    alt="Sign in"
+                    style={{ width: '100%', maxWidth: 320, height: 'auto', objectFit: 'contain' }}
                 />
             </div>
 

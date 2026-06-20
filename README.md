@@ -1,316 +1,199 @@
-📁 src/
-├── 🏠 app/
-│ ├── 🔐 (auth)/ # Authentication group routes
-│ │ ├── 🔑 SignIn/
-│ │ └── 📝 SignUp/
-│ │
-│ ├── 👤 (user)/ # User routes group
-│ │ ├── 🏠 page.tsx # Home page
-│ │ ├── 🛍️ products/
-│ │ ├── 🛒 cart/
-│ │ ├── 💳 checkout/
-│ │ ├── 📦 orders/
-│ │ └── 👤 profile/
-│ │
-│ ├── 👑 (admin)/ # Admin routes group
-│ │ ├── 📊 dashboard/
-│ │ ├── 📦 products/
-│ │ ├── 📋 orders/
-│ │ ├── 👥 customers/
-│ │ └── ⚙️ settings/
-│ │
-│ └── 🏗️ layout.tsx # Root layout
-│
-├── 🧩 components/ # Reusable components
-│ ├── 🎨 ui/ # UI components (shadcn/ui)
-│ ├── 🔄 common/ # Shared components
-│ │ ├── 🏷️ Header/
-│ │ ├── 🦶 Footer/
-│ │ └── 🧭 Navigation/
-│ ├── 📝 forms/ # Form components
-│ ├── 👑 admin/ # Admin-specific components
-│ └── 👤 user/ # User-specific components
-│
-├── 🚀 pages - api/ # API routes
-│ ├── 🔐 auth/
-│ ├── 📦 products/
-│ ├── 📋 orders/
-│ ├── 🛒 cart/
-│ └── 🔔 webhook/
-│
-├── 🛠️ lib/ # Utility functions and configurations
-│ ├── 🔐 auth.ts # NextAuth configuration
-│ ├── 🔧 utils.ts # Utility functions
-│ ├── 🗄️ db.ts # Database connection utility
-│ └── 🌐 api.ts # API utility functions (e.g., fetch wrapper)
-│
-├── 🎣 hooks/ # Custom React hooks
-│ ├── 🛒 useCart.ts
-│ ├── 🔐 useAuth.ts
-│ └── 🎨 useTheme.ts
-│
-├── 📊 constants/ # Application-wide constants
-│ ├── 🛣️ routes.ts
-│ ├── 🔗 api-endpoints.ts
-│ └── ⚙️ config.ts
-│
-├── 🧠 context/ # React Context providers
-│ ├── 🛒 cart-context.tsx
-│ ├── 🔐 auth-context.tsx
-│ └── 🎨 theme-context.tsx
-│
-├── 📝 types/ # TypeScript type definitions
-│ ├── 📦 product.ts
-│ ├── 📋 order.ts
-│ └── 👤 user.ts
-│
-├── 🛠️ services/ # Business logic services
-│ ├── 📦 product.service.ts
-│ ├── 📋 order.service.ts
-│ └── 👤 user.service.ts
-│
-└── 🚦 middleware.ts # Next.js middleware for auth & routing
-
->
->
-> admin password
-> email : admin@gmail.com
-> password : admin123456
->
-> user password
-> email : 142536789
-> password : 142536789
->
-> email : 123456789
-> password : 123456789
->
->
-> email : testraouf12@mozej.com
-> password :testraouf12@mozej.com
-
-
->
->
-> this is two page the first when user select on categories , send to the product page as context api , to open it ,
-> change this structure , when the user select on category , send the nameof this category in url , then open the info
-> of
-> this product in another page , take care , make the structure withe material ui and handle the light ad dark page
-> using
-> next theme , and separate it as many comp not all code , in same page , and handle ">  are you have any suggestion for
-> enhance the performance and seo or applicability and best practice and use mater ,,, handle this page firstly ""
-
+# 3legant — Full-Stack E-Commerce Platform
+
+A modern, full-stack furniture & home-goods store built with **Next.js 14 (App Router)**,
+**TypeScript**, **MongoDB**, and **Material UI**. It ships with a complete customer storefront
+and a separate admin dashboard for managing products, categories, orders, and homepage content.
+
+> **Demo login (after seeding):** `admin@gmail.com` / `Password123`
+
+---
+
+## ✨ Features
+
+### Storefront (customer)
+- Home page with hero slider, category showcase, new arrivals, and newsletter
+- Product catalog with search, price/category filters, and grid/list views
+- Category browsing and product detail pages with ratings & related products
+- Cart with a 3-step checkout wizard (cart → details → confirmation)
+- User account: profile, saved address, and order history
+- Contact page with EmailJS-powered form and map
+- Light / dark theme toggle (persisted)
 
-> handle the light and dark mode as variable based on the global.css, use it as variable not static color code
-> animation
-> loading
-> any
->
+### Admin dashboard
+- KPI overview (orders, users, products, revenue) with top products & recent orders
+- CRUD for **products**, **categories**, and homepage **slider** images
+- Order management with status updates
+- Cloudinary-backed image uploads
+
+---
 
-> handle the ui & material ui and responsive and light and dark mood  
-> handle the functionality
-> loading for each page
-> enhance the performance and seo and applicability and best practice
-> handle the animation
->
-> remove console.log
-> improve the api, and disappear the critical variables
+## 🧱 Tech Stack
+
+| Area | Technology |
+|------|-----------|
+| Framework | Next.js 14 (App Router) + React 18 |
+| Language | TypeScript |
+| UI | Material UI v5, Tailwind CSS, Framer Motion |
+| Database | MongoDB (native driver) on MongoDB Atlas |
+| Auth | NextAuth.js (credentials) + bcrypt |
+| State / data | React Context, React Query |
+| Media | Cloudinary (uploads), next/image |
+| Email | EmailJS |
+| Theming | next-themes + CSS design tokens |
+
+---
 
-> Responsive
->
-> Home , Shop , Categories , Contact Us , Cart , View Cart , My Account , Login , Register , Header , footer
->
->
->
->
->
->
->
+## 🎨 Design system
+
+Brand colors and surfaces are centralized as CSS variables (design tokens) in
+[`src/app/globals.css`](src/app/globals.css) — a deep-green primary on a neutral ink base, with
+fully tuned **light and dark** palettes plus semantic and order-status tokens. Components
+reference `var(--primary)`, `var(--foreground)`, `var(--surface)`, etc. rather than hardcoded
+hex values, and Tailwind utilities are mapped to the same tokens in
+[`tailwind.config.ts`](tailwind.config.ts).
+
+All imagery renders through a single primitive,
+[`AppImage`](src/components/common/ui/AppImage.tsx), which locks a consistent aspect ratio and
+applies `object-fit: cover`, so product/category cards never stretch or distort.
 
-- handle the light and dark mood
-- handle the structure of pages
-  -handle the cases of view admin without save on database
+---
 
-- plan for the tomorrow
+## 📁 Project structure
 
-Unfortunately, I cannot directly create or provide images. However, I can guide you on how to design each page and
-suggest tools or platforms where you can create these designs yourself. Here's how you can create visual examples for
-each page:
+```
+src/
+├─ app/                      # Next.js App Router
+│  ├─ (auth)/                # signin, signup
+│  ├─ user/                  # storefront: home, shop, categories, viewcart, useraccount, contactus
+│  ├─ admin/                 # dashboard: home, products, categories, orders, slider-section
+│  ├─ globals.css            # design tokens (light + dark) + base styles
+│  └─ layout.tsx             # root layout (providers, theme, toasts)
+├─ pages/api/                # REST API routes + NextAuth
+│  ├─ products.ts  categories.ts  orders.ts  user.ts  addtocart.ts  slidersection.ts
+│  └─ auth/[...nextauth].ts
+├─ components/               # shared UI (Header, Footer, AppImage, loaders, dialogs)
+├─ context/                  # React Context providers (cart, products, categories, user, theme…)
+└─ lib/mongodb.ts            # MongoClient connection helper
+seed.js                      # database seeding script (see below)
+```
 
-Tools to Create Dashboard Designs
-Figma (Free for personal use):
+---
 
-Use pre-built UI kits like Material Design, Tailwind UI, or Ant Design to quickly create dashboard layouts.
+## 🗄️ Data model
 
-Figma is collaborative and allows you to prototype interactions.
+The app uses the native MongoDB driver against these collections:
 
-Adobe XD:
+| Collection | Purpose | Key fields |
+|------------|---------|-----------|
+| `categories` | Product categories | name, image, timestamps |
+| `products` | Catalog | name, image, price, `categoryId`, PriceBeforeDiscount, description |
+| `users` | Accounts | name, username, email, phone, password (bcrypt), image |
+| `orders` | Orders | userId, orderCode, contactInfo, shippingAddress, paymentMethod, items[], totals, status |
+| `cart` | Per-user cart | userId, info[] (productId, quantity, isFavourite, rating) |
+| `slider-section` | Homepage hero images | images[] (url, alt, timestamps) |
 
-Great for creating high-fidelity designs with animations and transitions.
+Relationships: `products.categoryId → categories._id`; `orders.userId` / `cart.userId →
+users._id`; `orders.items[].productId` / `cart.info[].productId → products._id`.
 
-Canva:
+---
 
-Use Canva’s templates for dashboard designs (search for "admin dashboard" templates).
+## 🚀 Getting started
 
-Sketch:
+### Prerequisites
+- Node.js 18+
+- A MongoDB connection string (MongoDB Atlas recommended)
 
-Popular among designers for creating detailed UI designs.
+### 1. Clone & install
 
-Online Tools:
+```bash
+git clone https://github.com/MohamedAbdEl-Rauof/E-Commerce-Platform.git
+cd E-Commerce-Platform
 
-Balsamiq for wireframes.
+# This project has a known MUI peer-dependency conflict (@mui/lab vs @mui/material),
+# so install with legacy peer resolution:
+npm install --legacy-peer-deps
+```
 
-Lucidchart for flowcharts and layouts.
+### 2. Configure environment
 
-Design Examples for Each Page
-Below, I’ll describe how to design each page visually using these tools:
+Create a `.env` file in the project root:
 
-1️⃣ Dashboard Overview Page (Home)
-Layout:
+```env
+MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>/3legant?appName=Cluster0
+MONGODB_DB=3legant
 
-Top Section: Place 4-6 statistics cards in a grid (2x2 or 3x2).
+NEXTAUTH_SECRET=<generate-a-random-secret>
+ADMIN_EMAIL=admin@gmail.com
+JWT_EXPIRATION=1h
 
-Middle Section: Add two charts (e.g., a line chart for sales trends and a bar chart for user growth).
+# Cloudinary (image uploads)
+CLOUDINARY_CLOUD_NAME=<cloud-name>
+CLOUDINARY_API_KEY=<api-key>
+CLOUDINARY_API_SECRET=<api-secret>
 
-Bottom Section: Use a table or cards for Recent Orders, Recent Reviews, and New Users.
+# EmailJS (contact form) — public keys
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=<service-id>
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=<template-id>
+NEXT_PUBLIC_EMAILJS_USER_ID=<user-id>
+```
 
-Visual Style:
+> The app selects its database via `MONGODB_DB`. Make sure it matches the database you seed.
+> Any account whose email equals `ADMIN_EMAIL` is granted the **admin** role.
 
-Use a dark sidebar with light content for contrast.
+### 3. Seed sample data (optional but recommended)
 
-Add icons (e.g., a shopping cart for orders, a user icon for new users).
+`seed.js` populates every collection with realistic, relationally-consistent data
+(categories, 24 products with Unsplash imagery, users, orders, carts, and slider images).
 
-Use soft shadows and rounded corners for cards.
+```bash
+node seed.js
+```
 
-2️⃣ Products Management Page
-Layout:
+All seeded users share the password **`Password123`** (bcrypt-hashed), including the admin
+account `admin@gmail.com`.
 
-Top Section: Add a search bar with filters (e.g., by name, category, price).
+### 4. Run
 
-Middle Section: Display a table with product details (Name, Price, Category, Stock, Actions).
+```bash
+npm run dev      # start the dev server at http://localhost:3000
+```
 
-Bottom Section: Add a floating button for "Add New Product."
+---
 
-Visual Style:
+## 📜 Scripts
 
-Use a minimal table design with alternating row colors.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start the development server |
+| `npm run build` | Production build |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run ESLint |
+| `node seed.js` | Seed the database with sample data |
 
-Add hover effects on table rows.
+---
 
-Use a modal popup for the "Add New Product" form.
+## ☁️ Deployment
 
-3️⃣ Categories Management Page
-Layout:
+Deploy on **Vercel** (recommended for Next.js):
 
-Top Section: Add a search bar and a button for "Add New Category."
+1. Push the repository to GitHub.
+2. Import it in Vercel.
+3. Add all `.env` variables in **Project → Settings → Environment Variables**.
+4. Deploy.
 
-Middle Section: Display a table or grid of categories (Name, Image, Number of Products, Actions).
+Ensure your MongoDB Atlas cluster allows connections from Vercel (IP allowlist `0.0.0.0/0`
+for serverless, or use Atlas's recommended settings).
 
-Visual Style:
+---
 
-Use cards for each category with an image preview.
+## 🔒 Security notes
 
-Add edit and delete icons in the actions column.
+- Never commit a real `.env` — keep credentials out of version control and rotate any that
+  were ever exposed.
+- Passwords are hashed with bcrypt; authentication is handled by NextAuth.js.
 
-4️⃣ Orders Management Page
-Layout:
+---
 
-Top Section: Add a search bar with filters (e.g., by order ID, status, date).
+## 📄 License
 
-Middle Section: Display a table with order details (Order ID, Customer, Total Amount, Status, Actions).
-
-Bottom Section: Add a dropdown to update order status.
-
-Visual Style:
-
-Use badges for order status (e.g., green for "Delivered," yellow for "Pending").
-
-Add a modal popup for order details.
-
-5️⃣ Users Management Page
-Layout:
-
-Top Section: Add a search bar and a button for "Add New User."
-
-Middle Section: Display a table with user details (Name, Email, Role, Status, Actions).
-
-Visual Style:
-
-Use toggle switches for banning/unbanning users.
-
-Add a modal popup for editing user roles.
-
-6️⃣ Reviews Management Page
-Layout:
-
-Top Section: Add a search bar with filters (e.g., by product, rating).
-
-Middle Section: Display a table with review details (Product, User, Rating, Comment, Status, Actions).
-
-Visual Style:
-
-Use star icons for ratings.
-
-Add approve/reject buttons with color-coded labels.
-
-7️⃣ Cart Management Page (Optional)
-Layout:
-
-Top Section: Add a search bar to filter by user.
-
-Middle Section: Display a table with cart details (User, Number of Items, Total Price, Actions).
-
-Visual Style:
-
-Use a modal popup to view cart details.
-
-Add a delete icon to remove items.
-
-8️⃣ Slider Section Management Page
-Layout:
-
-Top Section: Add a button for "Add New Slide."
-
-Middle Section: Display a table or grid of slider images (Image, Alt Text, Actions).
-
-Visual Style:
-
-Use image thumbnails for preview.
-
-Add edit and delete icons in the actions column.
-
-9️⃣ Settings Page
-Layout:
-
-Top Section: Add tabs for different settings (General, Email, Security, Payment, Shipping).
-
-Middle Section: Display forms for each setting.
-
-Visual Style:
-
-Use input fields, dropdowns, and toggle switches.
-
-Add a save button at the bottom of each form.
-
-🔟 Analytics & Reports Page (Optional)
-Layout:
-
-Top Section: Add tabs for different reports (Sales, Users, Products).
-
-Middle Section: Display charts and tables for each report.
-
-Visual Style:
-
-Use interactive charts (e.g., line charts, bar charts, pie charts).
-
-Add an export button for downloading reports.
-
-Where to Find Inspiration
-Dribbble: Search for "admin dashboard" or "e-commerce dashboard" for design inspiration.
-
-Behance: Look for UI/UX designers who specialize in dashboards.
-
-ThemeForest: Purchase pre-built admin dashboard templates (e.g., Material Dashboard, Bootstrap Admin Templates).
-
-If you need help with specific design elements or tools, let me know! 🚀
-
-
+This project is provided for educational/portfolio purposes.

@@ -39,11 +39,12 @@ const Newsletter = () => {
             ) : (
                 <StyledBox>
                     <Image
-                        width={500}
-                        height={500}
+                        width={1200}
+                        height={400}
                         src="/images/Paste image (1).jpg"
-                        style={{width: '100%', height: 'auto'}}
+                        style={{width: '100%', height: 'clamp(220px, 38vw, 380px)', objectFit: 'cover'}}
                         alt="Join Our Newsletter"
+                        sizes="100vw"
                     />
                     <StyledOverlay>
                         <Typography variant="h4" component="h1" fontWeight="bold" color="black">

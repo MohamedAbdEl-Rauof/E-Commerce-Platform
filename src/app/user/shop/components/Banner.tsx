@@ -5,6 +5,7 @@ import {Box, Breadcrumbs, Container, Typography} from '@mui/material';
 import {styled} from '@mui/system';
 
 const StyledImage = styled(Image)({
+    objectFit: 'cover',
     transform: 'scale(1)',
     transition: 'transform 0.7s',
     '&:hover': {
@@ -26,10 +27,9 @@ const Banner: React.FC = () => {
             <StyledImage
                 src="/images/Paste Image (1).jpg"
                 alt="Elegant interior design showcasing a modern living room"
-                layout="fill"
-                objectFit="cover"
+                fill
                 priority
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                sizes="100vw"
             />
             <Box
                 sx={{

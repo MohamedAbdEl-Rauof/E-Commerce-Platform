@@ -22,6 +22,7 @@ import Banner from "./Banner";
 import SearchBar from "./SearchBar";
 import FiltersSidebar from "./FiltersSidebar";
 import ProductGrid from "./ProductGrid";
+import ProductCardSkeleton from "@/components/common/ui/ProductCardSkeleton";
 import { Category, FilterState, PRICE_RANGES, SORT_OPTIONS, VIEW_OPTIONS } from './types/shopTypes';
 import { Product } from "@/context/ProductContext";
 
@@ -266,18 +267,13 @@ const Shop: React.FC = () => {
                                 </Box>
                             </Box>
                             {isLoading ? (
-                                <StyledCard sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    minHeight: '50vh'
-                                }}>
-                                    <CircularProgress size={60} sx={{ color: 'var(--primary)' }} />
-                                    <Typography sx={{ mt: 3, color: 'var(--muted)' }}>
-                                        Loading Products ...
-                                    </Typography>
-                                </StyledCard>
+                                <Grid container spacing={3}>
+                                    {Array.from({ length: 9 }).map((_, index) => (
+                                        <Grid item key={index} xs={6} lg={4}>
+                                            <ProductCardSkeleton />
+                                        </Grid>
+                                    ))}
+                                </Grid>
                             ) : (
                                 <ProductGrid
                                     products={filteredProducts}

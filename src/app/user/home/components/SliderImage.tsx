@@ -25,18 +25,20 @@ const SliderContainer = styled(Box)(({theme}) => ({
 
 const StyledImage = styled(Image)({
     borderRadius: '8px',
+    objectFit: 'cover',
 });
 
 const NavigationButton = styled(IconButton)(({theme}) => ({
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
-    backgroundColor: 'var(--background)',
-    color: 'var(--text)',
+    backgroundColor: 'var(--light)',
+    color: 'var(--foreground)',
+    border: '1px solid var(--border)',
     '&:hover': {
-        backgroundColor: 'var(--background-light)',
+        backgroundColor: 'var(--hover)',
     },
-    zIndex: 1, 
+    zIndex: 1,
 }));
 
 const SliderImage = React.memo(() => {
@@ -81,8 +83,7 @@ const SliderImage = React.memo(() => {
                         <StyledImage
                             src={images[currentIndex].url}
                             alt={images[currentIndex].alt || `Image ${currentIndex + 1}`}
-                            layout="fill"
-                            objectFit="cover"
+                            fill
                             priority
                             sizes="100vw"
                             quality={100}
